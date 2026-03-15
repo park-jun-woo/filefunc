@@ -46,15 +46,26 @@ filefunc validate --format json ./internal/
 filefunc validate --codebook /path/to/codebook.yaml ./internal/
 ```
 
-Read-only. Never modifies files. Exit code 1 on violations. Requires `codebook.yaml` in the project root (auto-detected from `go.mod` location). Use `--codebook` to override.
+Read-only. Never modifies files. Exit code 1 on violations. Requires `codebook.yaml` in the project root (auto-detected from `go.mod` location). Use `--codebook` to override. Respects `.ffignore`.
 
-### annotate — Auto-generate calls/uses
+### chain — Trace call relationships
 
 ```bash
-filefunc annotate ./internal/
+filefunc chain func RunAll              # 1촌 (default)
+filefunc chain func RunAll --chon 2     # 2촌 (siblings included)
+filefunc chain func RunAll --chon 3     # 3촌 (max)
+filefunc chain func RunAll --child-depth 3   # children only
+filefunc chain func RunAll --parent-depth 3  # parents only
+filefunc chain feature validate         # all funcs in feature
 ```
 
-Extracts `//ff:calls` and `//ff:uses` from Go AST automatically. Only includes project-internal functions and types (excludes stdlib and built-ins).
+Traces call relationships using real-time AST analysis. Respects `.ffignore`.
+
+| Flag | Description | Default |
+|---|---|---|
+| `--chon` | Relationship distance (1~3) | 1 |
+| `--child-depth` | Trace calls only to this depth | — |
+| `--parent-depth` | Trace callers only to this depth | — |
 
 ### llmc — LLM verification
 
@@ -64,7 +75,7 @@ filefunc llmc --model qwen3:8b ./internal/
 filefunc llmc --threshold 0.9 ./internal/
 ```
 
-Verifies that `//ff:what` accurately describes the func body using a local LLM (ollama). Scores 0.0~1.0, threshold default 0.8. On pass, writes `//ff:checked llm=model hash=bodyhash` signature.
+Verifies that `//ff:what` accurately describes the func body using a local LLM (ollama). Scores 0.0~1.0, threshold default 0.8. On pass, writes `//ff:checked llm=model hash=bodyhash` signature. Respects `.ffignore`.
 
 | Flag | Description | Default |
 |---|---|---|
@@ -156,6 +167,20 @@ Values not in the codebook trigger `A2 ERROR`. Each project has its own codebook
 | C3 | All values must be lowercase + hyphens only (`[a-z][a-z0-9-]*`) | ERROR |
 
 Codebook is validated first. If codebook fails, code validation does not run.
+
+## .ffignore
+
+Exclude paths from all filefunc commands. Place `.ffignore` in the project root (next to `go.mod`). Same syntax as `.gitignore`.
+
+```
+# Example .ffignore
+vendor/
+*.pb.go
+*_gen.go
+internal/legacy/
+```
+
+Optional. If absent, nothing is excluded.
 
 ## Validate Options
 

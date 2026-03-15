@@ -6,7 +6,7 @@ import (
 )
 
 func TestWalkGoFiles(t *testing.T) {
-	files, err := WalkGoFiles("../parse")
+	files, err := WalkGoFiles("../parse", nil)
 	if err != nil {
 		t.Fatalf("WalkGoFiles failed: %v", err)
 	}

@@ -13,13 +13,15 @@ import (
 
 // BuildGraph builds a call graph from the project at root.
 func BuildGraph(root string) (*chain.CallGraph, []*model.GoFile, error) {
-	goModPath := FindGoMod(root)
+	goModDir := FindGoModDir(root)
+	goModPath := goModDir + "/go.mod"
 	modulePath, err := parse.ReadModulePath(goModPath)
 	if err != nil {
 		return nil, nil, fmt.Errorf("reading go.mod: %w", err)
 	}
 
-	paths, err := walk.WalkGoFiles(root)
+	ignorePatterns := walk.ParseFFIgnore(goModDir + "/.ffignore")
+	paths, err := walk.WalkGoFiles(root, ignorePatterns)
 	if err != nil {
 		return nil, nil, fmt.Errorf("walking files: %w", err)
 	}

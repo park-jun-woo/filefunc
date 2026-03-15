@@ -143,6 +143,16 @@ filefunc llmc --threshold 0.9 ./internal/        # stricter threshold
 
 Exit code 1 on violations. Zero violations required before committing.
 
+### .ffignore
+
+Place `.ffignore` in the project root (next to `go.mod`) to exclude paths from all commands. Same syntax as `.gitignore`. Optional — if absent, nothing is excluded.
+
+```
+vendor/
+*.pb.go
+*_gen.go
+```
+
 ---
 
 ## Exceptions (Not Violations)

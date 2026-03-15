@@ -27,8 +27,9 @@ var validateCmd = &cobra.Command{
 		codebookPath, _ := cmd.Flags().GetString("codebook")
 		format, _ := cmd.Flags().GetString("format")
 
+		goModDir := FindGoModDir(target)
 		if codebookPath == "" {
-			codebookPath = FindGoModDir(target) + "/codebook.yaml"
+			codebookPath = goModDir + "/codebook.yaml"
 		}
 
 		cb, err := parse.ParseCodebook(codebookPath)
@@ -42,7 +43,8 @@ var validateCmd = &cobra.Command{
 			return fmt.Errorf("codebook.yaml has %d violation(s) — fix before validating code", len(cbViolations))
 		}
 
-		paths, err := walk.WalkGoFiles(target)
+		ignorePatterns := walk.ParseFFIgnore(goModDir + "/.ffignore")
+		paths, err := walk.WalkGoFiles(target, ignorePatterns)
 		if err != nil {
 			return fmt.Errorf("walking files: %w", err)
 		}

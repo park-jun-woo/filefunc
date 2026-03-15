@@ -36,7 +36,8 @@ var llmcCmd = &cobra.Command{
 			return err
 		}
 
-		paths, err := walk.WalkGoFiles(target)
+		ignorePatterns := walk.ParseFFIgnore(FindGoModDir(target) + "/.ffignore")
+		paths, err := walk.WalkGoFiles(target, ignorePatterns)
 		if err != nil {
 			return fmt.Errorf("walking files: %w", err)
 		}

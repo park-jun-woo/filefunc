@@ -1,6 +1,5 @@
 //ff:func feature=parse type=walker
-//ff:what 디렉토리를 재귀 순회하며 .go 파일 경로 목록 반환
-//ff:checked llm=gpt-oss:20b hash=1791bca7
+//ff:what 디렉토리를 재귀 순회하며 .go 파일 경로 목록 반환 (.ffignore 적용)
 package walk
 
 import (
@@ -10,9 +9,8 @@ import (
 )
 
 // WalkGoFiles recursively walks a directory and returns all .go file paths.
-// Skips testdata directories. Test files (_test.go) are included but can be
-// identified by suffix.
-func WalkGoFiles(root string) ([]string, error) {
+// Skips testdata directories and paths matching ignorePatterns.
+func WalkGoFiles(root string, ignorePatterns []string) ([]string, error) {
 	var files []string
 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
@@ -20,6 +18,12 @@ func WalkGoFiles(root string) ([]string, error) {
 		}
 		if info.IsDir() && info.Name() == "testdata" {
 			return filepath.SkipDir
+		}
+		if MatchFFIgnore(path, info.Name(), info.IsDir(), ignorePatterns) {
+			if info.IsDir() {
+				return filepath.SkipDir
+			}
+			return nil
 		}
 		if info.IsDir() {
 			return nil

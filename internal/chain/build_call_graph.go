@@ -15,10 +15,13 @@ func BuildCallGraph(files []*model.GoFile, modulePath string, projFuncs map[stri
 	}
 
 	for _, gf := range files {
-		if gf.IsTest || len(gf.Funcs) == 0 {
+		if gf.IsTest {
 			continue
 		}
-		caller := gf.Funcs[0]
+		caller := funcName(gf)
+		if caller == "" {
+			continue
+		}
 		calls, err := parse.ExtractCalls(gf.Path, modulePath, projFuncs)
 		if err != nil {
 			continue
