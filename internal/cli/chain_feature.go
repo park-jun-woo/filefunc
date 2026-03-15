@@ -1,0 +1,44 @@
+//ff:func feature=cli type=command
+//ff:what chain feature 서브커맨드 — feature 전체 func의 호출 관계 추적
+package cli
+
+import (
+	"fmt"
+	"os"
+
+	"github.com/park-jun-woo/filefunc/internal/chain"
+	"github.com/spf13/cobra"
+)
+
+var chainFeatureCmd = &cobra.Command{
+	Use:   "feature <name>",
+	Short: "Trace call chains for all funcs in a feature",
+	Args:  cobra.ExactArgs(1),
+	RunE: func(cmd *cobra.Command, args []string) error {
+		feature := args[0]
+		chon, _ := cmd.Flags().GetInt("chon")
+
+		g, files, err := BuildGraph(".")
+		if err != nil {
+			return err
+		}
+
+		funcs := chain.FilterByFeature(files, feature)
+		if len(funcs) == 0 {
+			return fmt.Errorf("no funcs found for feature=%s", feature)
+		}
+
+		fmt.Fprintf(os.Stdout, "feature=%s (%d funcs)\n\n", feature, len(funcs))
+		for _, name := range funcs {
+			results := chain.TraverseChon(g, name, chon)
+			chain.FormatChain(os.Stdout, name, results)
+			fmt.Fprintln(os.Stdout)
+		}
+		return nil
+	},
+}
+
+func init() {
+	chainFeatureCmd.Flags().Int("chon", 1, "chon distance (1~3)")
+	chainCmd.AddCommand(chainFeatureCmd)
+}
