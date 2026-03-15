@@ -27,13 +27,13 @@ var validateCmd = &cobra.Command{
 		codebookPath, _ := cmd.Flags().GetString("codebook")
 		format, _ := cmd.Flags().GetString("format")
 
-		var cb *model.Codebook
-		if codebookPath != "" {
-			var err error
-			cb, err = parse.ParseCodebook(codebookPath)
-			if err != nil {
-				return fmt.Errorf("loading codebook: %w", err)
-			}
+		if codebookPath == "" {
+			codebookPath = FindGoModDir(target) + "/codebook.yaml"
+		}
+
+		cb, err := parse.ParseCodebook(codebookPath)
+		if err != nil {
+			return fmt.Errorf("codebook.yaml required: %w", err)
 		}
 
 		paths, err := walk.WalkGoFiles(target)
@@ -67,7 +67,7 @@ var validateCmd = &cobra.Command{
 }
 
 func init() {
-	validateCmd.Flags().String("codebook", "", "path to codebook.yaml")
+	validateCmd.Flags().String("codebook", "", "path to codebook.yaml (default: auto-detect from project root)")
 	validateCmd.Flags().String("format", "text", "output format (text or json)")
 	rootCmd.AddCommand(validateCmd)
 }
