@@ -1,7 +1,5 @@
 //ff:func feature=cli type=loader
 //ff:what ollama 엔드포인트에 모델이 존재하는지 API로 확인
-//ff:uses ollamaTagsResponse
-//ff:checked llm=gpt-oss:20b hash=60870630
 package llm
 
 import (
@@ -10,12 +8,6 @@ import (
 	"net/http"
 	"strings"
 )
-
-type ollamaTagsResponse struct {
-	Models []struct {
-		Name string `json:"name"`
-	} `json:"models"`
-}
 
 // ModelExists checks if the given model is available on the ollama endpoint.
 func ModelExists(endpoint, model string) bool {
