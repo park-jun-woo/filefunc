@@ -1,7 +1,5 @@
 //ff:func feature=validate type=command
 //ff:what 모든 검증 룰을 실행하고 위반 목록을 반환
-//ff:calls CheckAnnotationPosition, CheckAnnotationRequired, CheckCheckedHash, CheckCodebookValues, CheckFuncLines, CheckInitStandalone, CheckNestingDepth, CheckOneFileOneFunc, CheckOneFileOneMethod, CheckOneFileOneType, CheckWhatRequired, HasAnyChecked
-//ff:uses Codebook, GoFile, Violation
 //ff:checked llm=gpt-oss:20b hash=b5bdcebc
 package validate
 

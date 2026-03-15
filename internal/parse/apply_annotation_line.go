@@ -1,8 +1,6 @@
 //ff:func feature=parse type=parser
 //ff:what //ff: key-value 쌍을 Annotation 구조체에 적용
-//ff:calls ParseFuncPairs, SplitTrim
-//ff:uses Annotation
-//ff:checked llm=gpt-oss:20b hash=5c64391b
+//ff:checked llm=gpt-oss:20b hash=a752d254
 package parse
 
 import "github.com/park-jun-woo/filefunc/internal/model"
@@ -18,10 +16,6 @@ func ApplyAnnotationLine(ann *model.Annotation, key, value string) {
 		ann.What = value
 	case "why":
 		ann.Why = value
-	case "calls":
-		ann.Calls = SplitTrim(value)
-	case "uses":
-		ann.Uses = SplitTrim(value)
 	case "checked":
 		ann.Checked = ParseFuncPairs(value)
 	}

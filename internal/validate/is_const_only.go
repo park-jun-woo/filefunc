@@ -1,7 +1,5 @@
 //ff:func feature=validate type=util
 //ff:what 파일이 const/var만 포함하는지 판별
-//ff:uses GoFile
-//ff:uses GoFile
 //ff:checked llm=gpt-oss:20b hash=4deabf19
 package validate
 

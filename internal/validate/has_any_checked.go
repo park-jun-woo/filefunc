@@ -1,6 +1,5 @@
 //ff:func feature=validate type=util
 //ff:what 프로젝트 파일 목록에서 //ff:checked가 하나라도 있는지 판별
-//ff:uses GoFile
 //ff:checked llm=gpt-oss:20b hash=70d865a6
 package validate
 

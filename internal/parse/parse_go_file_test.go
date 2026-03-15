@@ -57,11 +57,5 @@ func TestParseGoFileAnnotation(t *testing.T) {
 		t.Errorf("Why = %q, want %q", gf.Annotation.Why, "제1시민은 AI 에이전트")
 	}
 
-	if len(gf.Annotation.Calls) != 2 {
-		t.Errorf("Calls = %v, want 2 items", gf.Annotation.Calls)
-	}
-
-	if len(gf.Annotation.Uses) != 2 {
-		t.Errorf("Uses = %v, want 2 items", gf.Annotation.Uses)
-	}
+	// calls/uses removed — computed on demand via AST
 }

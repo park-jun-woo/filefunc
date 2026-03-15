@@ -1,7 +1,5 @@
 //ff:func feature=parse type=parser
 //ff:what Go 소스 파일을 파싱하여 GoFile 구조체로 변환
-//ff:calls CalcMaxDepth, CollectFuncDecl, CollectGenDecl, ParseAnnotation
-//ff:uses GoFile
 //ff:checked llm=gpt-oss:20b hash=b53102b8
 package parse
 

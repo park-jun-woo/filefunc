@@ -1,7 +1,5 @@
 //ff:func feature=cli type=command
 //ff:what 단일 파일에 대해 LLM what-body 검증을 수행하고 결과를 반환
-//ff:calls CalcBodyHash, ExtractFuncSource, VerifyWhat, WriteAnnotationLine
-//ff:uses CalcBodyHash, ExtractFuncSource, GoFile, Provider, VerifyWhat, WriteAnnotationLine
 //ff:checked llm=gpt-oss:20b hash=aab86087
 package cli
 

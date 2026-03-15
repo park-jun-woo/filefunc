@@ -1,7 +1,5 @@
 //ff:func feature=validate type=rule
 //ff:what A7: //ff:checked 해시와 현재 body 해시를 대조하여 불일치 시 ERROR
-//ff:calls CalcBodyHash
-//ff:uses CalcBodyHash, GoFile, Violation
 //ff:checked llm=gpt-oss:20b hash=d7b8f892
 package validate
 

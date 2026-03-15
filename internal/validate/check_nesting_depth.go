@@ -1,7 +1,5 @@
 //ff:func feature=validate type=rule
 //ff:what Q1: nesting depth 2 초과 검증
-//ff:uses GoFile, Violation
-//ff:uses GoFile, Violation
 //ff:checked llm=gpt-oss:20b hash=5f7150eb
 package validate
 

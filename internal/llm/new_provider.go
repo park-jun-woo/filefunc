@@ -1,6 +1,5 @@
 //ff:func feature=cli type=loader
 //ff:what provider 문자열로 적절한 Provider 구현체를 생성
-//ff:uses OllamaProvider, Provider
 //ff:checked llm=gpt-oss:20b hash=83753639
 package llm
 

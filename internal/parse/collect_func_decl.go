@@ -1,7 +1,5 @@
 //ff:func feature=parse type=parser
 //ff:what FuncDecl에서 func/method/init 정보를 GoFile에 수집
-//ff:calls ReceiverTypeName
-//ff:uses GoFile
 //ff:checked llm=gpt-oss:20b hash=19e57b4c
 package parse
 

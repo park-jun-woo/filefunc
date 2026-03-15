@@ -1,6 +1,5 @@
 //ff:func feature=parse type=parser
 //ff:what func에서 프로젝트 내 사용 타입명을 AST로 추출
-//ff:calls BuildImportMap, CollectTypeRefs, SortedKeys
 //ff:checked llm=gpt-oss:20b hash=085874a2
 package parse
 

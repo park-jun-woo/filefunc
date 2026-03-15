@@ -1,7 +1,5 @@
 //ff:func feature=parse type=parser
 //ff:what Go 소스 파일 상단의 //ff: 어노테이션을 파싱
-//ff:calls ApplyAnnotationLine, IsSkippableLine
-//ff:uses Annotation
 //ff:checked llm=gpt-oss:20b hash=119a8578
 package parse
 

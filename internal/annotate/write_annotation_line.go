@@ -1,6 +1,5 @@
 //ff:func feature=annotate type=formatter
 //ff:what 파일의 //ff: 라인을 추가/갱신/제거
-//ff:calls InsertAfterAnnotations, ReplaceAnnotationLine
 //ff:checked llm=gpt-oss:20b hash=da4749c7
 package annotate
 

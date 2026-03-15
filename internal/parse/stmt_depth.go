@@ -1,6 +1,5 @@
 //ff:func feature=parse type=parser
 //ff:what 문장 목록의 최대 nesting depth 계산
-//ff:calls NodeDepth
 //ff:checked llm=gpt-oss:20b hash=82dbdcd3
 package parse
 

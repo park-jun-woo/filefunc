@@ -1,7 +1,5 @@
 //ff:func feature=report type=formatter
 //ff:what 검증 위반 목록을 텍스트 형식으로 출력
-//ff:uses Violation
-//ff:uses Violation
 //ff:checked llm=gpt-oss:20b hash=d86323e4
 package report
 

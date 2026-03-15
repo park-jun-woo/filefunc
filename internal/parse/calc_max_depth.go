@@ -1,6 +1,5 @@
 //ff:func feature=parse type=parser
 //ff:what 파일 내 모든 함수의 최대 nesting depth 계산
-//ff:calls StmtDepth
 //ff:checked llm=gpt-oss:20b hash=d75547cd
 package parse
 
