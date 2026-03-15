@@ -83,8 +83,10 @@ func TestType_A2_BadCodebook(t *testing.T) {
 		t.Fatal(err)
 	}
 	cb := &model.Codebook{
-		Feature: []string{"validate", "parse"},
-		Type:    []string{"rule", "model"},
+		Required: map[string][]string{
+			"feature": {"validate", "parse"},
+			"type":    {"rule", "model"},
+		},
 	}
 	expectViolation(t, CheckCodebookValues(gf, cb), "A2")
 }

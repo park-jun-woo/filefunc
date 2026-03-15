@@ -1,11 +1,14 @@
-feature:
-  - validate
-  - parse
-type:
-  - rule
-  - parser
-pattern:
-  - error-collection
-level:
-  - ERROR
-  - WARNING
+required:
+  feature:
+    - validate
+    - parse
+  type:
+    - rule
+    - parser
+
+optional:
+  pattern:
+    - error-collection
+  level:
+    - error
+    - warning

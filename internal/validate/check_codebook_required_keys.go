@@ -1,27 +1,35 @@
 //ff:func feature=validate type=rule
-//ff:what C1: codebook에 feature, type 키가 최소 1개 값과 함께 존재하는지 검증
+//ff:what C1: codebook required 섹션에 최소 1개 키가 있고 각 키에 최소 1개 값이 있는지 검증
 package validate
 
-import "github.com/park-jun-woo/filefunc/internal/model"
+import (
+	"fmt"
 
-// CheckCodebookRequiredKeys checks C1: feature and type must have at least one value.
+	"github.com/park-jun-woo/filefunc/internal/model"
+)
+
+// CheckCodebookRequiredKeys checks C1: required section must exist with at least one key,
+// and each key must have at least one value.
 func CheckCodebookRequiredKeys(cb *model.Codebook) []model.Violation {
-	var violations []model.Violation
-	if len(cb.Feature) == 0 {
-		violations = append(violations, model.Violation{
+	if len(cb.Required) == 0 {
+		return []model.Violation{{
 			File:    "codebook.yaml",
 			Rule:    "C1",
 			Level:   "ERROR",
-			Message: "codebook must have at least one feature value",
-		})
+			Message: "codebook must have a required section with at least one key",
+		}}
 	}
-	if len(cb.Type) == 0 {
-		violations = append(violations, model.Violation{
-			File:    "codebook.yaml",
-			Rule:    "C1",
-			Level:   "ERROR",
-			Message: "codebook must have at least one type value",
-		})
+
+	var violations []model.Violation
+	for key, vals := range cb.Required {
+		if len(vals) == 0 {
+			violations = append(violations, model.Violation{
+				File:    "codebook.yaml",
+				Rule:    "C1",
+				Level:   "ERROR",
+				Message: fmt.Sprintf("required key %q must have at least one value", key),
+			})
+		}
 	}
 	return violations
 }

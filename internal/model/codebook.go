@@ -2,10 +2,8 @@
 //ff:what codebook.yaml의 허용 값 목록을 담는 구조체
 package model
 
-// Codebook holds the allowed values for //ff:func annotations.
+// Codebook holds the allowed values for //ff:func and //ff:type annotations.
 type Codebook struct {
-	Feature []string `yaml:"feature"`
-	Type    []string `yaml:"type"`
-	Pattern []string `yaml:"pattern"`
-	Level   []string `yaml:"level"`
+	Required map[string][]string `yaml:"required"`
+	Optional map[string][]string `yaml:"optional"`
 }

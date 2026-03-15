@@ -81,24 +81,32 @@ package model
 
 ## Codebook Values (Current)
 
-Allowed values defined in codebook.yaml. Only these values may be used in annotations.
+Codebook has two sections: `required` and `optional`.
+
+**Required keys** must be present in every `//ff:func` and `//ff:type` annotation. This guarantees grep reliability.
+
+**Optional keys** are used only when relevant.
 
 ```
-feature: validate, annotate, chain, parse, codebook, report, cli
-type:    command, rule, parser, walker, model, formatter, loader, util
-pattern: error-collection, file-visitor, rule-registry
-level:   error, warning, info
+required:
+  feature: validate, annotate, chain, parse, codebook, report, cli
+  type:    command, rule, parser, walker, model, formatter, loader, util
+
+optional:
+  pattern: error-collection, file-visitor, rule-registry
+  level:   error, warning, info
 ```
 
 If you need a new value, amend codebook.yaml.
 
 ### Codebook format rules
 
-- `feature` and `type` keys are required (at least 1 value each)
+- `required` section must have at least one key with at least one value
 - No duplicate values within the same key
 - All values must be lowercase + hyphens only (`[a-z][a-z0-9-]*`)
 - Empty arrays are not allowed — remove the key instead
 - Codebook is validated first. If codebook fails, code validation does not run.
+- All required keys must be present in every annotation (A8). Missing → ERROR.
 
 ---
 

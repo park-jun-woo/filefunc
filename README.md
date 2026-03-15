@@ -104,6 +104,7 @@ Verifies that `//ff:what` accurately describes the func body using a local LLM (
 | A3 | Func/type files require `//ff:what` | ERROR |
 | A6 | Annotations must be at the top of the file | ERROR |
 | A7 | `//ff:checked` hash mismatch (body changed after LLM verification) | ERROR |
+| A8 | Required codebook keys must be present in annotation | ERROR |
 
 ## Annotations
 
@@ -133,11 +134,16 @@ The codebook defines allowed values for annotations. It's the project's vocabula
 
 ```yaml
 # codebook.yaml
-feature: [validate, annotate, chain, parse, codebook, report, cli]
-type: [command, rule, parser, walker, model, formatter, loader, util]
-pattern: [error-collection, file-visitor, rule-registry]
-level: [error, warning, info]
+required:
+  feature: [validate, annotate, chain, parse, codebook, report, cli]
+  type: [command, rule, parser, walker, model, formatter, loader, util]
+
+optional:
+  pattern: [error-collection, file-visitor, rule-registry]
+  level: [error, warning, info]
 ```
+
+`required` keys must be present in every `//ff:func` and `//ff:type` annotation (A8). This guarantees grep reliability — required keys never have gaps. `optional` keys are used only when relevant.
 
 Values not in the codebook trigger `A2 ERROR`. Each project has its own codebook. `codebook.yaml` is required — validate will error without it.
 
@@ -145,7 +151,7 @@ Values not in the codebook trigger `A2 ERROR`. Each project has its own codebook
 
 | Rule | Description | Severity |
 |---|---|---|
-| C1 | `feature` and `type` keys required (at least 1 value each) | ERROR |
+| C1 | `required` section must have at least one key with at least one value | ERROR |
 | C2 | No duplicate values within the same key | ERROR |
 | C3 | All values must be lowercase + hyphens only (`[a-z][a-z0-9-]*`) | ERROR |
 

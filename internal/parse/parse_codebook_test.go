@@ -10,19 +10,19 @@ func TestParseCodebook(t *testing.T) {
 		t.Fatalf("ParseCodebook failed: %v", err)
 	}
 
-	if len(cb.Feature) != 2 {
-		t.Errorf("Feature count = %d, want 2", len(cb.Feature))
+	if len(cb.Required["feature"]) != 2 {
+		t.Errorf("Required feature count = %d, want 2", len(cb.Required["feature"]))
 	}
 
-	if cb.Feature[0] != "validate" {
-		t.Errorf("Feature[0] = %q, want %q", cb.Feature[0], "validate")
+	if cb.Required["feature"][0] != "validate" {
+		t.Errorf("Required feature[0] = %q, want %q", cb.Required["feature"][0], "validate")
 	}
 
-	if len(cb.Type) != 2 {
-		t.Errorf("Type count = %d, want 2", len(cb.Type))
+	if len(cb.Required["type"]) != 2 {
+		t.Errorf("Required type count = %d, want 2", len(cb.Required["type"]))
 	}
 
-	if len(cb.Level) != 2 {
-		t.Errorf("Level count = %d, want 2", len(cb.Level))
+	if len(cb.Optional["level"]) != 2 {
+		t.Errorf("Optional level count = %d, want 2", len(cb.Optional["level"]))
 	}
 }
