@@ -26,9 +26,9 @@ var chainFuncCmd = &cobra.Command{
 
 		var results []chain.ChonResult
 		if childDepth > 0 {
-			results = chain.TraverseDepth(g, target, "child", childDepth)
+			results = chain.TraverseDepth(g, target, "calls", childDepth)
 		} else if parentDepth > 0 {
-			results = chain.TraverseDepth(g, target, "parent", parentDepth)
+			results = chain.TraverseDepth(g, target, "called-by", parentDepth)
 		} else {
 			results = chain.TraverseChon(g, target, chon)
 		}
