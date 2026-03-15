@@ -108,13 +108,18 @@ Amend codebook.yaml when new values are needed.
 ## Commands
 
 ```bash
-filefunc validate ./internal/                        # validate (codebook auto-detected)
-filefunc validate --format json ./internal/          # JSON output
+filefunc validate                                    # current dir as project root
+filefunc validate /path/to/project                   # explicit project root
+filefunc validate --format json
 filefunc chain func RunAll --chon 2                  # call relationships
 filefunc chain feature validate                      # feature-wide chain
-filefunc llmc ./internal/                            # LLM what-body verification
-filefunc llmc --model qwen3:8b --threshold 0.9 ./internal/
+filefunc chain func RunAll --root /path/to/project   # explicit project root
+filefunc llmc                                        # LLM what-body verification
+filefunc llmc /path/to/project
+filefunc llmc --model qwen3:8b --threshold 0.9
 ```
+
+Project root must contain `go.mod` and `codebook.yaml`. Omit to use current directory.
 
 Exit code 1 on violations. Zero violations required before committing.
 

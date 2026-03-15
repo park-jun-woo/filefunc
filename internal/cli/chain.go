@@ -10,5 +10,6 @@ var chainCmd = &cobra.Command{
 }
 
 func init() {
+	chainCmd.PersistentFlags().String("root", ".", "project root (must contain go.mod and codebook.yaml)")
 	rootCmd.AddCommand(chainCmd)
 }

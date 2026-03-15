@@ -15,21 +15,24 @@ import (
 )
 
 var validateCmd = &cobra.Command{
-	Use:   "validate [path]",
+	Use:   "validate [project-root]",
 	Short: "Validate code structure rules",
 	Args:  cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		target := "."
+		root := "."
 		if len(args) > 0 {
-			target = args[0]
+			root = args[0]
+		}
+
+		if err := CheckProjectRoot(root); err != nil {
+			return err
 		}
 
 		codebookPath, _ := cmd.Flags().GetString("codebook")
 		format, _ := cmd.Flags().GetString("format")
 
-		goModDir := FindGoModDir(target)
 		if codebookPath == "" {
-			codebookPath = goModDir + "/codebook.yaml"
+			codebookPath = root + "/codebook.yaml"
 		}
 
 		cb, err := parse.ParseCodebook(codebookPath)
@@ -43,8 +46,8 @@ var validateCmd = &cobra.Command{
 			return fmt.Errorf("codebook.yaml has %d violation(s) — fix before validating code", len(cbViolations))
 		}
 
-		ignorePatterns := walk.ParseFFIgnore(goModDir + "/.ffignore")
-		paths, err := walk.WalkGoFiles(target, ignorePatterns)
+		ignorePatterns := walk.ParseFFIgnore(root + "/.ffignore")
+		paths, err := walk.WalkGoFiles(root, ignorePatterns)
 		if err != nil {
 			return fmt.Errorf("walking files: %w", err)
 		}
@@ -75,7 +78,7 @@ var validateCmd = &cobra.Command{
 }
 
 func init() {
-	validateCmd.Flags().String("codebook", "", "path to codebook.yaml (default: auto-detect from project root)")
+	validateCmd.Flags().String("codebook", "", "path to codebook.yaml (default: <project-root>/codebook.yaml)")
 	validateCmd.Flags().String("format", "text", "output format (text or json)")
 	rootCmd.AddCommand(validateCmd)
 }

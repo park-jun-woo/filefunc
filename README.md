@@ -41,28 +41,30 @@ Requires Go 1.22+.
 ### validate — Check code structure rules
 
 ```bash
-filefunc validate ./internal/
-filefunc validate --format json ./internal/
-filefunc validate --codebook /path/to/codebook.yaml ./internal/
+filefunc validate                    # current directory as project root
+filefunc validate /path/to/project   # explicit project root
+filefunc validate --format json
 ```
 
-Read-only. Never modifies files. Exit code 1 on violations. Requires `codebook.yaml` in the project root (auto-detected from `go.mod` location). Use `--codebook` to override. Respects `.ffignore`.
+Project root must contain `go.mod` and `codebook.yaml`. Read-only. Exit code 1 on violations. Respects `.ffignore`.
 
 ### chain — Trace call relationships
 
 ```bash
-filefunc chain func RunAll              # 1촌 (default)
-filefunc chain func RunAll --chon 2     # 2촌 (siblings included)
+filefunc chain func RunAll              # 1촌 (default, current dir)
+filefunc chain func RunAll --chon 2     # 2촌 (co-called included)
 filefunc chain func RunAll --chon 3     # 3촌 (max)
-filefunc chain func RunAll --child-depth 3   # children only
-filefunc chain func RunAll --parent-depth 3  # parents only
+filefunc chain func RunAll --child-depth 3   # calls only
+filefunc chain func RunAll --parent-depth 3  # callers only
 filefunc chain feature validate         # all funcs in feature
+filefunc chain func RunAll --root /path/to/project  # explicit project root
 ```
 
-Traces call relationships using real-time AST analysis. Respects `.ffignore`.
+Real-time AST analysis. Respects `.ffignore`.
 
 | Flag | Description | Default |
 |---|---|---|
+| `--root` | Project root | `.` |
 | `--chon` | Relationship distance (1~3) | 1 |
 | `--child-depth` | Trace calls only to this depth | — |
 | `--parent-depth` | Trace callers only to this depth | — |
@@ -70,12 +72,13 @@ Traces call relationships using real-time AST analysis. Respects `.ffignore`.
 ### llmc — LLM verification
 
 ```bash
-filefunc llmc ./internal/
-filefunc llmc --model qwen3:8b ./internal/
-filefunc llmc --threshold 0.9 ./internal/
+filefunc llmc                           # current directory
+filefunc llmc /path/to/project          # explicit project root
+filefunc llmc --model qwen3:8b
+filefunc llmc --threshold 0.9
 ```
 
-Verifies that `//ff:what` accurately describes the func body using a local LLM (ollama). Scores 0.0~1.0, threshold default 0.8. On pass, writes `//ff:checked llm=model hash=bodyhash` signature. Respects `.ffignore`.
+Verifies `//ff:what` matches func body using local LLM (ollama). Scores 0.0~1.0, threshold 0.8. On pass, writes `//ff:checked` signature. Respects `.ffignore`.
 
 | Flag | Description | Default |
 |---|---|---|

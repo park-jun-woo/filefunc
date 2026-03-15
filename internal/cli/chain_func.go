@@ -15,11 +15,16 @@ var chainFuncCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		target := args[0]
+		root, _ := cmd.Flags().GetString("root")
 		chon, _ := cmd.Flags().GetInt("chon")
 		childDepth, _ := cmd.Flags().GetInt("child-depth")
 		parentDepth, _ := cmd.Flags().GetInt("parent-depth")
 
-		g, _, err := BuildGraph(".")
+		if err := CheckProjectRoot(root); err != nil {
+			return err
+		}
+
+		g, _, err := BuildGraph(root)
 		if err != nil {
 			return err
 		}

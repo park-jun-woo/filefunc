@@ -13,13 +13,17 @@ import (
 )
 
 var llmcCmd = &cobra.Command{
-	Use:   "llmc [path]",
+	Use:   "llmc [project-root]",
 	Short: "Verify //ff:what matches func body using LLM",
 	Args:  cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		target := "."
+		root := "."
 		if len(args) > 0 {
-			target = args[0]
+			root = args[0]
+		}
+
+		if err := CheckProjectRoot(root); err != nil {
+			return err
 		}
 
 		providerName, _ := cmd.Flags().GetString("provider")
@@ -36,8 +40,8 @@ var llmcCmd = &cobra.Command{
 			return err
 		}
 
-		ignorePatterns := walk.ParseFFIgnore(FindGoModDir(target) + "/.ffignore")
-		paths, err := walk.WalkGoFiles(target, ignorePatterns)
+		ignorePatterns := walk.ParseFFIgnore(root + "/.ffignore")
+		paths, err := walk.WalkGoFiles(root, ignorePatterns)
 		if err != nil {
 			return fmt.Errorf("walking files: %w", err)
 		}

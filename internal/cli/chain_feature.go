@@ -16,9 +16,14 @@ var chainFeatureCmd = &cobra.Command{
 	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		feature := args[0]
+		root, _ := cmd.Flags().GetString("root")
 		chon, _ := cmd.Flags().GetInt("chon")
 
-		g, files, err := BuildGraph(".")
+		if err := CheckProjectRoot(root); err != nil {
+			return err
+		}
+
+		g, files, err := BuildGraph(root)
 		if err != nil {
 			return err
 		}
