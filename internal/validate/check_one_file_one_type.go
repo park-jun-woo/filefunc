@@ -1,5 +1,8 @@
 //ff:func feature=validate type=rule
 //ff:what F2: 파일당 exported type 1개 검증
+//ff:uses GoFile, Violation
+//ff:uses GoFile, Violation
+//ff:checked llm=gpt-oss:20b hash=8465bf5c
 package validate
 
 import (

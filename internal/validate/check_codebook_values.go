@@ -1,5 +1,8 @@
 //ff:func feature=validate type=rule
 //ff:what A2: 어노테이션 값이 코드북에 존재하는지 검증
+//ff:calls AllowedValues, Contains
+//ff:uses Codebook, GoFile, Violation
+//ff:checked llm=gpt-oss:20b hash=fbc8cbdc
 package validate
 
 import (

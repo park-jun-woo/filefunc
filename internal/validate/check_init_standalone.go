@@ -1,5 +1,8 @@
 //ff:func feature=validate type=rule
 //ff:what F4: init()만 단독으로 존재하는 파일 검증
+//ff:uses GoFile, Violation
+//ff:uses GoFile, Violation
+//ff:checked llm=gpt-oss:20b hash=bbfc055b
 package validate
 
 import "github.com/park-jun-woo/filefunc/internal/model"

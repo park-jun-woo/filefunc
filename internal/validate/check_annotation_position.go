@@ -1,5 +1,8 @@
 //ff:func feature=validate type=rule
 //ff:what A6: //ff: 어노테이션이 파일 최상단에 위치하는지 검증
+//ff:uses GoFile, Violation
+//ff:uses GoFile, Violation
+//ff:checked llm=gpt-oss:20b hash=379025dd
 package validate
 
 import (

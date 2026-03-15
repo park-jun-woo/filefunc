@@ -1,5 +1,8 @@
 //ff:func feature=validate type=rule
 //ff:what Q2/Q3: func 라인 수 검증 (1000 ERROR, 100 WARNING)
+//ff:uses GoFile, Violation
+//ff:uses GoFile, Violation
+//ff:checked llm=gpt-oss:20b hash=3c327204
 package validate
 
 import (

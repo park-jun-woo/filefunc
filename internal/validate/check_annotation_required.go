@@ -1,5 +1,8 @@
 //ff:func feature=validate type=rule
 //ff:what A1: func 파일은 //ff:func, type 파일은 //ff:type 필수 검증
+//ff:uses GoFile, Violation
+//ff:uses GoFile, Violation
+//ff:checked llm=gpt-oss:20b hash=a1630e03
 package validate
 
 import "github.com/park-jun-woo/filefunc/internal/model"

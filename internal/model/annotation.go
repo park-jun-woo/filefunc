@@ -8,6 +8,7 @@ type Annotation struct {
 	Type  map[string]string // key-value pairs from //ff:type (e.g. feature=validate type=model)
 	What  string            // //ff:what — what this func/type does (required)
 	Why   string            // //ff:why — why it was designed this way (optional)
-	Calls []string          // //ff:calls — functions this func calls
-	Uses  []string          // //ff:uses — types this func uses
+	Calls   []string          // //ff:calls — functions this func calls
+	Uses    []string          // //ff:uses — types this func uses
+	Checked map[string]string // //ff:checked — LLM verification signature (llm=model hash=xxx)
 }

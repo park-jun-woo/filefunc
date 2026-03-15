@@ -1,5 +1,7 @@
 //ff:func feature=parse type=parser
 //ff:what if문의 else 분기를 포함한 최대 nesting depth 계산
+//ff:calls NodeDepth, StmtDepth
+//ff:checked llm=gpt-oss:20b hash=02db6e62
 package parse
 
 import "go/ast"

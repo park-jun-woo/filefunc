@@ -1,5 +1,8 @@
 //ff:func feature=validate type=util
 //ff:what 코드북에서 주어진 키의 허용 값 목록을 반환
+//ff:uses Codebook
+//ff:uses Codebook
+//ff:checked llm=gpt-oss:20b hash=3c7559d0
 package validate
 
 import "github.com/park-jun-woo/filefunc/internal/model"

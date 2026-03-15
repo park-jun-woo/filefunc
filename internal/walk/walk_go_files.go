@@ -1,5 +1,6 @@
 //ff:func feature=parse type=walker
 //ff:what 디렉토리를 재귀 순회하며 .go 파일 경로 목록 반환
+//ff:checked llm=gpt-oss:20b hash=1791bca7
 package walk
 
 import (

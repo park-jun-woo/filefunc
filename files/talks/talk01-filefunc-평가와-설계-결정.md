@@ -63,9 +63,9 @@ func CheckOneFileOneFunc(...) ...
 
 ## 남은 약점 (2개)
 
-1. **어노테이션 drift 방지** — pre-commit hook / CI 필수
+1. **어노테이션 drift 방지** — `//ff:checked` 서명으로 해결 확정
    - `//ff:calls`, `//ff:uses`: 코드와 기계적 대조 가능
-   - `//ff:what`: 자연어라 기계적 검증 불가 → **해결책 후보: 소형 LLM 검수**. func body(권고 100줄)와 what(1줄)를 소형 LLM에 주고 구현-what 일치 여부를 판정. 1 file 1 func이라 파일 단위 1:1 대응이 보장됨. 단, 소형 LLM 판정 정확도는 검증 필요
+   - `//ff:what`: 소형 LLM이 func body와 대조 → 일치 시 `//ff:checked llm=모델명 hash=body해시` 자동 기록. body 수정 시 해시 불일치로 자동 무효화 → ERROR. `--no-llm`으로 비활성화 가능 (환경 제약 대응)
 2. **코드북 설계 품질** — 코드북이 나쁘면 grep이 부정확. 의도된 트레이드오프. 코드북으로 어휘를 정규화하면 빠진 feature, 중복된 type, 애매한 분류가 목록에서 드러난다. 구멍이 보여야 관리가 된다. 대응 전략: 도메인을 날카롭게 좁히고, 프로젝트마다 코드북을 맞춤 작성한다
 
 ---
