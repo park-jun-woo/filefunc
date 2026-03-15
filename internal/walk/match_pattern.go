@@ -9,7 +9,14 @@ import (
 
 func matchPattern(path string, name string, isDir bool, pattern string) bool {
 	if strings.HasSuffix(pattern, "/") {
-		return isDir && (name == strings.TrimSuffix(pattern, "/") || strings.Contains(path, pattern))
+		dirPattern := strings.TrimSuffix(pattern, "/")
+		if !isDir {
+			return false
+		}
+		if name == dirPattern {
+			return true
+		}
+		return strings.HasSuffix(path, dirPattern) || strings.Contains(path+"/", pattern)
 	}
 	matched, _ := filepath.Match(pattern, name)
 	return matched
