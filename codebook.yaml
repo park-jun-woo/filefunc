@@ -27,6 +27,6 @@ pattern:
   - rule-registry     # 룰 등록/실행
 
 level:
-  - ERROR
-  - WARNING
-  - INFO
+  - error
+  - warning
+  - info

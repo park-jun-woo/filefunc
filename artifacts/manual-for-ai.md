@@ -87,10 +87,18 @@ Allowed values defined in codebook.yaml. Only these values may be used in annota
 feature: validate, annotate, chain, parse, codebook, report, cli
 type:    command, rule, parser, walker, model, formatter, loader, util
 pattern: error-collection, file-visitor, rule-registry
-level:   ERROR, WARNING, INFO
+level:   error, warning, info
 ```
 
 If you need a new value, amend codebook.yaml.
+
+### Codebook format rules
+
+- `feature` and `type` keys are required (at least 1 value each)
+- No duplicate values within the same key
+- All values must be lowercase + hyphens only (`[a-z][a-z0-9-]*`)
+- Empty arrays are not allowed — remove the key instead
+- Codebook is validated first. If codebook fails, code validation does not run.
 
 ---
 

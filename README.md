@@ -136,10 +136,20 @@ The codebook defines allowed values for annotations. It's the project's vocabula
 feature: [validate, annotate, chain, parse, codebook, report, cli]
 type: [command, rule, parser, walker, model, formatter, loader, util]
 pattern: [error-collection, file-visitor, rule-registry]
-level: [ERROR, WARNING, INFO]
+level: [error, warning, info]
 ```
 
-Values not in the codebook trigger `A2 ERROR`. Each project has its own codebook.
+Values not in the codebook trigger `A2 ERROR`. Each project has its own codebook. `codebook.yaml` is required — validate will error without it.
+
+### Codebook format rules
+
+| Rule | Description | Severity |
+|---|---|---|
+| C1 | `feature` and `type` keys required (at least 1 value each) | ERROR |
+| C2 | No duplicate values within the same key | ERROR |
+| C3 | All values must be lowercase + hyphens only (`[a-z][a-z0-9-]*`) | ERROR |
+
+Codebook is validated first. If codebook fails, code validation does not run.
 
 ## Validate Options
 

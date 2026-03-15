@@ -36,6 +36,12 @@ var validateCmd = &cobra.Command{
 			return fmt.Errorf("codebook.yaml required: %w", err)
 		}
 
+		cbViolations := validate.ValidateCodebook(cb)
+		if len(cbViolations) > 0 {
+			report.FormatText(os.Stdout, cbViolations)
+			return fmt.Errorf("codebook.yaml has %d violation(s) — fix before validating code", len(cbViolations))
+		}
+
 		paths, err := walk.WalkGoFiles(target)
 		if err != nil {
 			return fmt.Errorf("walking files: %w", err)
