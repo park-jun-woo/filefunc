@@ -1,0 +1,32 @@
+# filefunc codebook
+# 어노테이션(//ff:func)에 사용 가능한 값의 허용 목록
+# 여기에 없는 값을 어노테이션에 쓰면 validate ERROR
+
+feature:
+  - validate    # 코드 구조 룰 검증
+  - annotate    # LLM 자동 어노테이션 생성
+  - chain       # func/feature 데이터 흐름 추적
+  - parse       # 소스 코드, 어노테이션, codebook 파싱
+  - codebook    # codebook 로드 및 관리
+  - report      # 검증 결과 출력
+  - cli         # cobra 명령 정의
+
+type:
+  - command     # cobra 명령 엔트리포인트
+  - rule        # 개별 검증 룰 구현
+  - parser      # 파싱 로직
+  - walker      # 파일/디렉토리 순회
+  - model       # 데이터 구조체
+  - formatter   # 출력 포매터
+  - loader      # 파일/설정 로드
+  - util        # 범용 유틸리티
+
+pattern:
+  - error-collection  # 에러 수집 후 일괄 보고
+  - file-visitor      # 파일 단위 순회 처리
+  - rule-registry     # 룰 등록/실행
+
+level:
+  - ERROR
+  - WARNING
+  - INFO

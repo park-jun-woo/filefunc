@@ -1,0 +1,11 @@
+feature:
+  - validate
+  - parse
+type:
+  - rule
+  - parser
+pattern:
+  - error-collection
+level:
+  - ERROR
+  - WARNING
