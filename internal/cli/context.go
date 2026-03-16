@@ -74,7 +74,7 @@ var contextCmd = &cobra.Command{
 func ollamaGenerate(endpoint, model, prompt string) (string, error) {
 	reqBody, _ := json.Marshal(map[string]interface{}{
 		"model": model, "prompt": prompt, "stream": false,
-		"options": map[string]interface{}{"temperature": 0},
+		"options": map[string]interface{}{"temperature": 0, "num_predict": 200},
 	})
 	resp, err := http.Post(endpoint+"/api/generate", "application/json", bytes.NewReader(reqBody))
 	if err != nil {
