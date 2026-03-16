@@ -12,6 +12,7 @@ required:
     - codebook    # codebook 로드 및 관리
     - report      # 검증 결과 출력
     - cli         # cobra 명령 정의
+    - context     # LLM 기반 컨텍스트 탐색
   type:
     - command     # cobra 명령 엔트리포인트
     - rule        # 개별 검증 룰 구현

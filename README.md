@@ -86,6 +86,25 @@ vllm serve Qwen/Qwen3-Reranker-0.6B --task score \
   --hf_overrides '{"architectures":["Qwen3ForSequenceClassification"],"classifier_from_token":["no","yes"],"is_original_qwen3_reranker":true}'
 ```
 
+### context — LLM context search
+
+```bash
+filefunc context CheckNestingDepth "nesting depth 검증 수정"     # 4-stage pipeline
+filefunc context CheckNestingDepth "modify depth logic" --depth 2  # feature filter only
+filefunc context CheckNestingDepth "depth" --what-rate 0.3         # adjust what threshold
+filefunc context CheckNestingDepth "depth" --body-rate 0.5         # adjust body threshold
+```
+
+4-stage pipeline: chain chon=2 → same-feature filter → what scoring (LLM) → body scoring (LLM). Requires ollama with gpt-oss:20b.
+
+| Flag | Description | Default |
+|---|---|---|
+| `--depth` | Pipeline depth (1-4) | 4 |
+| `--what-rate` | What scoring threshold | 0.2 |
+| `--body-rate` | Body scoring threshold | 0.5 |
+| `--model` | ollama model | `gpt-oss:20b` |
+| `--endpoint` | ollama endpoint | `http://localhost:11434` |
+
 ### llmc — LLM verification
 
 ```bash
