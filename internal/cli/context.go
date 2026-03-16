@@ -34,9 +34,9 @@ var contextCmd = &cobra.Command{
 			return err
 		}
 
-		cb, err := parse.ParseCodebook(root + "/codebook.yaml")
+		codebookRaw, err := os.ReadFile(root + "/codebook.yaml")
 		if err != nil {
-			return err
+			return fmt.Errorf("codebook.yaml not found: %w", err)
 		}
 
 		ignorePatterns := walk.ParseFFIgnore(root)
@@ -58,12 +58,13 @@ var contextCmd = &cobra.Command{
 			return ollamaGenerate(endpoint, modelName, p)
 		}
 
-		return ffcontext.RunPipeline(os.Stdout, files, cb, ffcontext.PipelineConfig{
-			Prompt:   prompt,
-			Depth:    depth,
-			WhatRate: whatRate,
-			BodyRate: bodyRate,
-			Generate: generate,
+		return ffcontext.RunPipeline(os.Stdout, files, ffcontext.PipelineConfig{
+			Prompt:      prompt,
+			Depth:       depth,
+			WhatRate:    whatRate,
+			BodyRate:    bodyRate,
+			CodebookRaw: string(codebookRaw),
+			Generate:    generate,
 		})
 	},
 }
@@ -71,6 +72,7 @@ var contextCmd = &cobra.Command{
 func ollamaGenerate(endpoint, model, prompt string) (string, error) {
 	reqBody, _ := json.Marshal(map[string]interface{}{
 		"model": model, "prompt": prompt, "stream": false,
+		"options": map[string]interface{}{"temperature": 0},
 	})
 	resp, err := http.Post(endpoint+"/api/generate", "application/json", bytes.NewReader(reqBody))
 	if err != nil {

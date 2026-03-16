@@ -12,17 +12,18 @@ import (
 
 // PipelineConfig holds context pipeline parameters.
 type PipelineConfig struct {
-	Prompt   string
-	Depth    int
-	WhatRate float64
-	BodyRate float64
-	Generate func(string) (string, error)
+	Prompt      string
+	Depth       int
+	WhatRate    float64
+	BodyRate    float64
+	CodebookRaw string
+	Generate    func(string) (string, error)
 }
 
 // RunPipeline executes the 4-stage context pipeline.
-func RunPipeline(w io.Writer, files []*model.GoFile, cb *model.Codebook, cfg PipelineConfig) error {
+func RunPipeline(w io.Writer, files []*model.GoFile, cfg PipelineConfig) error {
 	// 1단계: LLM feature 선택
-	features, err := SelectFeature(cfg.Prompt, cb, cfg.Generate)
+	features, err := SelectFeature(cfg.Prompt, cfg.CodebookRaw, cfg.Generate)
 	if err != nil {
 		return fmt.Errorf("feature selection failed: %w", err)
 	}
@@ -34,7 +35,7 @@ func RunPipeline(w io.Writer, files []*model.GoFile, cb *model.Codebook, cfg Pip
 	fmt.Fprintf(w, "[1/4] feature selection: %s (LLM)\n", strings.Join(features, ", "))
 	if cfg.Depth <= 1 {
 		filtered := FilterFeature(files, features)
-		FormatResult(w, filtered, defaultScores(filtered))
+		FormatResult(w, filtered, nil)
 		return nil
 	}
 
@@ -43,7 +44,7 @@ func RunPipeline(w io.Writer, files []*model.GoFile, cb *model.Codebook, cfg Pip
 	filtered := FilterFeature(files, features)
 	fmt.Fprintf(w, "[2/4] feature filter: %d → %d\n", before, len(filtered))
 	if cfg.Depth <= 2 {
-		FormatResult(w, filtered, defaultScores(filtered))
+		FormatResult(w, filtered, nil)
 		return nil
 	}
 

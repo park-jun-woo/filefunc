@@ -5,13 +5,13 @@
 
 required:
   feature:
-    - validate    # 코드 구조 룰 검증
-    - annotate    # LLM 자동 어노테이션 생성
+    - validate    # 코드 구조 룰 검증 (F1,Q1,A1 등 정적 분석 룰)
+    - annotate    # LLM what-body 검증 및 어노테이션 자동 생성 (llmc)
     - chain       # func/feature 데이터 흐름 추적
     - parse       # 소스 코드, 어노테이션, codebook 파싱
     - codebook    # codebook 로드 및 관리
     - report      # 검증 결과 출력
-    - cli         # cobra 명령 정의
+    - cli         # cobra 명령 정의 및 llmc/validate/chain/context 실행
     - context     # LLM 기반 컨텍스트 탐색
   type:
     - command     # cobra 명령 엔트리포인트
