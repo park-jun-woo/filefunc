@@ -29,6 +29,7 @@ var contextCmd = &cobra.Command{
 		bodyRate, _ := cmd.Flags().GetFloat64("body-rate")
 		modelName, _ := cmd.Flags().GetString("model")
 		endpoint, _ := cmd.Flags().GetString("endpoint")
+		search, _ := cmd.Flags().GetString("search")
 
 		if err := CheckProjectRoot(root); err != nil {
 			return err
@@ -60,6 +61,7 @@ var contextCmd = &cobra.Command{
 
 		return ffcontext.RunPipeline(os.Stdout, files, ffcontext.PipelineConfig{
 			Prompt:      prompt,
+			Search:      search,
 			Depth:       depth,
 			WhatRate:    whatRate,
 			BodyRate:    bodyRate,
@@ -95,5 +97,6 @@ func init() {
 	contextCmd.Flags().Float64("body-rate", 0.5, "body scoring threshold")
 	contextCmd.Flags().String("model", "gpt-oss:20b", "ollama model name")
 	contextCmd.Flags().String("endpoint", "http://localhost:11434", "ollama endpoint")
+	contextCmd.Flags().String("search", "", "direct annotation filter (e.g. \"feature=validate type=rule\")")
 	rootCmd.AddCommand(contextCmd)
 }

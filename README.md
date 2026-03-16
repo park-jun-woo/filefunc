@@ -93,6 +93,8 @@ filefunc context "nesting depth 검증 수정"                        # 4-stage 
 filefunc context "modify depth logic" --depth 2                    # feature filter only
 filefunc context "depth 수정" --what-rate 0.3                      # adjust what threshold
 filefunc context "depth 수정" --body-rate 0.5                      # adjust body threshold
+filefunc context "depth 수정" --search "feature=validate"          # skip LLM, direct filter
+filefunc context "cross 수정" --search "feature=crosscheck ssot=openapi"  # multi-key AND
 ```
 
 4-stage pipeline: LLM feature selection → feature filter → what scoring (LLM) → body scoring (LLM). No func name needed. Requires ollama with gpt-oss:20b.
@@ -104,6 +106,7 @@ filefunc context "depth 수정" --body-rate 0.5                      # adjust bo
 | `--body-rate` | Body scoring threshold | 0.5 |
 | `--model` | ollama model | `gpt-oss:20b` |
 | `--endpoint` | ollama endpoint | `http://localhost:11434` |
+| `--search` | Direct annotation filter (skip LLM feature selection) | — |
 
 ### llmc — LLM verification
 
