@@ -1,4 +1,4 @@
-//ff:func feature=chain type=util control=iteration
+//ff:func feature=chain type=util control=iteration dimension=1
 //ff:what 중복 없이 문자열을 결과 슬라이스에 추가
 package chain
 

@@ -1,4 +1,4 @@
-//ff:func feature=parse type=parser control=iteration
+//ff:func feature=parse type=parser control=iteration dimension=1
 //ff:what ValueSpec에서 변수명 목록을 추출
 //ff:checked llm=gpt-oss:20b hash=21259418
 package parse

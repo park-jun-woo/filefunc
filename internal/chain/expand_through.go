@@ -1,4 +1,4 @@
-//ff:func feature=chain type=util control=iteration
+//ff:func feature=chain type=util control=iteration dimension=1
 //ff:what 중간 노드를 거쳐 도달하는 func 목록 수집 (2촌+, 3촌용)
 package chain
 

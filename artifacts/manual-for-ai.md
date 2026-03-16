@@ -29,7 +29,7 @@ For Go application-layer projects: backend services, CLI tools, code generators,
 
 | Rule | Description | Severity |
 |---|---|---|
-| Q1 | Nesting depth ≤ 2 (use early return, merge conditions, extract func) | ERROR |
+| Q1 | Nesting depth: sequence=2, selection=2, iteration=dimension+1 | ERROR |
 | Q2 | Func max 1000 lines | ERROR |
 | Q3 | Func recommended max: sequence/iteration 100, selection 300 | WARNING |
 
@@ -49,6 +49,8 @@ For Go application-layer projects: backend services, CLI tools, code generators,
 | A12 | `control=sequence` but switch/loop exists at depth 1 | ERROR |
 | A13 | `control=selection` but loop exists at depth 1 | ERROR |
 | A14 | `control=iteration` but switch exists at depth 1 | ERROR |
+| A15 | `control=iteration` requires `dimension=` | ERROR |
+| A16 | `dimension=` value must be a positive integer | ERROR |
 
 ### Code quality (Q3 control-specific)
 
@@ -87,6 +89,8 @@ package validate
 ```
 
 `control=` is required for all func files (A9). Values: `sequence`, `selection` (switch), `iteration` (loop). Böhm-Jacopini (1966). 1 func 1 control — no mixing.
+
+`dimension=` is required for `control=iteration` (A15). Q1 depth limit = dimension + 1. dimension=1 for flat lists (depth ≤ 2). dimension ≥ 2 requires named type (struct/interface) nesting — raw `[][][]int` is not allowed.
 
 | Annotation | Required | Description |
 |---|---|---|

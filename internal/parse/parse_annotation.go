@@ -1,4 +1,4 @@
-//ff:func feature=parse type=parser control=iteration
+//ff:func feature=parse type=parser control=iteration dimension=1
 //ff:what Go 소스 파일 상단의 //ff: 어노테이션을 파싱
 //ff:checked llm=gpt-oss:20b hash=119a8578
 package parse

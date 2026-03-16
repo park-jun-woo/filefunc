@@ -104,7 +104,7 @@ Verifies `//ff:what` matches func body using local LLM (ollama). Scores 0.0~1.0,
 
 | Rule | Description | Severity |
 |---|---|---|
-| Q1 | Nesting depth ≤ 2 | ERROR |
+| Q1 | Nesting depth: sequence=2, selection=2, iteration=dimension+1 | ERROR |
 | Q2 | Func max 1000 lines | ERROR |
 | Q3 | Func recommended max: sequence/iteration 100, selection 300 | WARNING |
 
@@ -124,6 +124,8 @@ Verifies `//ff:what` matches func body using local LLM (ollama). Scores 0.0~1.0,
 | A12 | `control=sequence` but switch/loop exists at depth 1 | ERROR |
 | A13 | `control=selection` but loop exists at depth 1 | ERROR |
 | A14 | `control=iteration` but switch exists at depth 1 | ERROR |
+| A15 | `control=iteration` requires `dimension=` | ERROR |
+| A16 | `dimension=` value must be a positive integer | ERROR |
 
 ## Annotations
 
@@ -136,6 +138,8 @@ func CheckOneFileOneFunc(gf *model.GoFile) []model.Violation {
 ```
 
 `control=` is required for all func files (A9). Values: `sequence`, `selection` (switch), `iteration` (loop). Based on Böhm-Jacopini theorem (1966). 1 func 1 control.
+
+`dimension=` is required for `control=iteration` files (A15). Specifies the dimensionality of the data being iterated. Q1 depth limit = dimension + 1. dimension=1 for flat lists (depth ≤ 2), dimension ≥ 2 requires named type (struct/interface) nesting.
 
 | Annotation | Purpose | Required |
 |---|---|---|

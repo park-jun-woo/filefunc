@@ -112,3 +112,20 @@ func TestMutest_A14(t *testing.T) {
 	expectViolation(t, CheckControlIterationNoSwitch(mustParse(t, "testdata/control_iteration_with_switch.go")), "A14")
 	expectNoViolation(t, CheckControlIterationNoSwitch(mustParse(t, "testdata/clean.go")))
 }
+
+// A15
+func TestMutest_A15(t *testing.T) {
+	expectViolation(t, CheckDimensionRequired(mustParse(t, "testdata/iter_no_dimension.go")), "A15")
+	expectNoViolation(t, CheckDimensionRequired(mustParse(t, "testdata/clean.go")))
+}
+
+// A16
+func TestMutest_A16(t *testing.T) {
+	expectViolation(t, CheckDimensionValue(mustParse(t, "testdata/bad_dimension_value.go")), "A16")
+	expectNoViolation(t, CheckDimensionValue(mustParse(t, "testdata/clean.go")))
+}
+
+// Q1 dimension
+func TestMutest_Q1_Dimension(t *testing.T) {
+	expectNoViolation(t, CheckNestingDepth(mustParse(t, "testdata/dimension2_depth3.go")))
+}

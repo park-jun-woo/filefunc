@@ -1,4 +1,4 @@
-//ff:func feature=parse type=parser control=iteration
+//ff:func feature=parse type=parser control=iteration dimension=1
 //ff:what 프로젝트 전체 GoFile에서 func/type 이름을 수집하여 심볼 맵 반환
 //ff:checked llm=gpt-oss:20b hash=201498f9
 package parse

@@ -1,4 +1,4 @@
-//ff:func feature=validate type=command control=iteration
+//ff:func feature=validate type=command control=iteration dimension=1
 //ff:what 모든 검증 룰을 실행하고 위반 목록을 반환
 package validate
 
@@ -26,6 +26,8 @@ func RunAll(files []*model.GoFile, cb *model.Codebook) []model.Violation {
 		violations = append(violations, CheckControlSequence(gf)...)
 		violations = append(violations, CheckControlSelectionNoLoop(gf)...)
 		violations = append(violations, CheckControlIterationNoSwitch(gf)...)
+		violations = append(violations, CheckDimensionRequired(gf)...)
+		violations = append(violations, CheckDimensionValue(gf)...)
 		if hasChecked {
 			violations = append(violations, CheckCheckedHash(gf)...)
 		}

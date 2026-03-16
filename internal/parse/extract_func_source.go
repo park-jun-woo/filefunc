@@ -1,4 +1,4 @@
-//ff:func feature=parse type=parser control=iteration
+//ff:func feature=parse type=parser control=iteration dimension=1
 //ff:what Go AST로 파일의 첫 번째 func(init 제외)의 signature+body를 소스 텍스트로 추출하여 반환
 //ff:checked llm=gpt-oss:20b hash=eb39edc3
 package parse

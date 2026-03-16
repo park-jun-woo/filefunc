@@ -1,4 +1,4 @@
-//ff:func feature=validate type=rule control=iteration
+//ff:func feature=validate type=rule control=iteration dimension=1
 //ff:what A8: 어노테이션에 codebook required 키가 모두 존재하는지 검증
 package validate
 

@@ -1,4 +1,4 @@
-//ff:func feature=chain type=parser control=iteration
+//ff:func feature=chain type=parser control=iteration dimension=1
 //ff:what 단방향 깊이 탐색의 재귀 헬퍼
 package chain
 

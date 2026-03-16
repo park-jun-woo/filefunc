@@ -1,4 +1,4 @@
-//ff:func feature=parse type=util control=iteration
+//ff:func feature=parse type=util control=iteration dimension=1
 //ff:what bool 맵의 키를 정렬된 문자열 슬라이스로 반환
 //ff:checked llm=gpt-oss:20b hash=3037cbab
 package parse

@@ -1,4 +1,4 @@
-//ff:func feature=validate type=rule control=iteration
+//ff:func feature=validate type=rule control=iteration dimension=1
 //ff:what C1: codebook required 섹션에 최소 1개 키가 있고 각 키에 최소 1개 값이 있는지 검증
 package validate
 

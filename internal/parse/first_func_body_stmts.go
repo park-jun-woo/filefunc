@@ -1,4 +1,4 @@
-//ff:func feature=parse type=parser control=iteration
+//ff:func feature=parse type=parser control=iteration dimension=1
 //ff:what AST에서 첫 번째 non-init FuncDecl의 body statement 목록을 반환
 package parse
 

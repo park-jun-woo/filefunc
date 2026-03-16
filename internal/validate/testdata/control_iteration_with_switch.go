@@ -1,4 +1,4 @@
-//ff:func feature=validate type=util control=iteration
+//ff:func feature=validate type=util control=iteration dimension=1
 //ff:what A14 위반 테스트: iteration인데 switch 존재
 package testdata
 

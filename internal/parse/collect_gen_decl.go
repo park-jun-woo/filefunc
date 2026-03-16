@@ -1,4 +1,4 @@
-//ff:func feature=parse type=parser control=iteration
+//ff:func feature=parse type=parser control=iteration dimension=1
 //ff:what GenDecl에서 type/var 정보를 GoFile에 수집
 //ff:checked llm=gpt-oss:20b hash=73552d9f
 package parse

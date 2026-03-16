@@ -1,4 +1,4 @@
-//ff:func feature=parse type=parser control=iteration
+//ff:func feature=parse type=parser control=iteration dimension=1
 //ff:what func에서 프로젝트 내 사용 타입명을 AST로 추출
 //ff:checked llm=gpt-oss:20b hash=085874a2
 package parse

@@ -1,4 +1,4 @@
-//ff:func feature=parse type=parser control=iteration
+//ff:func feature=parse type=parser control=iteration dimension=1
 //ff:what statement 목록에서 switch/loop 존재 여부로 제어구조 판별
 package parse
 

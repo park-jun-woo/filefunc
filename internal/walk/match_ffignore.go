@@ -1,4 +1,4 @@
-//ff:func feature=parse type=util control=iteration
+//ff:func feature=parse type=util control=iteration dimension=1
 //ff:what 경로가 .ffignore 패턴에 매칭되는지 판별
 package walk
 

@@ -1,4 +1,4 @@
-//ff:func feature=annotate type=util control=iteration
+//ff:func feature=annotate type=util control=iteration dimension=1
 //ff:what 어노테이션 블록 뒤에 새 라인을 삽입
 //ff:checked llm=gpt-oss:20b hash=62db7a3d
 package annotate

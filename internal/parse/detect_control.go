@@ -1,4 +1,4 @@
-//ff:func feature=parse type=parser control=iteration
+//ff:func feature=parse type=parser control=iteration dimension=1
 //ff:what func body의 직계 자식(depth 1)을 순회하여 제어구조를 판별
 package parse
 

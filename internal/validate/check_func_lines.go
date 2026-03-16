@@ -1,4 +1,4 @@
-//ff:func feature=validate type=rule control=iteration
+//ff:func feature=validate type=rule control=iteration dimension=1
 //ff:what Q2/Q3: func 라인 수 검증. Q3은 control별 기준 (sequence/iteration 100, selection 300)
 package validate
 

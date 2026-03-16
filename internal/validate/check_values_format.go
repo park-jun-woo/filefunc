@@ -1,4 +1,4 @@
-//ff:func feature=validate type=util control=iteration
+//ff:func feature=validate type=util control=iteration dimension=1
 //ff:what 문자열 슬라이스의 각 값이 소문자+하이픈 형식인지 검증
 package validate
 

@@ -1,4 +1,4 @@
-//ff:func feature=parse type=parser control=iteration
+//ff:func feature=parse type=parser control=iteration dimension=1
 //ff:what statement 목록에 SwitchStmt/TypeSwitchStmt가 포함되어 있는지 판별
 package parse
 
