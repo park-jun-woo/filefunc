@@ -5,8 +5,8 @@ package context
 import (
 	"fmt"
 	"io"
+	"strings"
 
-	"github.com/park-jun-woo/filefunc/internal/chain"
 	"github.com/park-jun-woo/filefunc/internal/model"
 )
 
@@ -20,48 +20,53 @@ type PipelineConfig struct {
 }
 
 // RunPipeline executes the 4-stage context pipeline.
-func RunPipeline(w io.Writer, target string, g *chain.CallGraph, files []*model.GoFile, cfg PipelineConfig) error {
-	fileMap := chain.BuildFuncFileMap(files)
-
-	// 1단계: chain chon=2
-	results := chain.TraverseChon(g, target, 2)
-	fmt.Fprintf(w, "[1/4] chain chon=2: %s → %d funcs\n", target, len(results))
+func RunPipeline(w io.Writer, files []*model.GoFile, cb *model.Codebook, cfg PipelineConfig) error {
+	// 1단계: LLM feature 선택
+	features, err := SelectFeature(cfg.Prompt, cb, cfg.Generate)
+	if err != nil {
+		return fmt.Errorf("feature selection failed: %w", err)
+	}
+	if len(features) == 0 {
+		fmt.Fprintln(w, "[1/4] feature selection: (none)")
+		fmt.Fprintln(w, "\nResults:\n  (no results)")
+		return nil
+	}
+	fmt.Fprintf(w, "[1/4] feature selection: %s (LLM)\n", strings.Join(features, ", "))
 	if cfg.Depth <= 1 {
-		FormatResult(w, results, chon1Scores(results), fileMap)
+		filtered := FilterFeature(files, features)
+		FormatResult(w, filtered, defaultScores(filtered))
 		return nil
 	}
 
-	// 2단계: same-feature 필터
-	targetFeature := getFeature(target, fileMap)
-	before := len(results)
-	results = FilterFeature(results, targetFeature, fileMap)
-	fmt.Fprintf(w, "[2/4] feature filter (%s): %d → %d\n", targetFeature, before, len(results))
+	// 2단계: feature 필터
+	before := len(files)
+	filtered := FilterFeature(files, features)
+	fmt.Fprintf(w, "[2/4] feature filter: %d → %d\n", before, len(filtered))
 	if cfg.Depth <= 2 {
-		FormatResult(w, results, chon1Scores(results), fileMap)
+		FormatResult(w, filtered, defaultScores(filtered))
 		return nil
 	}
 
 	// 3단계: what 스코어링
-	before = len(results)
-	kept, scores, removed, err := ScoreWhat(results, cfg.Prompt, cfg.WhatRate, fileMap, cfg.Generate)
+	before = len(filtered)
+	kept, scores, removed, err := ScoreWhat(filtered, cfg.Prompt, cfg.WhatRate, cfg.Generate)
 	if err != nil {
 		return fmt.Errorf("what scoring failed: %w", err)
 	}
 	fmt.Fprintf(w, "[3/4] what scoring: %d → %d (rate≥%.1f, %d removed)\n", before, len(kept), cfg.WhatRate, removed)
-	results = kept
 	if cfg.Depth <= 3 {
-		FormatResult(w, results, scores, fileMap)
+		FormatResult(w, kept, scores)
 		return nil
 	}
 
 	// 4단계: 본문 스코어링
-	before = len(results)
-	kept, scores, removed, err = ScoreBody(results, cfg.Prompt, cfg.BodyRate, fileMap, cfg.Generate)
+	before = len(kept)
+	kept, scores, removed, err = ScoreBody(kept, cfg.Prompt, cfg.BodyRate, cfg.Generate)
 	if err != nil {
 		return fmt.Errorf("body scoring failed: %w", err)
 	}
 	fmt.Fprintf(w, "[4/4] body scoring: %d → %d (rate≥%.1f, %d removed)\n", before, len(kept), cfg.BodyRate, removed)
 
-	FormatResult(w, kept, scores, fileMap)
+	FormatResult(w, kept, scores)
 	return nil
 }

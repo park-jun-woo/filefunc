@@ -11,16 +11,18 @@ import (
 	"os"
 
 	ffcontext "github.com/park-jun-woo/filefunc/internal/context"
+	"github.com/park-jun-woo/filefunc/internal/model"
+	"github.com/park-jun-woo/filefunc/internal/parse"
+	"github.com/park-jun-woo/filefunc/internal/walk"
 	"github.com/spf13/cobra"
 )
 
 var contextCmd = &cobra.Command{
-	Use:   "context <func-name> <prompt>",
+	Use:   "context <prompt>",
 	Short: "Find relevant code context using LLM scoring",
-	Args:  cobra.ExactArgs(2),
+	Args:  cobra.ExactArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		target := args[0]
-		prompt := args[1]
+		prompt := args[0]
 		root, _ := cmd.Flags().GetString("root")
 		depth, _ := cmd.Flags().GetInt("depth")
 		whatRate, _ := cmd.Flags().GetFloat64("what-rate")
@@ -32,16 +34,31 @@ var contextCmd = &cobra.Command{
 			return err
 		}
 
-		g, files, err := BuildGraph(root)
+		cb, err := parse.ParseCodebook(root + "/codebook.yaml")
 		if err != nil {
 			return err
+		}
+
+		ignorePatterns := walk.ParseFFIgnore(root)
+		paths, err := walk.WalkGoFiles(root, ignorePatterns)
+		if err != nil {
+			return err
+		}
+
+		var files []*model.GoFile
+		for _, p := range paths {
+			gf, err := parse.ParseGoFile(p)
+			if err != nil {
+				continue
+			}
+			files = append(files, gf)
 		}
 
 		generate := func(p string) (string, error) {
 			return ollamaGenerate(endpoint, modelName, p)
 		}
 
-		return ffcontext.RunPipeline(os.Stdout, target, g, files, ffcontext.PipelineConfig{
+		return ffcontext.RunPipeline(os.Stdout, files, cb, ffcontext.PipelineConfig{
 			Prompt:   prompt,
 			Depth:    depth,
 			WhatRate: whatRate,

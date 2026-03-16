@@ -6,22 +6,22 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/park-jun-woo/filefunc/internal/chain"
 	"github.com/park-jun-woo/filefunc/internal/model"
 )
 
 // FormatResult writes the final context pipeline results.
-func FormatResult(w io.Writer, results []chain.ChonResult, scores map[int]float64, fileMap map[string]*model.GoFile) {
+func FormatResult(w io.Writer, files []*model.GoFile, scores map[int]float64) {
 	fmt.Fprintln(w, "\nResults:")
-	for i, r := range results {
+	for i, gf := range files {
+		name := funcName(gf)
 		score := scores[i]
 		what := ""
-		if gf := fileMap[r.Name]; gf != nil && gf.Annotation != nil {
+		if gf.Annotation != nil {
 			what = gf.Annotation.What
 		}
-		fmt.Fprintf(w, "  %s [%.2f] %d촌 (what=\"%s\")\n", r.Name, score, r.Chon, what)
+		fmt.Fprintf(w, "  %s [%.2f] (what=\"%s\")\n", name, score, what)
 	}
-	if len(results) == 0 {
+	if len(files) == 0 {
 		fmt.Fprintln(w, "  (no results)")
 	}
 }

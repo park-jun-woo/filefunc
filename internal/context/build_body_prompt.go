@@ -1,5 +1,5 @@
 //ff:func feature=context type=formatter control=iteration dimension=1
-//ff:what 본문 스코어링용 배치 프롬프트를 생성
+//ff:what 본문 스코어링용 배치 프롬프트를 GoFile 목록으로 생성
 package context
 
 import (
@@ -7,25 +7,17 @@ import (
 	"os"
 	"strings"
 
-	"github.com/park-jun-woo/filefunc/internal/chain"
 	"github.com/park-jun-woo/filefunc/internal/model"
 	"github.com/park-jun-woo/filefunc/internal/parse"
 )
 
 // BuildBodyPrompt creates a batch prompt for body-based relevance scoring.
-// Only includes chon=2+ results (chon=1 is always 1.0).
-func BuildBodyPrompt(prompt string, results []chain.ChonResult, fileMap map[string]*model.GoFile) (string, []int) {
+// Returns the prompt and indices of files that have extractable bodies.
+func BuildBodyPrompt(prompt string, files []*model.GoFile) (string, []int) {
 	var lines []string
 	var indices []int
 	num := 1
-	for i, r := range results {
-		if r.Chon <= 1 {
-			continue
-		}
-		gf := fileMap[r.Name]
-		if gf == nil {
-			continue
-		}
+	for i, gf := range files {
 		src, _ := os.ReadFile(gf.Path)
 		body := parse.ExtractFuncSource(gf.Path, src)
 		if body == "" {

@@ -89,13 +89,13 @@ vllm serve Qwen/Qwen3-Reranker-0.6B --task score \
 ### context — LLM context search
 
 ```bash
-filefunc context CheckNestingDepth "nesting depth 검증 수정"     # 4-stage pipeline
-filefunc context CheckNestingDepth "modify depth logic" --depth 2  # feature filter only
-filefunc context CheckNestingDepth "depth" --what-rate 0.3         # adjust what threshold
-filefunc context CheckNestingDepth "depth" --body-rate 0.5         # adjust body threshold
+filefunc context "nesting depth 검증 수정"                        # 4-stage pipeline
+filefunc context "modify depth logic" --depth 2                    # feature filter only
+filefunc context "depth 수정" --what-rate 0.3                      # adjust what threshold
+filefunc context "depth 수정" --body-rate 0.5                      # adjust body threshold
 ```
 
-4-stage pipeline: chain chon=2 → same-feature filter → what scoring (LLM) → body scoring (LLM). Requires ollama with gpt-oss:20b.
+4-stage pipeline: LLM feature selection → feature filter → what scoring (LLM) → body scoring (LLM). No func name needed. Requires ollama with gpt-oss:20b.
 
 | Flag | Description | Default |
 |---|---|---|

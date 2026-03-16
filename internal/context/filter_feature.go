@@ -1,30 +1,26 @@
 //ff:func feature=context type=util control=iteration dimension=1
-//ff:what chon=2 결과에서 대상 함수와 같은 feature만 유지, chon=1은 무조건 유지
+//ff:what GoFile 목록에서 지정된 feature 값에 해당하는 파일만 필터링
 package context
 
-import (
-	"github.com/park-jun-woo/filefunc/internal/chain"
-	"github.com/park-jun-woo/filefunc/internal/model"
-)
+import "github.com/park-jun-woo/filefunc/internal/model"
 
-// FilterFeature keeps chon=1 unconditionally and filters chon=2 to same feature.
-func FilterFeature(results []chain.ChonResult, targetFeature string, fileMap map[string]*model.GoFile) []chain.ChonResult {
-	var kept []chain.ChonResult
-	for _, r := range results {
-		if r.Chon <= 1 {
-			kept = append(kept, r)
-			continue
-		}
-		gf := fileMap[r.Name]
-		if gf == nil || gf.Annotation == nil {
+// FilterFeature keeps GoFiles whose annotation feature matches any of the given features.
+func FilterFeature(files []*model.GoFile, features []string) []*model.GoFile {
+	featureSet := make(map[string]bool, len(features))
+	for _, f := range features {
+		featureSet[f] = true
+	}
+	var kept []*model.GoFile
+	for _, gf := range files {
+		if gf.Annotation == nil {
 			continue
 		}
 		f := gf.Annotation.Func["feature"]
 		if f == "" {
 			f = gf.Annotation.Type["feature"]
 		}
-		if f == targetFeature {
-			kept = append(kept, r)
+		if featureSet[f] {
+			kept = append(kept, gf)
 		}
 	}
 	return kept
