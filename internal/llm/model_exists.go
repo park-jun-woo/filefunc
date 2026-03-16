@@ -1,4 +1,4 @@
-//ff:func feature=cli type=loader
+//ff:func feature=cli type=loader control=iteration
 //ff:what ollama 엔드포인트에 모델이 존재하는지 API로 확인
 package llm
 

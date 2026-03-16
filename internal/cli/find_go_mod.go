@@ -1,4 +1,4 @@
-//ff:func feature=cli type=util
+//ff:func feature=cli type=util control=iteration
 //ff:what 대상 경로에서 상위로 탐색하며 go.mod 파일 경로를 찾음
 //ff:checked llm=gpt-oss:20b hash=65fbd539
 package cli

@@ -1,4 +1,4 @@
-//ff:func feature=cli type=util
+//ff:func feature=cli type=util control=iteration
 //ff:what 프로젝트 루트에서 호출 그래프를 구성
 package cli
 

@@ -1,4 +1,4 @@
-//ff:func feature=parse type=parser
+//ff:func feature=parse type=parser control=iteration
 //ff:what "key1=val1 key2=val2" 형식 문자열을 맵으로 파싱
 //ff:checked llm=gpt-oss:20b hash=e3c9290a
 package parse

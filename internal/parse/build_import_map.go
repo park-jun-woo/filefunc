@@ -1,4 +1,4 @@
-//ff:func feature=parse type=parser
+//ff:func feature=parse type=parser control=iteration
 //ff:what AST의 import 목록에서 프로젝트 내부 패키지 alias 맵 생성
 //ff:checked llm=gpt-oss:20b hash=e377700d
 package parse

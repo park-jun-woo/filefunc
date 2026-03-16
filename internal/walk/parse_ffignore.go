@@ -1,4 +1,4 @@
-//ff:func feature=parse type=loader
+//ff:func feature=parse type=loader control=iteration
 //ff:what .ffignore 파일을 읽어 패턴 목록을 반환 (없으면 빈 목록)
 package walk
 

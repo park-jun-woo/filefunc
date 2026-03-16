@@ -1,4 +1,4 @@
-//ff:func feature=validate type=rule
+//ff:func feature=validate type=rule control=iteration
 //ff:what C2: codebook required+optional 전체에서 동일 키 내 중복 값을 검출
 package validate
 

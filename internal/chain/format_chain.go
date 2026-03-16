@@ -1,4 +1,4 @@
-//ff:func feature=chain type=formatter
+//ff:func feature=chain type=formatter control=iteration
 //ff:what 체인 탐색 결과를 텍스트로 출력
 package chain
 

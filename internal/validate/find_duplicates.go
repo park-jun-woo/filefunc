@@ -1,4 +1,4 @@
-//ff:func feature=validate type=util
+//ff:func feature=validate type=util control=iteration
 //ff:what 문자열 슬라이스에서 중복 값을 찾아 Violation 목록으로 반환
 package validate
 

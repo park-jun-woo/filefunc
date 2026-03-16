@@ -1,4 +1,4 @@
-//ff:func feature=parse type=parser
+//ff:func feature=parse type=parser control=selection
 //ff:what //ff: key-value 쌍을 Annotation 구조체에 적용
 //ff:checked llm=gpt-oss:20b hash=a752d254
 package parse

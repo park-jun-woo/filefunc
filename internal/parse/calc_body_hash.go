@@ -1,4 +1,4 @@
-//ff:func feature=parse type=parser
+//ff:func feature=parse type=parser control=iteration
 //ff:what func signature+body의 SHA-256 해시 앞 8자리 계산
 //ff:checked llm=gpt-oss:20b hash=5c46dfaa
 package parse

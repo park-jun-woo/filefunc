@@ -1,6 +1,5 @@
-//ff:func feature=validate type=command
+//ff:func feature=validate type=command control=iteration
 //ff:what 모든 검증 룰을 실행하고 위반 목록을 반환
-//ff:checked llm=gpt-oss:20b hash=b5bdcebc
 package validate
 
 import "github.com/park-jun-woo/filefunc/internal/model"
@@ -21,6 +20,9 @@ func RunAll(files []*model.GoFile, cb *model.Codebook) []model.Violation {
 		violations = append(violations, CheckRequiredKeysInAnnotation(gf, cb)...)
 		violations = append(violations, CheckWhatRequired(gf)...)
 		violations = append(violations, CheckAnnotationPosition(gf)...)
+		violations = append(violations, CheckControlSelection(gf)...)
+		violations = append(violations, CheckControlIteration(gf)...)
+		violations = append(violations, CheckControlSequence(gf)...)
 		if hasChecked {
 			violations = append(violations, CheckCheckedHash(gf)...)
 		}

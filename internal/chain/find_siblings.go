@@ -1,4 +1,4 @@
-//ff:func feature=chain type=parser
+//ff:func feature=chain type=parser control=iteration
 //ff:what 같은 부모에게 호출되는 func 목록 (2촌 형제)
 package chain
 

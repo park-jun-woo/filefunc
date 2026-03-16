@@ -1,5 +1,7 @@
 # filefunc — Manual for AI Agents
 
+For Go application-layer projects: backend services, CLI tools, code generators, SSOT validators.
+
 ## How to Navigate
 
 1. Read `codebook.yaml` — project vocabulary (required/optional keys and allowed values)
@@ -41,6 +43,17 @@
 | A6 | Annotations must be at the top of the file (above package) | ERROR |
 | A7 | `//ff:checked` hash mismatch → body changed after LLM verification | ERROR |
 | A8 | Required codebook keys must be present in annotation | ERROR |
+| A9 | `control=selection` but no switch at depth 1 | ERROR |
+| A10 | `control=iteration` but no loop at depth 1 | ERROR |
+| A11 | `control=sequence` but switch/loop exists at depth 1 | ERROR |
+
+### Code quality (Q3 control-specific)
+
+| control | Q3 limit |
+|---|---|
+| sequence | 100 lines |
+| iteration | 100 lines |
+| selection | 300 lines |
 
 ### Codebook format
 
@@ -64,11 +77,13 @@ Codebook is validated first. If codebook fails, code validation does not run.
 Write at the **very top** of every func/type file (above package declaration):
 
 ```go
-//ff:func feature=validate type=rule
+//ff:func feature=validate type=rule control=sequence
 //ff:what F1: validates one func per file
 //ff:checked llm=gpt-oss:20b hash=a3f8c1d2    (auto by llmc)
 package validate
 ```
+
+`control=` values: `sequence` (default, omittable), `selection` (switch), `iteration` (loop). Böhm-Jacopini (1966). 1 func 1 control — no mixing.
 
 | Annotation | Required | Description |
 |---|---|---|
@@ -77,6 +92,14 @@ package validate
 | `//ff:what` | func/type files | One-line description. What does this do? |
 | `//ff:why` | optional | Why designed this way? User decisions only |
 | `//ff:checked` | auto (llmc) | LLM verification signature. Do not write manually |
+
+### Control-based read strategy
+
+```
+control=selection  → read entire body at once. Don't read cases partially.
+control=iteration  → focus on loop body. Outside loop is initialization.
+control=sequence   → read only the step you need. Other steps: what is enough.
+```
 
 ### Naming
 

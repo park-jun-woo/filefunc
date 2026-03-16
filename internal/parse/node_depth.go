@@ -1,4 +1,4 @@
-//ff:func feature=parse type=parser
+//ff:func feature=parse type=parser control=selection
 //ff:what 단일 AST 문장 노드의 nesting depth 계산
 //ff:checked llm=gpt-oss:20b hash=30f2fdaa
 package parse

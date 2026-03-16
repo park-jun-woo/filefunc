@@ -1,4 +1,4 @@
-//ff:func feature=validate type=rule
+//ff:func feature=validate type=rule control=iteration
 //ff:what C3: codebook required+optional 전체 값이 소문자+하이픈 형식인지 검증
 package validate
 

@@ -1,4 +1,4 @@
-//ff:func feature=validate type=rule
+//ff:func feature=validate type=rule control=iteration
 //ff:what A8: 어노테이션에 codebook required 키가 모두 존재하는지 검증
 package validate
 
@@ -9,7 +9,7 @@ import (
 )
 
 // CheckRequiredKeysInAnnotation checks A8: all required codebook keys must be
-// present in the //ff:func or //ff:type annotation.
+// present in the //ff:func or //ff:type annotation. control=iteration
 func CheckRequiredKeysInAnnotation(gf *model.GoFile, cb *model.Codebook) []model.Violation {
 	if cb == nil || gf.IsTest || gf.Annotation == nil {
 		return nil

@@ -1,4 +1,4 @@
-//ff:func feature=parse type=util
+//ff:func feature=parse type=util control=iteration
 //ff:what 쉼표 구분 문자열을 분리하고 각 항목 공백 제거
 //ff:checked llm=gpt-oss:20b hash=addbd68c
 package parse

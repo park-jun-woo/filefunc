@@ -1,4 +1,4 @@
-//ff:func feature=chain type=parser
+//ff:func feature=chain type=parser control=iteration
 //ff:what 프로젝트 전체 호출 그래프를 양방향으로 구성
 package chain
 
