@@ -50,7 +50,7 @@ func CheckFuncLines(gf *model.GoFile) []model.Violation {
 
 		msg := fmt.Sprintf("func %s is %d lines; recommended maximum is %d", fd.Name.Name, lines, q3Limit)
 		if HasBacktick(fd) {
-			msg += "\n  hint: backtick string detected — consider extracting to a separate template file"
+			msg += "\n  hint: backtick string detected — extract to a var-only file (e.g. template_xxx.go) to exempt from Q3"
 		}
 		violations = append(violations, model.Violation{
 			File:    gf.Path,
