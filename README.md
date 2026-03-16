@@ -195,25 +195,33 @@ The codebook defines allowed values for annotations. It's the project's vocabula
 ```yaml
 # codebook.yaml
 required:
-  feature: [validate, annotate, chain, parse, codebook, report, cli]
-  type: [command, rule, parser, walker, model, formatter, loader, util]
+  feature:
+    validate: "코드 구조 룰 검증 (F1,Q1,A1 등 정적 분석 룰)"
+    parse: "소스 코드, 어노테이션, codebook 파싱"
+  type:
+    command: "cobra 명령 엔트리포인트"
+    rule: "개별 검증 룰 구현"
 
 optional:
-  pattern: [error-collection, file-visitor, rule-registry]
-  level: [error, warning, info]
+  pattern:
+    error-collection: "에러 수집 후 일괄 보고"
+  level:
+    error: ""
+    warning: ""
 ```
 
-`required` keys must be present in every `//ff:func` and `//ff:type` annotation (A8). This guarantees grep reliability — required keys never have gaps. `optional` keys are used only when relevant.
+Each value has a description (`key: "description"`). Descriptions are used by `filefunc context` for LLM feature selection. `required` keys must be present in every annotation (A8). `optional` keys are used when relevant.
 
-Values not in the codebook trigger `A2 ERROR`. Each project has its own codebook. `codebook.yaml` is required — validate will error without it.
+Values not in the codebook trigger `A2 ERROR`. Each project has its own codebook. `codebook.yaml` is required.
 
 ### Codebook format rules
 
 | Rule | Description | Severity |
 |---|---|---|
 | C1 | `required` section must have at least one key with at least one value | ERROR |
-| C2 | No duplicate values within the same key | ERROR |
-| C3 | All values must be lowercase + hyphens only (`[a-z][a-z0-9-]*`) | ERROR |
+| C2 | No duplicate keys within the same section | ERROR |
+| C3 | All keys must be lowercase + hyphens only (`[a-z][a-z0-9-]*`) | ERROR |
+| C4 | Required values should have non-empty descriptions | WARNING |
 
 Codebook is validated first. If codebook fails, code validation does not run.
 
