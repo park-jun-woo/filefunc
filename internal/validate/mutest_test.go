@@ -1,6 +1,7 @@
 package validate
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/park-jun-woo/filefunc/internal/model"
@@ -128,4 +129,33 @@ func TestMutest_A16(t *testing.T) {
 // Q1 dimension
 func TestMutest_Q1_Dimension(t *testing.T) {
 	expectNoViolation(t, CheckNestingDepth(mustParse(t, "testdata/dimension2_depth3.go")))
+}
+
+// Q3 backtick hint
+func TestMutest_Q3_Backtick(t *testing.T) {
+	violations := CheckFuncLines(mustParse(t, "testdata/q3_backtick.go"))
+	expectViolation(t, violations, "Q3")
+	if len(violations) > 0 && !strings.Contains(violations[0].Message, "backtick") {
+		t.Errorf("expected backtick hint in message, got %q", violations[0].Message)
+	}
+}
+
+// A9
+func TestMutest_A9(t *testing.T) {
+	expectViolation(t, CheckControlRequired(mustParse(t, "testdata/no_control.go")), "A9")
+}
+
+// A10
+func TestMutest_A10(t *testing.T) {
+	expectViolation(t, CheckControlSelection(mustParse(t, "testdata/selection_no_switch.go")), "A10")
+}
+
+// A11
+func TestMutest_A11(t *testing.T) {
+	expectViolation(t, CheckControlIteration(mustParse(t, "testdata/iteration_no_loop.go")), "A11")
+}
+
+// A12
+func TestMutest_A12(t *testing.T) {
+	expectViolation(t, CheckControlSequence(mustParse(t, "testdata/sequence_with_loop.go")), "A12")
 }
