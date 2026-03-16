@@ -155,6 +155,8 @@ filefunc llmc --model qwen3:8b --threshold 0.9
 
 Project root must contain `go.mod` and `codebook.yaml`. Omit to use current directory.
 
+`--prompt` requires vLLM server: `pip install vllm && vllm serve Qwen/Qwen3-Reranker-0.6B --task score --hf_overrides '{"architectures":["Qwen3ForSequenceClassification"],"classifier_from_token":["no","yes"],"is_original_qwen3_reranker":true}'`
+
 Exit code 1 on violations. Zero violations required before committing.
 
 ### .ffignore

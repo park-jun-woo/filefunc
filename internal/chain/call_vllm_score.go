@@ -17,7 +17,7 @@ func callVLLMScore(endpoint string, modelName string, text1 string, text2 string
 	}
 	resp, err := http.Post(endpoint+"/v1/score", "application/json", bytes.NewReader(reqBody))
 	if err != nil {
-		return 0, fmt.Errorf("vllm request failed: %w", err)
+		return 0, fmt.Errorf("vLLM server not available at %s\nInstall: pip install vllm\nRun:     vllm serve Qwen/Qwen3-Reranker-0.6B --task score --hf_overrides '{\"architectures\":[\"Qwen3ForSequenceClassification\"],\"classifier_from_token\":[\"no\",\"yes\"],\"is_original_qwen3_reranker\":true}'", endpoint)
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)

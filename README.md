@@ -78,6 +78,14 @@ Real-time AST analysis. Respects `.ffignore`.
 | `--model` | Reranker model name | `Qwen/Qwen3-Reranker-0.6B` |
 | `--score-endpoint` | vLLM endpoint for reranker | `http://localhost:8000` |
 
+`--prompt` requires a vLLM server running Qwen3-Reranker-0.6B:
+
+```bash
+pip install vllm
+vllm serve Qwen/Qwen3-Reranker-0.6B --task score \
+  --hf_overrides '{"architectures":["Qwen3ForSequenceClassification"],"classifier_from_token":["no","yes"],"is_original_qwen3_reranker":true}'
+```
+
 ### llmc — LLM verification
 
 ```bash
