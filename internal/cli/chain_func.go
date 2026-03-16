@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/park-jun-woo/filefunc/internal/chain"
+	"github.com/park-jun-woo/filefunc/internal/model"
 	"github.com/spf13/cobra"
 )
 
@@ -19,12 +20,13 @@ var chainFuncCmd = &cobra.Command{
 		chon, _ := cmd.Flags().GetInt("chon")
 		childDepth, _ := cmd.Flags().GetInt("child-depth")
 		parentDepth, _ := cmd.Flags().GetInt("parent-depth")
+		metaRaw, _ := cmd.Flags().GetString("meta")
 
 		if err := CheckProjectRoot(root); err != nil {
 			return err
 		}
 
-		g, _, err := BuildGraph(root)
+		g, files, err := BuildGraph(root)
 		if err != nil {
 			return err
 		}
@@ -38,7 +40,12 @@ var chainFuncCmd = &cobra.Command{
 			results = chain.TraverseChon(g, target, chon)
 		}
 
-		chain.FormatChain(os.Stdout, target, results)
+		metaFlags := chain.ParseMetaFlags(metaRaw)
+		var fileMap map[string]*model.GoFile
+		if len(metaFlags) > 0 {
+			fileMap = chain.BuildFuncFileMap(files)
+		}
+		chain.FormatChain(os.Stdout, target, results, metaFlags, fileMap)
 		return nil
 	},
 }
@@ -47,5 +54,6 @@ func init() {
 	chainFuncCmd.Flags().Int("chon", 1, "chon distance (1~3)")
 	chainFuncCmd.Flags().Int("child-depth", 0, "trace children only to this depth")
 	chainFuncCmd.Flags().Int("parent-depth", 0, "trace parents only to this depth")
+	chainFuncCmd.Flags().String("meta", "", "annotation metadata to include (meta,what,why,checked,all)")
 	chainCmd.AddCommand(chainFuncCmd)
 }

@@ -142,6 +142,8 @@ filefunc validate                                    # current dir as project ro
 filefunc validate /path/to/project                   # explicit project root
 filefunc validate --format json
 filefunc chain func RunAll --chon 2                  # call relationships
+filefunc chain func RunAll --chon 2 --meta what      # with //ff:what annotations
+filefunc chain func RunAll --chon 2 --meta all       # with all annotations
 filefunc chain feature validate                      # feature-wide chain
 filefunc chain func RunAll --root /path/to/project   # explicit project root
 filefunc llmc                                        # LLM what-body verification

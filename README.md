@@ -58,6 +58,8 @@ filefunc chain func RunAll --child-depth 3   # calls only
 filefunc chain func RunAll --parent-depth 3  # callers only
 filefunc chain feature validate         # all funcs in feature
 filefunc chain func RunAll --root /path/to/project  # explicit project root
+filefunc chain func RunAll --chon 2 --meta what     # with //ff:what annotations
+filefunc chain func RunAll --chon 2 --meta all      # with all annotations
 ```
 
 Real-time AST analysis. Respects `.ffignore`.
@@ -68,6 +70,7 @@ Real-time AST analysis. Respects `.ffignore`.
 | `--chon` | Relationship distance (1~3) | 1 |
 | `--child-depth` | Trace calls only to this depth | — |
 | `--parent-depth` | Trace callers only to this depth | — |
+| `--meta` | Include annotation metadata (meta,what,why,checked,all) | — |
 
 ### llmc — LLM verification
 
