@@ -31,7 +31,7 @@ For Go application-layer projects: backend services, CLI tools, code generators,
 |---|---|---|
 | Q1 | Nesting depth ≤ 2 (use early return, merge conditions, extract func) | ERROR |
 | Q2 | Func max 1000 lines | ERROR |
-| Q3 | Func recommended max 100 lines | WARNING |
+| Q3 | Func recommended max: sequence/iteration 100, selection 300 | WARNING |
 
 ### Annotation
 
@@ -47,6 +47,8 @@ For Go application-layer projects: backend services, CLI tools, code generators,
 | A10 | `control=selection` but no switch at depth 1 | ERROR |
 | A11 | `control=iteration` but no loop at depth 1 | ERROR |
 | A12 | `control=sequence` but switch/loop exists at depth 1 | ERROR |
+| A13 | `control=selection` but loop exists at depth 1 | ERROR |
+| A14 | `control=iteration` but switch exists at depth 1 | ERROR |
 
 ### Code quality (Q3 control-specific)
 
@@ -84,11 +86,11 @@ Write at the **very top** of every func/type file (above package declaration):
 package validate
 ```
 
-`control=` values: `sequence` (default, omittable), `selection` (switch), `iteration` (loop). Böhm-Jacopini (1966). 1 func 1 control — no mixing.
+`control=` is required for all func files (A9). Values: `sequence`, `selection` (switch), `iteration` (loop). Böhm-Jacopini (1966). 1 func 1 control — no mixing.
 
 | Annotation | Required | Description |
 |---|---|---|
-| `//ff:func` | func files | Metadata (feature, type). Values from codebook.yaml |
+| `//ff:func` | func files | Metadata (feature, type, control). Values from codebook.yaml + control rule |
 | `//ff:type` | type files | Metadata (feature, type). Values from codebook.yaml |
 | `//ff:what` | func/type files | One-line description. What does this do? |
 | `//ff:why` | optional | Why designed this way? User decisions only |

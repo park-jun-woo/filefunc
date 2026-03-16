@@ -24,6 +24,8 @@ func RunAll(files []*model.GoFile, cb *model.Codebook) []model.Violation {
 		violations = append(violations, CheckControlSelection(gf)...)
 		violations = append(violations, CheckControlIteration(gf)...)
 		violations = append(violations, CheckControlSequence(gf)...)
+		violations = append(violations, CheckControlSelectionNoLoop(gf)...)
+		violations = append(violations, CheckControlIterationNoSwitch(gf)...)
 		if hasChecked {
 			violations = append(violations, CheckCheckedHash(gf)...)
 		}

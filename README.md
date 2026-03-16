@@ -122,6 +122,8 @@ Verifies `//ff:what` matches func body using local LLM (ollama). Scores 0.0~1.0,
 | A10 | `control=selection` but no switch at depth 1 | ERROR |
 | A11 | `control=iteration` but no loop at depth 1 | ERROR |
 | A12 | `control=sequence` but switch/loop exists at depth 1 | ERROR |
+| A13 | `control=selection` but loop exists at depth 1 | ERROR |
+| A14 | `control=iteration` but switch exists at depth 1 | ERROR |
 
 ## Annotations
 
@@ -133,7 +135,7 @@ Verifies `//ff:what` matches func body using local LLM (ollama). Scores 0.0~1.0,
 func CheckOneFileOneFunc(gf *model.GoFile) []model.Violation {
 ```
 
-`control=` values: `sequence` (default, omittable), `selection` (switch), `iteration` (loop). Based on Böhm-Jacopini theorem (1966).
+`control=` is required for all func files (A9). Values: `sequence`, `selection` (switch), `iteration` (loop). Based on Böhm-Jacopini theorem (1966). 1 func 1 control.
 
 | Annotation | Purpose | Required |
 |---|---|---|

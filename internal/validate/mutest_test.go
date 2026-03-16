@@ -100,3 +100,15 @@ func TestMutest_A3(t *testing.T) {
 func TestMutest_A6(t *testing.T) {
 	expectViolation(t, CheckAnnotationPosition(mustParse(t, "testdata/annotation_after_func.go")), "A6")
 }
+
+// A13
+func TestMutest_A13(t *testing.T) {
+	expectViolation(t, CheckControlSelectionNoLoop(mustParse(t, "testdata/control_selection_with_loop.go")), "A13")
+	expectNoViolation(t, CheckControlSelectionNoLoop(mustParse(t, "testdata/clean.go")))
+}
+
+// A14
+func TestMutest_A14(t *testing.T) {
+	expectViolation(t, CheckControlIterationNoSwitch(mustParse(t, "testdata/control_iteration_with_switch.go")), "A14")
+	expectNoViolation(t, CheckControlIterationNoSwitch(mustParse(t, "testdata/clean.go")))
+}
