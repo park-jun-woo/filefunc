@@ -3,6 +3,7 @@
 package cli
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/park-jun-woo/filefunc/internal/chain"
@@ -21,6 +22,14 @@ var chainFuncCmd = &cobra.Command{
 		childDepth, _ := cmd.Flags().GetInt("child-depth")
 		parentDepth, _ := cmd.Flags().GetInt("parent-depth")
 		metaRaw, _ := cmd.Flags().GetString("meta")
+		prompt, _ := cmd.Flags().GetString("prompt")
+		rate, _ := cmd.Flags().GetFloat64("rate")
+		scoreModel, _ := cmd.Flags().GetString("model")
+		scoreEndpoint, _ := cmd.Flags().GetString("score-endpoint")
+
+		if rate > 0 && prompt == "" {
+			return fmt.Errorf("--prompt is required when --rate is specified")
+		}
 
 		if err := CheckProjectRoot(root); err != nil {
 			return err
@@ -42,10 +51,24 @@ var chainFuncCmd = &cobra.Command{
 
 		metaFlags := chain.ParseMetaFlags(metaRaw)
 		var fileMap map[string]*model.GoFile
-		if len(metaFlags) > 0 {
+		if len(metaFlags) > 0 || prompt != "" {
 			fileMap = chain.BuildFuncFileMap(files)
 		}
-		chain.FormatChain(os.Stdout, target, results, metaFlags, fileMap)
+
+		var scores map[int]float64
+		removed := 0
+		if prompt != "" {
+			scores, err = chain.ScoreRelevance(results, prompt, scoreEndpoint, scoreModel, fileMap)
+			if err != nil {
+				return err
+			}
+			if rate == 0 {
+				rate = 0.8
+			}
+			results, scores, removed = chain.FilterByRate(results, scores, rate)
+		}
+
+		chain.FormatChain(os.Stdout, target, results, metaFlags, fileMap, scores, removed)
 		return nil
 	},
 }
@@ -55,5 +78,9 @@ func init() {
 	chainFuncCmd.Flags().Int("child-depth", 0, "trace children only to this depth")
 	chainFuncCmd.Flags().Int("parent-depth", 0, "trace parents only to this depth")
 	chainFuncCmd.Flags().String("meta", "", "annotation metadata to include (meta,what,why,checked,all)")
+	chainFuncCmd.Flags().String("prompt", "", "user task intent for relevance scoring")
+	chainFuncCmd.Flags().Float64("rate", 0, "relevance score threshold (0.0~1.0)")
+	chainFuncCmd.Flags().String("model", "Qwen/Qwen3-Reranker-0.6B", "reranker model name")
+	chainFuncCmd.Flags().String("score-endpoint", "http://localhost:8000", "vLLM endpoint for reranker")
 	chainCmd.AddCommand(chainFuncCmd)
 }

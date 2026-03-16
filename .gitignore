@@ -11,6 +11,9 @@ filefunc
 .DS_Store
 Thumbs.db
 
+# Python
+.venv/
+
 # Go
 vendor/
 

@@ -60,6 +60,8 @@ filefunc chain feature validate         # all funcs in feature
 filefunc chain func RunAll --root /path/to/project  # explicit project root
 filefunc chain func RunAll --chon 2 --meta what     # with //ff:what annotations
 filefunc chain func RunAll --chon 2 --meta all      # with all annotations
+filefunc chain func RunAll --chon 2 --meta what \
+  --prompt "nesting depth 수정" --rate 0.8           # reranker filtering
 ```
 
 Real-time AST analysis. Respects `.ffignore`.
@@ -71,6 +73,10 @@ Real-time AST analysis. Respects `.ffignore`.
 | `--child-depth` | Trace calls only to this depth | — |
 | `--parent-depth` | Trace callers only to this depth | — |
 | `--meta` | Include annotation metadata (meta,what,why,checked,all) | — |
+| `--prompt` | User task intent for relevance scoring (requires vLLM) | — |
+| `--rate` | Relevance score threshold (0.0~1.0) | 0.8 |
+| `--model` | Reranker model name | `Qwen/Qwen3-Reranker-0.6B` |
+| `--score-endpoint` | vLLM endpoint for reranker | `http://localhost:8000` |
 
 ### llmc — LLM verification
 
