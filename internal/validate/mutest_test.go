@@ -83,9 +83,9 @@ func TestMutest_A1(t *testing.T) {
 // A2
 func TestMutest_A2(t *testing.T) {
 	cb := &model.Codebook{
-		Required: map[string][]string{
-			"feature": {"validate", "parse"},
-			"type":    {"rule", "parser"},
+		Required: map[string]map[string]string{
+			"feature": {"validate": "", "parse": ""},
+			"type":    {"rule": "", "parser": ""},
 		},
 	}
 	expectViolation(t, CheckCodebookValues(mustParse(t, "testdata/bad_codebook_value.go"), cb), "A2")

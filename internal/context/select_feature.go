@@ -2,10 +2,11 @@
 //ff:what LLM으로 codebook feature를 선택하여 반환
 package context
 
+import "github.com/park-jun-woo/filefunc/internal/model"
+
 // SelectFeature asks LLM to select relevant features from codebook.
-// codebookRaw is the raw codebook.yaml text (includes comments).
-func SelectFeature(prompt string, codebookRaw string, generate func(string) (string, error)) ([]string, error) {
-	llmPrompt := BuildFeaturePrompt(prompt, codebookRaw)
+func SelectFeature(prompt string, cb *model.Codebook, generate func(string) (string, error)) ([]string, error) {
+	llmPrompt := BuildFeaturePrompt(prompt, cb)
 	resp, err := generate(llmPrompt)
 	if err != nil {
 		return nil, err

@@ -1,14 +1,14 @@
 required:
   feature:
-    - validate
-    - parse
+    validate: "코드 구조 룰 검증"
+    parse: "소스 코드 파싱"
   type:
-    - rule
-    - parser
+    rule: "개별 검증 룰"
+    parser: "파싱 로직"
 
 optional:
   pattern:
-    - error-collection
+    error-collection: "에러 수집"
   level:
-    - error
-    - warning
+    error: ""
+    warning: ""

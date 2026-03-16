@@ -12,13 +12,13 @@ import (
 
 // PipelineConfig holds context pipeline parameters.
 type PipelineConfig struct {
-	Prompt      string
-	Search      string
-	Depth       int
-	WhatRate    float64
-	BodyRate    float64
-	CodebookRaw string
-	Generate    func(string) (string, error)
+	Prompt   string
+	Search   string
+	Depth    int
+	WhatRate float64
+	BodyRate float64
+	Codebook *model.Codebook
+	Generate func(string) (string, error)
 }
 
 // RunPipeline executes the 4-stage context pipeline.
@@ -33,7 +33,7 @@ func RunPipeline(w io.Writer, files []*model.GoFile, cfg PipelineConfig) error {
 		fmt.Fprintln(w, "[2/4] (skipped — direct search)")
 	} else {
 		// LLM feature 선택
-		features, err := SelectFeature(cfg.Prompt, cfg.CodebookRaw, cfg.Generate)
+		features, err := SelectFeature(cfg.Prompt, cfg.Codebook, cfg.Generate)
 		if err != nil {
 			return fmt.Errorf("feature selection failed: %w", err)
 		}

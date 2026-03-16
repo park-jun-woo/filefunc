@@ -40,7 +40,7 @@ var validateCmd = &cobra.Command{
 			return fmt.Errorf("codebook.yaml required: %w", err)
 		}
 
-		cbViolations := validate.ValidateCodebook(cb)
+		cbViolations := validate.ValidateCodebook(cb, codebookPath)
 		if len(cbViolations) > 0 {
 			report.FormatText(os.Stdout, cbViolations)
 			return fmt.Errorf("codebook.yaml has %d violation(s) — fix before validating code", len(cbViolations))

@@ -35,7 +35,7 @@ var contextCmd = &cobra.Command{
 			return err
 		}
 
-		codebookRaw, err := os.ReadFile(root + "/codebook.yaml")
+		cb, err := parse.ParseCodebook(root + "/codebook.yaml")
 		if err != nil {
 			return fmt.Errorf("codebook.yaml not found: %w", err)
 		}
@@ -60,13 +60,13 @@ var contextCmd = &cobra.Command{
 		}
 
 		return ffcontext.RunPipeline(os.Stdout, files, ffcontext.PipelineConfig{
-			Prompt:      prompt,
-			Search:      search,
-			Depth:       depth,
-			WhatRate:    whatRate,
-			BodyRate:    bodyRate,
-			CodebookRaw: string(codebookRaw),
-			Generate:    generate,
+			Prompt:   prompt,
+			Search:   search,
+			Depth:    depth,
+			WhatRate: whatRate,
+			BodyRate: bodyRate,
+			Codebook: cb,
+			Generate: generate,
 		})
 	},
 }

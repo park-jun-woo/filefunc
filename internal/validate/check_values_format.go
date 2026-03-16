@@ -1,5 +1,5 @@
 //ff:func feature=validate type=util control=iteration dimension=1
-//ff:what 문자열 슬라이스의 각 값이 소문자+하이픈 형식인지 검증
+//ff:what map의 각 키가 소문자+하이픈 형식인지 검증
 package validate
 
 import (
@@ -11,10 +11,10 @@ import (
 
 var validValuePattern = regexp.MustCompile(`^[a-z][a-z0-9-]*$`)
 
-// CheckValuesFormat returns violations for values not matching [a-z][a-z0-9-]*.
-func CheckValuesFormat(key string, values []string) []model.Violation {
+// CheckValuesFormat returns violations for map keys not matching [a-z][a-z0-9-]*.
+func CheckValuesFormat(key string, values map[string]string) []model.Violation {
 	var violations []model.Violation
-	for _, v := range values {
+	for v := range values {
 		if !validValuePattern.MatchString(v) {
 			violations = append(violations, model.Violation{
 				File:    "codebook.yaml",

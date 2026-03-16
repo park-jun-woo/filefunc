@@ -14,8 +14,8 @@ func TestParseCodebook(t *testing.T) {
 		t.Errorf("Required feature count = %d, want 2", len(cb.Required["feature"]))
 	}
 
-	if cb.Required["feature"][0] != "validate" {
-		t.Errorf("Required feature[0] = %q, want %q", cb.Required["feature"][0], "validate")
+	if _, ok := cb.Required["feature"]["validate"]; !ok {
+		t.Error("Required feature missing 'validate'")
 	}
 
 	if len(cb.Required["type"]) != 2 {
