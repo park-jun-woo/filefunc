@@ -57,14 +57,16 @@
 | C3 | `codebook_bad_format.yaml` | 키가 대문자 (소문자+하이픈 아님) | ✅ |
 | C4 | `codebook_no_description.yaml` | required description 비어있음 (WARNING) | ✅ |
 
-### 미구현 뮤턴트
+### 추가 어노테이션 룰
 
-| 룰 | 위반 내용 | 비고 |
-|---|---|---|
-| A7 | //ff:checked 해시 불일치 | 프로젝트에 checked 없으면 스킵 |
-| A8 | required 키 누락 | codebook 의존 |
+| 룰 | 뮤턴트 파일 | 위반 내용 | 상태 |
+|---|---|---|---|
+| A7 | `checked_hash_mismatch.go` | //ff:checked 해시 불일치 | ✅ |
+| A8 | `missing_required_key.go` | required 키 type 누락 | ✅ |
 
 정상 파일: `clean.go` — 모든 룰 통과 확인용.
+
+**전체 커버리지: 27/27 룰 (100%)**
 
 ## 원칙
 

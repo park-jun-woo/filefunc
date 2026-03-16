@@ -160,6 +160,22 @@ func TestMutest_A12(t *testing.T) {
 	expectViolation(t, CheckControlSequence(mustParse(t, "testdata/sequence_with_loop.go")), "A12")
 }
 
+// A7
+func TestMutest_A7(t *testing.T) {
+	expectViolation(t, CheckCheckedHash(mustParse(t, "testdata/checked_hash_mismatch.go")), "A7")
+}
+
+// A8
+func TestMutest_A8(t *testing.T) {
+	cb := &model.Codebook{
+		Required: map[string]map[string]string{
+			"feature": {"validate": "", "parse": ""},
+			"type":    {"rule": "", "parser": ""},
+		},
+	}
+	expectViolation(t, CheckRequiredKeysInAnnotation(mustParse(t, "testdata/missing_required_key.go"), cb), "A8")
+}
+
 // C1
 func TestMutest_C1(t *testing.T) {
 	cb, err := parse.ParseCodebook("testdata/codebook_empty_required.yaml")
