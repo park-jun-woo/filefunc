@@ -118,9 +118,10 @@ Verifies `//ff:what` matches func body using local LLM (ollama). Scores 0.0~1.0,
 | A6 | Annotations must be at the top of the file | ERROR |
 | A7 | `//ff:checked` hash mismatch (body changed after LLM verification) | ERROR |
 | A8 | Required codebook keys must be present in annotation | ERROR |
-| A9 | `control=selection` but no switch at depth 1 | ERROR |
-| A10 | `control=iteration` but no loop at depth 1 | ERROR |
-| A11 | `control=sequence` but switch/loop exists at depth 1 | ERROR |
+| A9 | Func files must have `control=` (sequence/selection/iteration) | ERROR |
+| A10 | `control=selection` but no switch at depth 1 | ERROR |
+| A11 | `control=iteration` but no loop at depth 1 | ERROR |
+| A12 | `control=sequence` but switch/loop exists at depth 1 | ERROR |
 
 ## Annotations
 

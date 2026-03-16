@@ -10,16 +10,13 @@ import (
 
 // CheckRequiredKeysInAnnotation checks A8: all required codebook keys must be
 // present in the //ff:func or //ff:type annotation.
-// control key is only required for //ff:func files.
 func CheckRequiredKeysInAnnotation(gf *model.GoFile, cb *model.Codebook) []model.Violation {
 	if cb == nil || gf.IsTest || gf.Annotation == nil {
 		return nil
 	}
 
-	isFunc := len(gf.Annotation.Func) > 0
-	isType := len(gf.Annotation.Type) > 0
 	meta := gf.Annotation.Func
-	if !isFunc {
+	if len(meta) == 0 {
 		meta = gf.Annotation.Type
 	}
 	if len(meta) == 0 {
@@ -28,9 +25,6 @@ func CheckRequiredKeysInAnnotation(gf *model.GoFile, cb *model.Codebook) []model
 
 	var violations []model.Violation
 	for key := range cb.Required {
-		if key == "control" && isType {
-			continue
-		}
 		if _, ok := meta[key]; !ok {
 			violations = append(violations, model.Violation{
 				File:    gf.Path,

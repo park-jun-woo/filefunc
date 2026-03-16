@@ -20,6 +20,7 @@ func RunAll(files []*model.GoFile, cb *model.Codebook) []model.Violation {
 		violations = append(violations, CheckRequiredKeysInAnnotation(gf, cb)...)
 		violations = append(violations, CheckWhatRequired(gf)...)
 		violations = append(violations, CheckAnnotationPosition(gf)...)
+		violations = append(violations, CheckControlRequired(gf)...)
 		violations = append(violations, CheckControlSelection(gf)...)
 		violations = append(violations, CheckControlIteration(gf)...)
 		violations = append(violations, CheckControlSequence(gf)...)

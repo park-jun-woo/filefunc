@@ -1,5 +1,5 @@
 //ff:func feature=validate type=rule control=sequence
-//ff:what A9: control=selection인데 depth 1에 switch 없으면 ERROR
+//ff:what A10: control=selection인데 depth 1에 switch 없으면 ERROR
 package validate
 
 import (
@@ -7,7 +7,7 @@ import (
 	"github.com/park-jun-woo/filefunc/internal/parse"
 )
 
-// CheckControlSelection checks A9: control=selection requires switch at depth 1.
+// CheckControlSelection checks A10: control=selection requires switch at depth 1.
 func CheckControlSelection(gf *model.GoFile) []model.Violation {
 	if gf.IsTest || len(gf.Funcs) == 0 || gf.Annotation == nil {
 		return nil
@@ -19,7 +19,7 @@ func CheckControlSelection(gf *model.GoFile) []model.Violation {
 	if actual != "selection" {
 		return []model.Violation{{
 			File:    gf.Path,
-			Rule:    "A9",
+			Rule:    "A10",
 			Level:   "ERROR",
 			Message: "control=selection but no switch found at depth 1",
 		}}
