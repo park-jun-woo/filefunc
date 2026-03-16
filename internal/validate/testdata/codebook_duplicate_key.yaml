@@ -1,0 +1,6 @@
+required:
+  feature:
+    validate: "검증"
+    validate: "검증 중복"
+  type:
+    rule: "룰"

@@ -159,3 +159,35 @@ func TestMutest_A11(t *testing.T) {
 func TestMutest_A12(t *testing.T) {
 	expectViolation(t, CheckControlSequence(mustParse(t, "testdata/sequence_with_loop.go")), "A12")
 }
+
+// C1
+func TestMutest_C1(t *testing.T) {
+	cb, err := parse.ParseCodebook("testdata/codebook_empty_required.yaml")
+	if err != nil {
+		t.Fatal(err)
+	}
+	expectViolation(t, CheckCodebookRequiredKeys(cb), "C1")
+}
+
+// C2
+func TestMutest_C2(t *testing.T) {
+	expectViolation(t, CheckCodebookDuplicates("testdata/codebook_duplicate_key.yaml"), "C2")
+}
+
+// C3
+func TestMutest_C3(t *testing.T) {
+	cb, err := parse.ParseCodebook("testdata/codebook_bad_format.yaml")
+	if err != nil {
+		t.Fatal(err)
+	}
+	expectViolation(t, CheckCodebookValueFormat(cb), "C3")
+}
+
+// C4
+func TestMutest_C4(t *testing.T) {
+	cb, err := parse.ParseCodebook("testdata/codebook_no_description.yaml")
+	if err != nil {
+		t.Fatal(err)
+	}
+	expectViolation(t, CheckCodebookDescription(cb), "C4")
+}

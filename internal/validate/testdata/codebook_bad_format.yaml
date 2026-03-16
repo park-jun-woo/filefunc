@@ -1,0 +1,5 @@
+required:
+  feature:
+    VALIDATE: "대문자"
+  type:
+    rule: "룰"

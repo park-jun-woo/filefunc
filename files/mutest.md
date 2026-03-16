@@ -29,7 +29,7 @@
 | Q1 (dimension) | `dimension2_depth3.go` | dimension=2, depth 3 → 통과 확인 | ✅ |
 | Q2 | `long_func.go` | func 1010줄 | ✅ |
 | Q3 | `medium_func.go` | func 110줄 (WARNING) | ✅ |
-| Q3 (backtick) | `q3_backtick.go` | 100줄+ backtick 포함 → hint 메시지 확인 | ✅ |
+| Q3 (backtick) | `q3_backtick.go` | 100줄+ backtick → var-only file 안내 | ✅ |
 
 ### 어노테이션 룰
 
@@ -50,12 +50,12 @@
 
 ### 코드북 룰
 
-| 룰 | 위반 내용 | 상태 |
-|---|---|---|
-| C1 | required 섹션 비어있음 | — |
-| C2 | 동일 섹션 내 중복 키 (원본 텍스트 기반) | — |
-| C3 | 키가 소문자+하이픈 아님 | — |
-| C4 | required description 비어있음 (WARNING) | — |
+| 룰 | 뮤턴트 파일 | 위반 내용 | 상태 |
+|---|---|---|---|
+| C1 | `codebook_empty_required.yaml` | required 섹션 비어있음 | ✅ |
+| C2 | `codebook_duplicate_key.yaml` | 동일 섹션 내 중복 키 | ✅ |
+| C3 | `codebook_bad_format.yaml` | 키가 대문자 (소문자+하이픈 아님) | ✅ |
+| C4 | `codebook_no_description.yaml` | required description 비어있음 (WARNING) | ✅ |
 
 ### 미구현 뮤턴트
 
