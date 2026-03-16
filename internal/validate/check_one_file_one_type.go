@@ -1,4 +1,4 @@
-//ff:func feature=validate type=rule
+//ff:func feature=validate type=rule control=sequence
 //ff:what F2: 파일당 type 1개 검증
 package validate
 

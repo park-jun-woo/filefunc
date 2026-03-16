@@ -1,4 +1,4 @@
-//ff:func feature=cli type=command
+//ff:func feature=cli type=command control=sequence
 //ff:what chain 서브커맨드 부모 정의
 package cli
 

@@ -1,4 +1,4 @@
-//ff:func feature=cli type=command
+//ff:func feature=cli type=command control=sequence
 //ff:what chain feature 서브커맨드 — feature 전체 func의 호출 관계 추적
 package cli
 

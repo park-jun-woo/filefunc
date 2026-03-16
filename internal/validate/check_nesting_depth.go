@@ -1,4 +1,4 @@
-//ff:func feature=validate type=rule
+//ff:func feature=validate type=rule control=sequence
 //ff:what Q1: nesting depth 2 초과 검증
 //ff:checked llm=gpt-oss:20b hash=5f7150eb
 package validate

@@ -1,4 +1,4 @@
-//ff:func feature=chain type=parser
+//ff:func feature=chain type=parser control=sequence
 //ff:what 촌수 기반 그래프 탐색 — 최대 3촌까지
 package chain
 

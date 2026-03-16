@@ -1,4 +1,4 @@
-//ff:func feature=cli type=parser
+//ff:func feature=cli type=parser control=sequence
 //ff:what LLM 응답 문자열에서 0.0~1.0 점수를 추출
 //ff:checked llm=gpt-oss:20b hash=465c2cda
 package llm

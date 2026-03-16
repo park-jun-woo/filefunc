@@ -1,4 +1,4 @@
-//ff:func feature=cli type=formatter
+//ff:func feature=cli type=formatter control=sequence
 //ff:what what과 func body로 LLM 검증 프롬프트를 생성
 //ff:checked llm=gpt-oss:20b hash=f3a78f60
 package llm

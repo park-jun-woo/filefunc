@@ -1,4 +1,4 @@
-//ff:func feature=parse type=parser
+//ff:func feature=parse type=parser control=sequence
 //ff:what FuncDecl에서 프로젝트 내부 타입 참조를 수집
 //ff:checked llm=gpt-oss:20b hash=28e2e40d
 package parse

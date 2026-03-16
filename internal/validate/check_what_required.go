@@ -1,4 +1,4 @@
-//ff:func feature=validate type=rule
+//ff:func feature=validate type=rule control=sequence
 //ff:what A3: func 또는 type 파일에 //ff:what 필수 검증
 //ff:checked llm=gpt-oss:20b hash=38b63879
 package validate

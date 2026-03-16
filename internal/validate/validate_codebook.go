@@ -1,4 +1,4 @@
-//ff:func feature=validate type=command
+//ff:func feature=validate type=command control=sequence
 //ff:what codebook.yaml 형식 검증 오케스트레이터 (C1~C3 실행)
 package validate
 

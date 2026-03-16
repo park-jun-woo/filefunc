@@ -1,4 +1,4 @@
-//ff:func feature=chain type=util
+//ff:func feature=chain type=util control=sequence
 //ff:what GoFile에서 대표 func/method 이름을 추출
 package chain
 

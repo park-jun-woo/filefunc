@@ -1,4 +1,4 @@
-//ff:func feature=chain type=parser
+//ff:func feature=chain type=parser control=sequence
 //ff:what 특정 func을 호출하는 func 목록을 역방향 맵에서 조회
 package chain
 

@@ -1,4 +1,4 @@
-//ff:func feature=parse type=parser
+//ff:func feature=parse type=parser control=sequence
 //ff:what 메서드 리시버의 타입명을 추출
 //ff:checked llm=gpt-oss:20b hash=a00ef592
 package parse

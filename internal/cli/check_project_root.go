@@ -1,4 +1,4 @@
-//ff:func feature=cli type=util
+//ff:func feature=cli type=util control=sequence
 //ff:what 지정 경로가 유효한 프로젝트 루트인지 검증 (폴더, go.mod, codebook.yaml 필수)
 package cli
 

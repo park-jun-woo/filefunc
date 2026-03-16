@@ -1,4 +1,4 @@
-//ff:func feature=codebook type=loader
+//ff:func feature=codebook type=loader control=sequence
 //ff:what codebook.yaml 파일을 로드하여 Codebook 구조체로 파싱
 //ff:checked llm=gpt-oss:20b hash=2c47479f
 package parse

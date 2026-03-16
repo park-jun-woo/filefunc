@@ -1,4 +1,4 @@
-//ff:func feature=parse type=parser
+//ff:func feature=parse type=parser control=sequence
 //ff:what CallExpr에서 프로젝트 내부 함수명을 추출
 //ff:checked llm=gpt-oss:20b hash=5b0d8f50
 package parse

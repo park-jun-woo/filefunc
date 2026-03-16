@@ -1,4 +1,4 @@
-//ff:func feature=cli type=loader
+//ff:func feature=cli type=loader control=sequence
 //ff:what ollama에 모델이 존재하는지 확인하고 없으면 pull 여부를 질의
 //ff:checked llm=gpt-oss:20b hash=a281a0aa
 package llm

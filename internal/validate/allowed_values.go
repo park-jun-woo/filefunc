@@ -1,4 +1,4 @@
-//ff:func feature=validate type=util
+//ff:func feature=validate type=util control=sequence
 //ff:what codebook의 required+optional에서 주어진 키의 허용 값 목록을 통합 반환
 package validate
 

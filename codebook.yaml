@@ -21,6 +21,10 @@ required:
     - formatter   # 출력 포매터
     - loader      # 파일/설정 로드
     - util        # 범용 유틸리티
+  control:
+    - sequence      # 순차 실행
+    - selection      # 분기 (switch)
+    - iteration      # 반복 (loop)
 
 optional:
   pattern:
@@ -31,7 +35,3 @@ optional:
     - error
     - warning
     - info
-  control:
-    - sequence      # 순차 실행 (기본값, 생략 가능)
-    - selection      # 분기 (switch)
-    - iteration      # 반복 (loop)

@@ -1,4 +1,4 @@
-//ff:func feature=validate type=rule
+//ff:func feature=validate type=rule control=sequence
 //ff:what F3: 파일당 method 1개 검증
 //ff:checked llm=gpt-oss:20b hash=2e1f09f6
 package validate

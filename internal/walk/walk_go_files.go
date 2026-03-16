@@ -1,4 +1,4 @@
-//ff:func feature=parse type=walker
+//ff:func feature=parse type=walker control=sequence
 //ff:what 디렉토리를 재귀 순회하며 .go 파일 경로 목록 반환 (.ffignore 적용)
 package walk
 

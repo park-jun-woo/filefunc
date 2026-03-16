@@ -1,4 +1,4 @@
-//ff:func feature=chain type=parser
+//ff:func feature=chain type=parser control=sequence
 //ff:what 단방향 깊이 탐색 (child-depth 또는 parent-depth)
 package chain
 

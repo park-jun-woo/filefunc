@@ -1,4 +1,4 @@
-//ff:func feature=parse type=util
+//ff:func feature=parse type=util control=sequence
 //ff:what 단일 .ffignore 패턴과 경로를 매칭
 package walk
 

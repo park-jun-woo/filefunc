@@ -1,4 +1,4 @@
-//ff:func feature=cli type=command
+//ff:func feature=cli type=command control=sequence
 //ff:what Provider로 what-body 일치 점수를 판정
 //ff:checked llm=gpt-oss:20b hash=43ab8822
 package llm

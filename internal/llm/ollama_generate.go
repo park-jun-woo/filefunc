@@ -1,4 +1,4 @@
-//ff:func feature=cli type=command
+//ff:func feature=cli type=command control=sequence
 //ff:what OllamaProvider의 Generate 메서드 — ollama /api/generate 호출
 package llm
 

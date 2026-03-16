@@ -1,4 +1,4 @@
-//ff:func feature=cli type=loader
+//ff:func feature=cli type=loader control=sequence
 //ff:what ollama 엔드포인트에서 모델을 pull
 //ff:checked llm=gpt-oss:20b hash=3297f896
 package llm

@@ -1,4 +1,4 @@
-//ff:func feature=validate type=rule
+//ff:func feature=validate type=rule control=sequence
 //ff:what F4: init()만 단독으로 존재하는 파일 검증
 //ff:checked llm=gpt-oss:20b hash=bbfc055b
 package validate

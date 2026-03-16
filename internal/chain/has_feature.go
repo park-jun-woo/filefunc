@@ -1,4 +1,4 @@
-//ff:func feature=chain type=util
+//ff:func feature=chain type=util control=sequence
 //ff:what GoFile의 어노테이션이 지정된 feature 값을 가지는지 판별
 package chain
 

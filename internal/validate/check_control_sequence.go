@@ -9,7 +9,7 @@ import (
 	"github.com/park-jun-woo/filefunc/internal/parse"
 )
 
-// CheckControlSequence checks A11: control=sequence (or omitted) must not have
+// CheckControlSequence checks A11: control=sequence must not have
 // switch or loop at depth 1.
 func CheckControlSequence(gf *model.GoFile) []model.Violation {
 	if gf.IsTest || len(gf.Funcs) == 0 || gf.Annotation == nil {

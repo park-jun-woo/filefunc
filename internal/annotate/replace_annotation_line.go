@@ -1,4 +1,4 @@
-//ff:func feature=annotate type=formatter
+//ff:func feature=annotate type=formatter control=sequence
 //ff:what 기존 //ff: 라인을 새 값으로 교체하거나 제거하여 결과 라인 반환
 //ff:checked llm=gpt-oss:20b hash=20f78335
 package annotate
