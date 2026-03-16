@@ -125,15 +125,15 @@ control=sequence   → read only the step you need. Other steps: what is enough.
 ```yaml
 required:
   feature:
-    validate: "코드 구조 룰 검증"
-    parse: "소스 코드 파싱"
+    validate: "code structure rule validation (F1,Q1,A1 etc.)"
+    parse: "source code, annotation, codebook parsing"
   type:
-    command: "cobra 명령 엔트리포인트"
-    rule: "개별 검증 룰"
+    command: "cobra command entrypoint"
+    rule: "individual validation rule"
 
 optional:
   pattern:
-    error-collection: "에러 수집"
+    error-collection: "collect errors for batch reporting"
   level:
     error: ""
 ```
