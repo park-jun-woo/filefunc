@@ -8,6 +8,8 @@
 
 상세: `files/mutest.md`
 
+현재 구현: F1~F4, Q1~Q3, A1~A3, A6, A13~A16, Q1 dimension
+
 ### 2. exception (예외 통과 테스트)
 
 룰 예외 조건에서 위반이 발생하지 **않는가**?
@@ -38,6 +40,14 @@ func TestClean_AllRules(t *testing.T) {
 | A1 type 미감지 | type-only 파일에 //ff:type 없으면 A1 ERROR |
 | A1 type 정상 | type-only 파일에 //ff:type 있으면 통과 |
 | A2 type 코드북 | //ff:type의 값이 코드북에 없으면 A2 ERROR |
+
+### 5. dimension (Q1 동적 상한 테스트)
+
+| 테스트 | 검증 내용 |
+|---|---|
+| Q1 dimension 통과 | `dimension2_depth3.go` — dimension=2, depth 3 → Q1 통과 |
+| A15 위반 | `iter_no_dimension.go` — iteration인데 dimension 없음 → ERROR |
+| A16 위반 | `bad_dimension_value.go` — dimension=0 → ERROR |
 
 ## 테스트 위치
 
