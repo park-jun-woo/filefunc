@@ -62,6 +62,7 @@ filefunc chain func RunAll --chon 2 --meta what     # with //ff:what annotations
 filefunc chain func RunAll --chon 2 --meta all      # with all annotations
 filefunc chain func RunAll --chon 2 --meta what \
   --prompt "nesting depth 수정" --rate 0.8           # reranker filtering
+filefunc chain func ParseFile --package funcspec     # limit to specific package
 ```
 
 Real-time AST analysis. Respects `.ffignore`.
@@ -73,6 +74,7 @@ Real-time AST analysis. Respects `.ffignore`.
 | `--child-depth` | Trace calls only to this depth | — |
 | `--parent-depth` | Trace callers only to this depth | — |
 | `--meta` | Include annotation metadata (meta,what,why,checked,all) | — |
+| `--package` | Limit to funcs in this Go package (chain func only) | — |
 | `--prompt` | User task intent for relevance scoring (requires vLLM) | — |
 | `--rate` | Relevance score threshold (0.0~1.0) | 0.8 |
 | `--model` | Reranker model name | `Qwen/Qwen3-Reranker-0.6B` |

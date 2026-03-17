@@ -26,6 +26,7 @@ var chainFuncCmd = &cobra.Command{
 		rate, _ := cmd.Flags().GetFloat64("rate")
 		scoreModel, _ := cmd.Flags().GetString("model")
 		scoreEndpoint, _ := cmd.Flags().GetString("score-endpoint")
+		pkg, _ := cmd.Flags().GetString("package")
 
 		if rate > 0 && prompt == "" {
 			return fmt.Errorf("--prompt is required when --rate is specified")
@@ -51,8 +52,15 @@ var chainFuncCmd = &cobra.Command{
 
 		metaFlags := chain.ParseMetaFlags(metaRaw)
 		var fileMap map[string]*model.GoFile
-		if len(metaFlags) > 0 || prompt != "" {
+		if len(metaFlags) > 0 || prompt != "" || pkg != "" {
 			fileMap = chain.BuildFuncFileMap(files)
+		}
+
+		if pkg != "" {
+			if gf, ok := fileMap[target]; ok && gf.Package != pkg {
+				return fmt.Errorf("func %q not found in package %q (found in %q)", target, pkg, gf.Package)
+			}
+			results = chain.FilterByPackage(results, fileMap, pkg)
 		}
 
 		var scores map[int]float64
@@ -82,5 +90,6 @@ func init() {
 	chainFuncCmd.Flags().Float64("rate", 0, "relevance score threshold (0.0~1.0)")
 	chainFuncCmd.Flags().String("model", "Qwen/Qwen3-Reranker-0.6B", "reranker model name")
 	chainFuncCmd.Flags().String("score-endpoint", "http://localhost:8000", "vLLM endpoint for reranker")
+	chainFuncCmd.Flags().String("package", "", "limit to funcs in this Go package")
 	chainCmd.AddCommand(chainFuncCmd)
 }
