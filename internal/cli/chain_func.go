@@ -41,26 +41,28 @@ var chainFuncCmd = &cobra.Command{
 			return err
 		}
 
+		qualified, err := resolveTarget(g, target, pkg)
+		if err != nil {
+			return err
+		}
+
 		var results []chain.ChonResult
 		if childDepth > 0 {
-			results = chain.TraverseDepth(g, target, "calls", childDepth)
+			results = chain.TraverseDepth(g, qualified, "calls", childDepth)
 		} else if parentDepth > 0 {
-			results = chain.TraverseDepth(g, target, "called-by", parentDepth)
+			results = chain.TraverseDepth(g, qualified, "called-by", parentDepth)
 		} else {
-			results = chain.TraverseChon(g, target, chon)
+			results = chain.TraverseChon(g, qualified, chon)
+		}
+
+		if pkg != "" {
+			results = chain.FilterByPackage(results, pkg)
 		}
 
 		metaFlags := chain.ParseMetaFlags(metaRaw)
 		var fileMap map[string]*model.GoFile
-		if len(metaFlags) > 0 || prompt != "" || pkg != "" {
+		if len(metaFlags) > 0 || prompt != "" {
 			fileMap = chain.BuildFuncFileMap(files)
-		}
-
-		if pkg != "" {
-			if gf, ok := fileMap[target]; ok && gf.Package != pkg {
-				return fmt.Errorf("func %q not found in package %q (found in %q)", target, pkg, gf.Package)
-			}
-			results = chain.FilterByPackage(results, fileMap, pkg)
 		}
 
 		var scores map[int]float64
@@ -76,7 +78,7 @@ var chainFuncCmd = &cobra.Command{
 			results, scores, removed = chain.FilterByRate(results, scores, rate)
 		}
 
-		chain.FormatChain(os.Stdout, target, results, metaFlags, fileMap, scores, removed)
+		chain.FormatChain(os.Stdout, qualified, results, metaFlags, fileMap, scores, removed)
 		return nil
 	},
 }

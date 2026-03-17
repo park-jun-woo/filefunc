@@ -1,6 +1,5 @@
 //ff:func feature=parse type=parser control=iteration dimension=1
-//ff:what AST의 import 목록에서 프로젝트 내부 패키지 alias 맵 생성
-//ff:checked llm=gpt-oss:20b hash=e377700d
+//ff:what AST의 import 목록에서 프로젝트 내부 패키지 alias → 패키지명 맵 생성
 package parse
 
 import (
@@ -8,22 +7,21 @@ import (
 	"strings"
 )
 
-// BuildImportMap builds a map of package aliases that belong to the project module.
-func BuildImportMap(f *ast.File, modulePath string) map[string]bool {
-	m := make(map[string]bool)
+// BuildImportMap builds a map of alias → package name for project-internal imports.
+func BuildImportMap(f *ast.File, modulePath string) map[string]string {
+	m := make(map[string]string)
 	for _, imp := range f.Imports {
 		path := strings.Trim(imp.Path.Value, `"`)
 		if !strings.HasPrefix(path, modulePath) {
 			continue
 		}
-		alias := ""
+		parts := strings.Split(path, "/")
+		pkgName := parts[len(parts)-1]
+		alias := pkgName
 		if imp.Name != nil {
 			alias = imp.Name.Name
-		} else {
-			parts := strings.Split(path, "/")
-			alias = parts[len(parts)-1]
 		}
-		m[alias] = true
+		m[alias] = pkgName
 	}
 	return m
 }

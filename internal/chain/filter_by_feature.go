@@ -12,7 +12,9 @@ func FilterByFeature(files []*model.GoFile, feature string) []string {
 		if !hasFeature(gf, feature) {
 			continue
 		}
-		result = append(result, gf.Funcs...)
+		for _, name := range gf.Funcs {
+			result = append(result, qualifiedName(gf.Package, name))
+		}
 	}
 	return result
 }

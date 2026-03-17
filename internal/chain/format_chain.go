@@ -15,13 +15,19 @@ import (
 // scores: result index → relevance score. nil = no scoring.
 // removed: number of results removed by rate filter. 0 = no filtering.
 func FormatChain(w io.Writer, start string, results []ChonResult, metaFlags map[string]bool, fileMap map[string]*model.GoFile, scores map[int]float64, removed int) {
-	fmt.Fprintf(w, "%s%s\n", start, formatMeta(start, metaFlags, fileMap))
+	startDisplay := nameFromQualified(start)
+	fmt.Fprintf(w, "%s%s\n", startDisplay, formatMeta(start, metaFlags, fileMap))
+	startPkg := pkgFromQualified(start)
 	for i, r := range results {
 		scoreSuffix := ""
 		if s, ok := scores[i]; ok {
 			scoreSuffix = fmt.Sprintf(" [%.2f]", s)
 		}
-		fmt.Fprintf(w, "  %d촌 %s: %s%s%s\n", r.Chon, r.Rel, r.Name, formatMeta(r.Name, metaFlags, fileMap), scoreSuffix)
+		display := nameFromQualified(r.Name)
+		if pkgFromQualified(r.Name) != startPkg {
+			display = r.Name
+		}
+		fmt.Fprintf(w, "  %d촌 %s: %s%s%s\n", r.Chon, r.Rel, display, formatMeta(r.Name, metaFlags, fileMap), scoreSuffix)
 	}
 	if len(results) == 0 {
 		fmt.Fprintln(w, "  (no relations found)")

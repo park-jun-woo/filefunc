@@ -8,7 +8,7 @@ import (
 )
 
 // BuildCallGraph builds a bidirectional call graph from parsed Go files.
-func BuildCallGraph(files []*model.GoFile, modulePath string, projFuncs map[string]bool) *CallGraph {
+func BuildCallGraph(files []*model.GoFile, modulePath string, projFuncs map[string]string) *CallGraph {
 	g := &CallGraph{
 		Children: make(map[string][]string),
 		Parents:  make(map[string][]string),
@@ -18,11 +18,12 @@ func BuildCallGraph(files []*model.GoFile, modulePath string, projFuncs map[stri
 		if gf.IsTest {
 			continue
 		}
-		caller := funcName(gf)
-		if caller == "" {
+		name := funcName(gf)
+		if name == "" {
 			continue
 		}
-		calls, err := parse.ExtractCalls(gf.Path, modulePath, projFuncs)
+		caller := qualifiedName(gf.Package, name)
+		calls, err := parse.ExtractCalls(gf.Path, modulePath, projFuncs, gf.Package)
 		if err != nil {
 			continue
 		}

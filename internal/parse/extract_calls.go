@@ -1,6 +1,5 @@
 //ff:func feature=parse type=parser control=iteration dimension=1
-//ff:what func body에서 프로젝트 내 호출 함수명을 AST로 추출
-//ff:checked llm=gpt-oss:20b hash=b668ae9c
+//ff:what func body에서 프로젝트 내 호출 함수를 qualified name(pkg.FuncName)으로 AST 추출
 package parse
 
 import (
@@ -9,8 +8,8 @@ import (
 	"go/token"
 )
 
-// ExtractCalls extracts project-internal function calls from a Go source file.
-func ExtractCalls(path string, modulePath string, projFuncs map[string]bool) ([]string, error) {
+// ExtractCalls extracts project-internal function calls as qualified names (pkg.FuncName).
+func ExtractCalls(path string, modulePath string, projFuncs map[string]string, callerPkg string) ([]string, error) {
 	fset := token.NewFileSet()
 	f, err := parser.ParseFile(fset, path, nil, 0)
 	if err != nil {
@@ -30,7 +29,7 @@ func ExtractCalls(path string, modulePath string, projFuncs map[string]bool) ([]
 			if !ok {
 				return true
 			}
-			name := CallName(call, imports, projFuncs)
+			name := CallName(call, imports, projFuncs, callerPkg)
 			if name != "" {
 				seen[name] = true
 			}

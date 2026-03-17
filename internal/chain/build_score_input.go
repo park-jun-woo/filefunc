@@ -7,8 +7,9 @@ import "github.com/park-jun-woo/filefunc/internal/model"
 // BuildScoreInput creates a document string for reranker scoring: "FuncName: what text".
 func BuildScoreInput(name string, fileMap map[string]*model.GoFile) string {
 	gf := fileMap[name]
+	display := nameFromQualified(name)
 	if gf == nil || gf.Annotation == nil || gf.Annotation.What == "" {
-		return name
+		return display
 	}
-	return name + ": " + gf.Annotation.What
+	return display + ": " + gf.Annotation.What
 }

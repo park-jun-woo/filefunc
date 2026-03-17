@@ -4,18 +4,18 @@ package chain
 
 import "github.com/park-jun-woo/filefunc/internal/model"
 
-// BuildFuncFileMap creates a mapping from func/method/type names to their GoFile.
+// BuildFuncFileMap creates a mapping from qualified names (pkg.Name) to their GoFile.
 func BuildFuncFileMap(files []*model.GoFile) map[string]*model.GoFile {
 	m := make(map[string]*model.GoFile, len(files))
 	for _, gf := range files {
 		for _, name := range gf.Funcs {
-			m[name] = gf
+			m[qualifiedName(gf.Package, name)] = gf
 		}
 		for _, name := range gf.Methods {
-			m[name] = gf
+			m[qualifiedName(gf.Package, name)] = gf
 		}
 		for _, name := range gf.Types {
-			m[name] = gf
+			m[qualifiedName(gf.Package, name)] = gf
 		}
 	}
 	return m

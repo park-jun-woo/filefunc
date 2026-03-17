@@ -34,5 +34,6 @@ func BuildGraph(root string) (*chain.CallGraph, []*model.GoFile, error) {
 	}
 
 	projFuncs, _ := parse.CollectProjectSymbols(files)
-	return chain.BuildCallGraph(files, modulePath, projFuncs), files, nil
+	g := chain.BuildCallGraph(files, modulePath, projFuncs)
+	return g, files, nil
 }
