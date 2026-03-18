@@ -3,6 +3,8 @@ github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2
 github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=
 github.com/park-jun-woo/toulmin v0.0.0-20260318141013-2f92b64aefef h1:9dzEdKUYzFhM2ShC0sNOJVzeRaJ2gQCY10s2NC46WeI=
 github.com/park-jun-woo/toulmin v0.0.0-20260318141013-2f92b64aefef/go.mod h1:3XpOzXMKmpU0YfV2joQHsDN2u/WvquiuBEwWCjAe6jU=
+github.com/park-jun-woo/toulmin v0.0.0-20260318152810-84281b8fb949 h1:gSp3V03ciQKC5IFsrCa6MHcjtqhWSeyrjeX1K1Vc4HA=
+github.com/park-jun-woo/toulmin v0.0.0-20260318152810-84281b8fb949/go.mod h1:3XpOzXMKmpU0YfV2joQHsDN2u/WvquiuBEwWCjAe6jU=
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/spf13/cobra v1.10.2 h1:DMTTonx5m65Ic0GOoRY2c16WCbHxOOw6xxezuLaBpcU=
 github.com/spf13/cobra v1.10.2/go.mod h1:7C1pvHqHw5A4vrJfjNwvOdzYu0Gml16OCs2GRiTUUS4=

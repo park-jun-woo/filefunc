@@ -1,9 +1,24 @@
 //ff:func feature=validate type=rule control=sequence
-//ff:what Q1 toulmin rule — nesting depth 상한 위반 여부를 bool로 반환
+//ff:what Q1 toulmin rule — nesting depth 상한 위반 시 violation 반환
 package validate
 
-// RuleQ1 returns true if the file violates Q1 (nesting depth exceeds limit).
-func RuleQ1(claim any, ground any) bool {
+import (
+	"fmt"
+
+	"github.com/park-jun-woo/filefunc/internal/model"
+)
+
+// RuleQ1 returns (true, []model.Violation) if the file violates Q1 (nesting depth exceeds limit).
+func RuleQ1(claim any, ground any) (bool, any) {
 	gf := ground.(*ValidateGround).File
-	return len(CheckNestingDepth(gf)) > 0
+	limit := depthLimit(gf)
+	if gf.MaxDepth > limit {
+		return true, []model.Violation{{
+			File:    gf.Path,
+			Rule:    "Q1",
+			Level:   "ERROR",
+			Message: fmt.Sprintf("nesting depth %d exceeds maximum of %d", gf.MaxDepth, limit),
+		}}
+	}
+	return false, nil
 }

@@ -5,7 +5,7 @@ package validate
 
 // DefeaterNoFunc returns true if the file has no funcs and no annotation.
 // Used as a defeater against control/dimension/annotation rules.
-func DefeaterNoFunc(claim any, ground any) bool {
+func DefeaterNoFunc(claim any, ground any) (bool, any) {
 	gf := ground.(*ValidateGround).File
-	return len(gf.Funcs) == 0 || gf.Annotation == nil
+	return len(gf.Funcs) == 0 || gf.Annotation == nil, nil
 }

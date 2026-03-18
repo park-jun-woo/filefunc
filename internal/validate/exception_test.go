@@ -25,7 +25,7 @@ func TestException_F6_ParamType(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	expectNoViolation(t, CheckOneFileOneType(gf))
+	expectNoViolation(t, ruleViolations(RuleF2, gf, nil))
 }
 
 // F7: const-only file → F1 should not fire (defeated by DefeaterConstOnly)
@@ -44,7 +44,7 @@ func TestException_F4_VarWithInit(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	expectNoViolation(t, CheckInitStandalone(gf))
+	expectNoViolation(t, ruleViolations(RuleF4, gf, nil))
 }
 
 // --- Clean: all rules pass ---
@@ -66,7 +66,7 @@ func TestType_A1_Missing(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	expectViolation(t, CheckAnnotationRequired(gf), "A1")
+	expectViolation(t, ruleViolations(RuleA1, gf, nil), "A1")
 }
 
 // A1: type-only file with //ff:type → should pass
@@ -75,7 +75,7 @@ func TestType_A1_Present(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	expectNoViolation(t, CheckAnnotationRequired(gf))
+	expectNoViolation(t, ruleViolations(RuleA1, gf, nil))
 }
 
 // A2: //ff:type with bad codebook value → should fire
@@ -90,5 +90,5 @@ func TestType_A2_BadCodebook(t *testing.T) {
 			"type":    {"rule": "", "model": ""},
 		},
 	}
-	expectViolation(t, CheckCodebookValues(gf, cb), "A2")
+	expectViolation(t, ruleViolations(RuleA2, gf, cb), "A2")
 }

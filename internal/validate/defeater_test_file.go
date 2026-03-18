@@ -5,6 +5,6 @@ package validate
 
 // DefeaterTestFile returns true if the file is a test file.
 // Used as a defeater in the defeats graph against F1, F2, F3, and annotation rules.
-func DefeaterTestFile(claim any, ground any) bool {
-	return ground.(*ValidateGround).File.IsTest
+func DefeaterTestFile(claim any, ground any) (bool, any) {
+	return ground.(*ValidateGround).File.IsTest, nil
 }
