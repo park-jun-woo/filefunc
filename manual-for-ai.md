@@ -155,6 +155,7 @@ filefunc chain func RunAll --chon 2 --meta what      # with //ff:what annotation
 filefunc chain func RunAll --chon 2 --meta all       # with all annotations
 filefunc chain func RunAll --chon 2 --meta what \
   --prompt "nesting depth 수정" --rate 0.8            # reranker filtering
+filefunc chain func ParseFile --package funcspec     # limit to specific package
 filefunc chain feature validate                      # feature-wide chain
 filefunc chain func RunAll --root /path/to/project   # explicit project root
 filefunc context "nesting depth 수정"                   # LLM 4-stage context search

@@ -46,7 +46,7 @@ filefunc validate /path/to/project   # explicit project root
 filefunc validate --format json
 ```
 
-Project root must contain `go.mod` and `codebook.yaml`. Read-only. Exit code 1 on violations. Respects `.ffignore`.
+Project root must contain `go.mod` and `codebook.yaml`. Read-only. Exit code 1 on violations. Respects `.ffignore`. Powered by [toulmin](https://github.com/park-jun-woo/toulmin) argumentation engine — exceptions are defeats in a graph, not if-statements in code.
 
 ### chain — Trace call relationships
 
