@@ -10,17 +10,6 @@ import (
 	"github.com/park-jun-woo/filefunc/internal/model"
 )
 
-// PipelineConfig holds context pipeline parameters.
-type PipelineConfig struct {
-	Prompt   string
-	Search   string
-	Depth    int
-	WhatRate float64
-	BodyRate float64
-	Codebook *model.Codebook
-	Generate func(string) (string, error)
-}
-
 // RunPipeline executes the 4-stage context pipeline.
 func RunPipeline(w io.Writer, files []*model.GoFile, cfg PipelineConfig) error {
 	var filtered []*model.GoFile

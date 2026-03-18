@@ -40,7 +40,7 @@ var contextCmd = &cobra.Command{
 			return fmt.Errorf("codebook.yaml not found: %w", err)
 		}
 
-		ignorePatterns := walk.ParseFFIgnore(root)
+		ignorePatterns := walk.ParseFFIgnore(root + "/.ffignore")
 		paths, err := walk.WalkGoFiles(root, ignorePatterns)
 		if err != nil {
 			return err

@@ -16,7 +16,7 @@ func RuleA12(claim any, ground any) (bool, any) {
 		return false, nil
 	}
 	control := gf.Annotation.Func["control"]
-	if control != "" && control != "sequence" {
+	if control != "sequence" {
 		return false, nil
 	}
 	actual := parse.DetectControl(gf.Path)

@@ -8,7 +8,7 @@ import "github.com/park-jun-woo/filefunc/internal/model"
 func RuleA1(claim any, ground any) (bool, any) {
 	gf := ground.(*ValidateGround).File
 	hasFuncs := len(gf.Funcs) > 0
-	hasTypes := len(gf.Types) > 0 && !hasFuncs
+	hasTypes := len(gf.Types) > 0
 	ann := gf.Annotation
 
 	if hasFuncs && (ann == nil || len(ann.Func) == 0) {

@@ -1,10 +1,10 @@
 //ff:func feature=parse type=loader control=iteration dimension=1
 //ff:what go.mod에서 모듈 경로를 추출
-//ff:checked llm=gpt-oss:20b hash=2c02ae35
 package parse
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"strings"
 )
@@ -24,5 +24,8 @@ func ReadModulePath(goModPath string) (string, error) {
 			return strings.TrimSpace(line[len("module "):]), nil
 		}
 	}
-	return "", scanner.Err()
+	if err := scanner.Err(); err != nil {
+		return "", err
+	}
+	return "", fmt.Errorf("module directive not found in %s", goModPath)
 }

@@ -10,8 +10,9 @@ func evaluateFile(gf *model.GoFile, cb *model.Codebook, ground *ValidateGround) 
 	results := ValidateGraph.Evaluate(gf.Path, ground)
 	var violations []model.Violation
 	for _, r := range results {
-		if r.Verdict > 0 && r.Evidence != nil {
-			violations = append(violations, r.Evidence.([]model.Violation)...)
+		vs, ok := r.Evidence.([]model.Violation)
+		if r.Verdict > 0 && ok {
+			violations = append(violations, vs...)
 		}
 	}
 	return violations

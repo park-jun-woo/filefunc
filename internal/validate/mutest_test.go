@@ -169,6 +169,19 @@ func TestMutest_A12(t *testing.T) {
 	expectViolation(t, ruleViolations(RuleA12, mustParse(t, "testdata/sequence_with_loop.go"), nil), "A12")
 }
 
+// A12: control="" should NOT fire A12 (A9 handles it)
+func TestMutest_A12_NoControl(t *testing.T) {
+	expectNoViolation(t, ruleViolations(RuleA12, mustParse(t, "testdata/no_control.go"), nil))
+}
+
+// A1: file with func+type should check both annotations
+func TestMutest_A1_FuncAndType(t *testing.T) {
+	gf := mustParse(t, "testdata/sample_with_func_and_type.go")
+	violations := ruleViolations(RuleA1, gf, nil)
+	// has //ff:func but not //ff:type — should fire A1 for type
+	expectViolation(t, violations, "A1")
+}
+
 // A7
 func TestMutest_A7(t *testing.T) {
 	expectViolation(t, ruleViolations(RuleA7, mustParse(t, "testdata/checked_hash_mismatch.go"), nil), "A7")

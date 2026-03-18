@@ -3,6 +3,9 @@
 package chain
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/park-jun-woo/filefunc/internal/model"
 	"github.com/park-jun-woo/filefunc/internal/parse"
 )
@@ -25,6 +28,7 @@ func BuildCallGraph(files []*model.GoFile, modulePath string, projFuncs map[stri
 		caller := qualifiedName(gf.Package, name)
 		calls, err := parse.ExtractCalls(gf.Path, modulePath, projFuncs, gf.Package)
 		if err != nil {
+			fmt.Fprintf(os.Stderr, "[WARN] %s: extract calls failed: %v\n", gf.Path, err)
 			continue
 		}
 		g.Children[caller] = calls

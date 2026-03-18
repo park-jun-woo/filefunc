@@ -1,6 +1,5 @@
 //ff:func feature=cli type=command control=sequence
 //ff:what 단일 파일에 대해 LLM what-body 검증을 수행하고 결과를 반환
-//ff:checked llm=gpt-oss:20b hash=aab86087
 package cli
 
 import (
@@ -45,7 +44,11 @@ func ProcessLlmcFile(gf *model.GoFile, provider llm.Provider, modelName string, 
 		return "fail"
 	}
 
-	annotate.WriteAnnotationLine(gf.Path, "checked", fmt.Sprintf("llm=%s hash=%s", modelName, currentHash))
+	_, err = annotate.WriteAnnotationLine(gf.Path, "checked", fmt.Sprintf("llm=%s hash=%s", modelName, currentHash))
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "[ERROR] %s: failed to write checked annotation: %v\n", gf.Path, err)
+		return "fail"
+	}
 	fmt.Printf("[PASS] %s: score=%.2f\n", gf.Path, score)
 	return "pass"
 }
