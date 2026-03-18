@@ -1,6 +1,5 @@
-//ff:func feature=parse type=parser control=sequence
+//ff:func feature=parse type=parser control=selection
 //ff:what if문의 else 분기를 포함한 최대 nesting depth 계산
-//ff:checked llm=gpt-oss:20b hash=02db6e62
 package parse
 
 import "go/ast"
@@ -12,7 +11,15 @@ func IfElseDepth(s *ast.IfStmt, current int) int {
 	if s.Else == nil {
 		return d
 	}
-	ed := NodeDepth(s.Else, current)
+	var ed int
+	switch e := s.Else.(type) {
+	case *ast.IfStmt:
+		ed = IfElseDepth(e, current)
+	case *ast.BlockStmt:
+		ed = StmtDepth(e.List, current+1)
+	default:
+		ed = NodeDepth(s.Else, current)
+	}
 	if ed > d {
 		return ed
 	}

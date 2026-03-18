@@ -15,16 +15,16 @@ import (
 // scores: result index → relevance score. nil = no scoring.
 // removed: number of results removed by rate filter. 0 = no filtering.
 func FormatChain(w io.Writer, start string, results []ChonResult, metaFlags map[string]bool, fileMap map[string]*model.GoFile, scores map[int]float64, removed int) {
-	startDisplay := nameFromQualified(start)
+	startDisplay := NameFromQualified(start)
 	fmt.Fprintf(w, "%s%s\n", startDisplay, formatMeta(start, metaFlags, fileMap))
-	startPkg := pkgFromQualified(start)
+	startPkg := PkgFromQualified(start)
 	for i, r := range results {
 		scoreSuffix := ""
 		if s, ok := scores[i]; ok {
 			scoreSuffix = fmt.Sprintf(" [%.2f]", s)
 		}
-		display := nameFromQualified(r.Name)
-		if pkgFromQualified(r.Name) != startPkg {
+		display := NameFromQualified(r.Name)
+		if PkgFromQualified(r.Name) != startPkg {
 			display = r.Name
 		}
 		fmt.Fprintf(w, "  %d촌 %s: %s%s%s\n", r.Chon, r.Rel, display, formatMeta(r.Name, metaFlags, fileMap), scoreSuffix)

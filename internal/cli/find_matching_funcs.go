@@ -11,12 +11,12 @@ import (
 func findMatchingFuncs(g *chain.CallGraph, target string) []string {
 	seen := make(map[string]bool)
 	for key := range g.Children {
-		if nameFromQualified(key) == target {
+		if chain.NameFromQualified(key) == target {
 			seen[key] = true
 		}
 	}
 	for key := range g.Parents {
-		if nameFromQualified(key) == target {
+		if chain.NameFromQualified(key) == target {
 			seen[key] = true
 		}
 	}

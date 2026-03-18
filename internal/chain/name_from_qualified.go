@@ -4,7 +4,8 @@ package chain
 
 import "strings"
 
-func nameFromQualified(qname string) string {
+// NameFromQualified extracts the function name from a qualified name (pkg.FuncName).
+func NameFromQualified(qname string) string {
 	if i := strings.LastIndex(qname, "."); i >= 0 {
 		return qname[i+1:]
 	}

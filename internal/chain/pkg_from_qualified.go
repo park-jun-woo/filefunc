@@ -4,7 +4,8 @@ package chain
 
 import "strings"
 
-func pkgFromQualified(qname string) string {
+// PkgFromQualified extracts the package name from a qualified name (pkg.FuncName).
+func PkgFromQualified(qname string) string {
 	if i := strings.LastIndex(qname, "."); i >= 0 {
 		return qname[:i]
 	}

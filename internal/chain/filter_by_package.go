@@ -6,7 +6,7 @@ package chain
 func FilterByPackage(results []ChonResult, pkg string) []ChonResult {
 	var filtered []ChonResult
 	for _, r := range results {
-		if pkgFromQualified(r.Name) == pkg {
+		if PkgFromQualified(r.Name) == pkg {
 			filtered = append(filtered, r)
 		}
 	}

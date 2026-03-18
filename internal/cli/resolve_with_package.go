@@ -5,11 +5,13 @@ package cli
 import (
 	"fmt"
 	"strings"
+
+	"github.com/park-jun-woo/filefunc/internal/chain"
 )
 
 func resolveWithPackage(matches []string, target string, pkg string) (string, error) {
 	for _, m := range matches {
-		if pkgFromQualified(m) == pkg {
+		if chain.PkgFromQualified(m) == pkg {
 			return m, nil
 		}
 	}

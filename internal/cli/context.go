@@ -72,21 +72,29 @@ var contextCmd = &cobra.Command{
 }
 
 func ollamaGenerate(endpoint, model, prompt string) (string, error) {
-	reqBody, _ := json.Marshal(map[string]interface{}{
+	reqBody, err := json.Marshal(map[string]interface{}{
 		"model": model, "prompt": prompt, "stream": false,
 		"options": map[string]interface{}{"temperature": 0, "num_predict": 200},
 	})
+	if err != nil {
+		return "", fmt.Errorf("marshal request: %w", err)
+	}
 	resp, err := http.Post(endpoint+"/api/generate", "application/json", bytes.NewReader(reqBody))
 	if err != nil {
 		return "", fmt.Errorf("ollama not available at %s", endpoint)
 	}
 	defer resp.Body.Close()
-	body, _ := io.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf("read response: %w", err)
+	}
 	if resp.StatusCode != http.StatusOK {
 		return "", fmt.Errorf("ollama returned %d: %s", resp.StatusCode, string(body))
 	}
 	var result struct{ Response string }
-	json.Unmarshal(body, &result)
+	if err := json.Unmarshal(body, &result); err != nil {
+		return "", fmt.Errorf("unmarshal response: %w", err)
+	}
 	return result.Response, nil
 }
 
