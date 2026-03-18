@@ -41,6 +41,7 @@ var ValidateGraph = toulmin.NewGraph("validate").
 	Defeat(DefeaterTestFile, RuleA2).
 	Defeat(DefeaterTestFile, RuleA3).
 	Defeat(DefeaterTestFile, RuleA6).
+	Defeat(DefeaterTestFile, RuleA7).
 	Defeat(DefeaterTestFile, RuleA8).
 	Defeat(DefeaterTestFile, RuleA9).
 	Defeat(DefeaterTestFile, RuleA10).

@@ -4,6 +4,7 @@ package cli
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/park-jun-woo/filefunc/internal/chain"
 	"github.com/park-jun-woo/filefunc/internal/model"
@@ -13,12 +14,12 @@ import (
 
 // BuildGraph builds a call graph from the project at root.
 func BuildGraph(root string) (*chain.CallGraph, []*model.GoFile, error) {
-	modulePath, err := parse.ReadModulePath(root + "/go.mod")
+	modulePath, err := parse.ReadModulePath(filepath.Join(root, "go.mod"))
 	if err != nil {
 		return nil, nil, fmt.Errorf("reading go.mod: %w", err)
 	}
 
-	ignorePatterns := walk.ParseFFIgnore(root + "/.ffignore")
+	ignorePatterns := walk.ParseFFIgnore(filepath.Join(root, ".ffignore"))
 	paths, err := walk.WalkGoFiles(root, ignorePatterns)
 	if err != nil {
 		return nil, nil, fmt.Errorf("walking files: %w", err)

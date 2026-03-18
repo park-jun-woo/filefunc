@@ -7,6 +7,10 @@ func traverseDepthRecur(g *CallGraph, current string, direction string, depth in
 		return
 	}
 
+	if direction != "calls" && direction != "called-by" {
+		return
+	}
+
 	var nexts []string
 	if direction == "calls" {
 		nexts = g.Children[current]

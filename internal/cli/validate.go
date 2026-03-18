@@ -5,6 +5,7 @@ package cli
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/park-jun-woo/filefunc/internal/model"
 	"github.com/park-jun-woo/filefunc/internal/parse"
@@ -32,7 +33,7 @@ var validateCmd = &cobra.Command{
 		format, _ := cmd.Flags().GetString("format")
 
 		if codebookPath == "" {
-			codebookPath = root + "/codebook.yaml"
+			codebookPath = filepath.Join(root, "codebook.yaml")
 		}
 
 		cb, err := parse.ParseCodebook(codebookPath)
@@ -46,7 +47,7 @@ var validateCmd = &cobra.Command{
 			return fmt.Errorf("codebook.yaml has %d violation(s) — fix before validating code", len(cbViolations))
 		}
 
-		ignorePatterns := walk.ParseFFIgnore(root + "/.ffignore")
+		ignorePatterns := walk.ParseFFIgnore(filepath.Join(root, ".ffignore"))
 		paths, err := walk.WalkGoFiles(root, ignorePatterns)
 		if err != nil {
 			return fmt.Errorf("walking files: %w", err)

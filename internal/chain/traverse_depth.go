@@ -3,7 +3,7 @@
 package chain
 
 // TraverseDepth traverses the call graph in one direction up to maxDepth.
-// direction is "child" or "parent".
+// direction is "calls" or "called-by".
 func TraverseDepth(g *CallGraph, start string, direction string, maxDepth int) []ChonResult {
 	var results []ChonResult
 	seen := map[string]bool{start: true}

@@ -9,6 +9,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 
 	ffcontext "github.com/park-jun-woo/filefunc/internal/context"
 	"github.com/park-jun-woo/filefunc/internal/model"
@@ -35,12 +36,12 @@ var contextCmd = &cobra.Command{
 			return err
 		}
 
-		cb, err := parse.ParseCodebook(root + "/codebook.yaml")
+		cb, err := parse.ParseCodebook(filepath.Join(root, "codebook.yaml"))
 		if err != nil {
 			return fmt.Errorf("codebook.yaml not found: %w", err)
 		}
 
-		ignorePatterns := walk.ParseFFIgnore(root + "/.ffignore")
+		ignorePatterns := walk.ParseFFIgnore(filepath.Join(root, ".ffignore"))
 		paths, err := walk.WalkGoFiles(root, ignorePatterns)
 		if err != nil {
 			return err

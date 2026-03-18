@@ -4,6 +4,7 @@ package cli
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/park-jun-woo/filefunc/internal/llm"
 	"github.com/park-jun-woo/filefunc/internal/model"
@@ -40,7 +41,7 @@ var llmcCmd = &cobra.Command{
 			return err
 		}
 
-		ignorePatterns := walk.ParseFFIgnore(root + "/.ffignore")
+		ignorePatterns := walk.ParseFFIgnore(filepath.Join(root, ".ffignore"))
 		paths, err := walk.WalkGoFiles(root, ignorePatterns)
 		if err != nil {
 			return fmt.Errorf("walking files: %w", err)

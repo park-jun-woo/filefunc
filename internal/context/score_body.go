@@ -16,7 +16,11 @@ func ScoreBody(files []*model.GoFile, prompt string, rate float64, generate func
 	keptScores := make(map[int]float64)
 	removed := 0
 	for _, gf := range files {
-		src, _ := os.ReadFile(gf.Path)
+		src, err := os.ReadFile(gf.Path)
+		if err != nil {
+			removed++
+			continue
+		}
 		body := parse.ExtractFuncSource(gf.Path, src)
 		if body == "" {
 			removed++

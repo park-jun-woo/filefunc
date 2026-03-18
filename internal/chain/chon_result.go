@@ -6,5 +6,5 @@ package chain
 type ChonResult struct {
 	Name string
 	Chon int
-	Rel  string // "child", "parent", "sibling", "grandchild", "grandparent", "uncle", "nephew"
+	Rel  string // "calls", "called-by", "calls-2depth", "called-by-2depth", "co-called", "caller-peer", "peer-calls"
 }

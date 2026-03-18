@@ -5,6 +5,7 @@ package cli
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 )
 
 // CheckProjectRoot verifies the path is a directory with go.mod and codebook.yaml.
@@ -16,10 +17,10 @@ func CheckProjectRoot(root string) error {
 	if !info.IsDir() {
 		return fmt.Errorf("path must be a directory: %s", root)
 	}
-	if _, err := os.Stat(root + "/go.mod"); err != nil {
+	if _, err := os.Stat(filepath.Join(root, "go.mod")); err != nil {
 		return fmt.Errorf("go.mod not found in %s", root)
 	}
-	if _, err := os.Stat(root + "/codebook.yaml"); err != nil {
+	if _, err := os.Stat(filepath.Join(root, "codebook.yaml")); err != nil {
 		return fmt.Errorf("codebook.yaml not found in %s", root)
 	}
 	return nil
