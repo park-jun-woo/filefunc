@@ -11,7 +11,7 @@ import (
 // CheckRequiredKeysInAnnotation checks A8: all required codebook keys must be
 // present in the //ff:func or //ff:type annotation.
 func CheckRequiredKeysInAnnotation(gf *model.GoFile, cb *model.Codebook) []model.Violation {
-	if cb == nil || gf.IsTest || gf.Annotation == nil {
+	if cb == nil || gf.Annotation == nil {
 		return nil
 	}
 

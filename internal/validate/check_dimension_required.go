@@ -6,7 +6,7 @@ import "github.com/park-jun-woo/filefunc/internal/model"
 
 // CheckDimensionRequired checks A15: iteration files must have dimension= annotation.
 func CheckDimensionRequired(gf *model.GoFile) []model.Violation {
-	if gf.IsTest || len(gf.Funcs) == 0 || gf.Annotation == nil {
+	if len(gf.Funcs) == 0 || gf.Annotation == nil {
 		return nil
 	}
 	if gf.Annotation.Func["control"] != "iteration" {

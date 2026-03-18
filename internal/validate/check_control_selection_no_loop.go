@@ -9,7 +9,7 @@ import (
 
 // CheckControlSelectionNoLoop checks A13: control=selection must not have loop at depth 1.
 func CheckControlSelectionNoLoop(gf *model.GoFile) []model.Violation {
-	if gf.IsTest || len(gf.Funcs) == 0 || gf.Annotation == nil {
+	if len(gf.Funcs) == 0 || gf.Annotation == nil {
 		return nil
 	}
 	if gf.Annotation.Func["control"] != "selection" {

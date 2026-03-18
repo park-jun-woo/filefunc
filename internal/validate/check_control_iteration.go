@@ -9,7 +9,7 @@ import (
 
 // CheckControlIteration checks A11: control=iteration requires loop at depth 1.
 func CheckControlIteration(gf *model.GoFile) []model.Violation {
-	if gf.IsTest || len(gf.Funcs) == 0 || gf.Annotation == nil {
+	if len(gf.Funcs) == 0 || gf.Annotation == nil {
 		return nil
 	}
 	if gf.Annotation.Func["control"] != "iteration" {

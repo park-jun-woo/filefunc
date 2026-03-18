@@ -9,7 +9,7 @@ import (
 
 // CheckControlSelection checks A10: control=selection requires switch at depth 1.
 func CheckControlSelection(gf *model.GoFile) []model.Violation {
-	if gf.IsTest || len(gf.Funcs) == 0 || gf.Annotation == nil {
+	if len(gf.Funcs) == 0 || gf.Annotation == nil {
 		return nil
 	}
 	if gf.Annotation.Func["control"] != "selection" {

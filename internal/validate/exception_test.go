@@ -9,13 +9,14 @@ import (
 
 // --- Exception tests: rules must NOT fire ---
 
-// F5: _test.go with multiple funcs → F1 should not fire
+// F5: _test.go with multiple funcs → F1 should not fire (defeated by DefeaterTestFile)
 func TestException_F5_TestFile(t *testing.T) {
 	gf, err := parse.ParseGoFile("testdata/test_file_test.go")
 	if err != nil {
 		t.Fatal(err)
 	}
-	expectNoViolation(t, CheckOneFileOneFunc(gf))
+	violations := RunAll([]*model.GoFile{gf}, nil)
+	expectNoViolation(t, violations)
 }
 
 // F6: func + unexported param type → F2 should not fire
@@ -27,13 +28,14 @@ func TestException_F6_ParamType(t *testing.T) {
 	expectNoViolation(t, CheckOneFileOneType(gf))
 }
 
-// F7: const-only file → F1 should not fire
+// F7: const-only file → F1 should not fire (defeated by DefeaterConstOnly)
 func TestException_F7_ConstOnly(t *testing.T) {
 	gf, err := parse.ParseGoFile("testdata/const_only.go")
 	if err != nil {
 		t.Fatal(err)
 	}
-	expectNoViolation(t, CheckOneFileOneFunc(gf))
+	violations := RunAll([]*model.GoFile{gf}, nil)
+	expectNoViolation(t, violations)
 }
 
 // F4 exception: var + init() → should not fire

@@ -9,7 +9,7 @@ import (
 
 // CheckControlIterationNoSwitch checks A14: control=iteration must not have switch at depth 1.
 func CheckControlIterationNoSwitch(gf *model.GoFile) []model.Violation {
-	if gf.IsTest || len(gf.Funcs) == 0 || gf.Annotation == nil {
+	if len(gf.Funcs) == 0 || gf.Annotation == nil {
 		return nil
 	}
 	if gf.Annotation.Func["control"] != "iteration" {

@@ -12,7 +12,7 @@ import (
 // CheckControlSequence checks A12: control=sequence must not have
 // switch or loop at depth 1.
 func CheckControlSequence(gf *model.GoFile) []model.Violation {
-	if gf.IsTest || len(gf.Funcs) == 0 || gf.Annotation == nil {
+	if len(gf.Funcs) == 0 || gf.Annotation == nil {
 		return nil
 	}
 	control := gf.Annotation.Func["control"]

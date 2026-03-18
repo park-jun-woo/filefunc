@@ -11,7 +11,7 @@ import (
 
 // CheckDimensionValue checks A16: dimension value must be a positive integer.
 func CheckDimensionValue(gf *model.GoFile) []model.Violation {
-	if gf.IsTest || len(gf.Funcs) == 0 || gf.Annotation == nil {
+	if len(gf.Funcs) == 0 || gf.Annotation == nil {
 		return nil
 	}
 	dim := gf.Annotation.Func["dimension"]

@@ -9,5 +9,6 @@ require (
 
 require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
+	github.com/park-jun-woo/toulmin v0.0.0-20260318141013-2f92b64aefef // indirect
 	github.com/spf13/pflag v1.0.9 // indirect
 )

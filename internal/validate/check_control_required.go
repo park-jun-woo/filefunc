@@ -7,7 +7,7 @@ import "github.com/park-jun-woo/filefunc/internal/model"
 // CheckControlRequired checks A9: func files must have control= annotation
 // with a valid value (sequence, selection, iteration).
 func CheckControlRequired(gf *model.GoFile) []model.Violation {
-	if gf.IsTest || len(gf.Funcs) == 0 || gf.Annotation == nil {
+	if len(gf.Funcs) == 0 || gf.Annotation == nil {
 		return nil
 	}
 	control := gf.Annotation.Func["control"]

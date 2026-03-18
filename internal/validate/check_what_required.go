@@ -1,15 +1,11 @@
 //ff:func feature=validate type=rule control=sequence
 //ff:what A3: func 또는 type 파일에 //ff:what 필수 검증
-//ff:checked llm=gpt-oss:20b hash=38b63879
 package validate
 
 import "github.com/park-jun-woo/filefunc/internal/model"
 
 // CheckWhatRequired checks A3: files with funcs or types must have //ff:what annotation.
 func CheckWhatRequired(gf *model.GoFile) []model.Violation {
-	if gf.IsTest {
-		return nil
-	}
 	if len(gf.Funcs) == 0 && len(gf.Types) == 0 {
 		return nil
 	}
