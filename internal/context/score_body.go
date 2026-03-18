@@ -18,6 +18,7 @@ func ScoreBody(files []*model.GoFile, prompt string, rate float64, generate func
 	for _, gf := range files {
 		src, err := os.ReadFile(gf.Path)
 		if err != nil {
+			fmt.Fprintf(os.Stderr, "warning: skipping %s: %v\n", gf.Path, err)
 			removed++
 			continue
 		}

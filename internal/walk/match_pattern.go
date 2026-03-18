@@ -16,7 +16,7 @@ func matchPattern(path string, name string, isDir bool, pattern string) bool {
 		if name == dirPattern {
 			return true
 		}
-		return strings.HasSuffix(path, dirPattern) || strings.Contains(path+"/", pattern)
+		return strings.HasSuffix(path, dirPattern) || strings.Contains("/"+path+"/", "/"+dirPattern+"/")
 	}
 	matched, _ := filepath.Match(pattern, name)
 	return matched

@@ -1,6 +1,6 @@
 //ff:func feature=parse type=parser control=iteration dimension=1
 //ff:what func에서 프로젝트 내 사용 타입명을 AST로 추출
-//ff:checked llm=gpt-oss:20b hash=085874a2
+//ff:checked llm=gpt-oss:20b hash=ae8506ca
 package parse
 
 import (
@@ -22,7 +22,7 @@ func ExtractUses(path string, modulePath string, projTypes map[string]bool) ([]s
 
 	for _, decl := range f.Decls {
 		fd, ok := decl.(*ast.FuncDecl)
-		if !ok || fd.Name.Name == "init" {
+		if !ok || fd.Body == nil || fd.Name.Name == "init" {
 			continue
 		}
 		CollectTypeRefs(fd, imports, projTypes, seen)

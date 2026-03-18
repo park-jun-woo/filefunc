@@ -1,6 +1,6 @@
 //ff:func feature=parse type=parser control=iteration dimension=1
 //ff:what func signature+body의 SHA-256 해시 앞 8자리 계산
-//ff:checked llm=gpt-oss:20b hash=5c46dfaa
+//ff:checked llm=gpt-oss:20b hash=f72ddf88
 package parse
 
 import (
@@ -28,7 +28,7 @@ func CalcBodyHash(path string) (string, error) {
 
 	for _, decl := range f.Decls {
 		fd, ok := decl.(*ast.FuncDecl)
-		if !ok || fd.Name.Name == "init" {
+		if !ok || fd.Body == nil || fd.Name.Name == "init" {
 			continue
 		}
 		start := fset.Position(fd.Pos()).Offset

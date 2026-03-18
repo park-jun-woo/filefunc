@@ -4,6 +4,7 @@ package cli
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 
 	"github.com/park-jun-woo/filefunc/internal/llm"
@@ -51,6 +52,7 @@ var llmcCmd = &cobra.Command{
 		for _, p := range paths {
 			gf, err := parse.ParseGoFile(p)
 			if err != nil {
+				fmt.Fprintf(os.Stderr, "warning: skipping %s: %v\n", p, err)
 				continue
 			}
 			files = append(files, gf)

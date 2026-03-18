@@ -1,6 +1,6 @@
 //ff:func feature=parse type=parser control=iteration dimension=1
 //ff:what Go AST로 파일의 첫 번째 func(init 제외)의 signature+body를 소스 텍스트로 추출하여 반환
-//ff:checked llm=gpt-oss:20b hash=eb39edc3
+//ff:checked llm=gpt-oss:20b hash=59464a91
 package parse
 
 import (
@@ -20,7 +20,7 @@ func ExtractFuncSource(path string, src []byte) string {
 
 	for _, decl := range f.Decls {
 		fd, ok := decl.(*ast.FuncDecl)
-		if !ok || fd.Name.Name == "init" {
+		if !ok || fd.Body == nil || fd.Name.Name == "init" {
 			continue
 		}
 		start := fset.Position(fd.Pos()).Offset

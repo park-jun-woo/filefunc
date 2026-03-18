@@ -19,8 +19,8 @@ func FilterByRate(results []ChonResult, scores map[int]float64, rate float64) ([
 			continue
 		}
 		if s >= rate {
-			keptScores[len(kept)] = s
 			kept = append(kept, r)
+			keptScores[len(kept)-1] = s
 		} else {
 			removed++
 		}

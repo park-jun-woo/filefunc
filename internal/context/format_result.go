@@ -14,7 +14,10 @@ func FormatResult(w io.Writer, files []*model.GoFile, scores map[int]float64) {
 	fmt.Fprintln(w, "\nResults:")
 	for i, gf := range files {
 		name := funcName(gf)
-		score := scores[i]
+		var score float64
+		if scores != nil {
+			score = scores[i]
+		}
 		what := ""
 		if gf.Annotation != nil {
 			what = gf.Annotation.What

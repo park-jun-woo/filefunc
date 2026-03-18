@@ -17,6 +17,9 @@ func BuildFeaturePrompt(prompt string, cb *model.Codebook) string {
 		"question": prompt,
 		"format":   "JSON array of feature strings, max 2",
 	}
-	b, _ := json.Marshal(req)
+	b, err := json.Marshal(req)
+	if err != nil {
+		return ""
+	}
 	return string(b)
 }

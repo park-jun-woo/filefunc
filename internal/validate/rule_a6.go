@@ -38,5 +38,8 @@ func RuleA6(claim any, ground any) (bool, any) {
 			seenCode = true
 		}
 	}
+	if err := scanner.Err(); err != nil {
+		return false, err
+	}
 	return false, nil
 }

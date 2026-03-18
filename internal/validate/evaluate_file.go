@@ -7,7 +7,15 @@ import "github.com/park-jun-woo/filefunc/internal/model"
 // evaluateFile runs the defeats graph on a single file and collects violations
 // from the evidence returned by each rule function.
 func evaluateFile(gf *model.GoFile, cb *model.Codebook, ground *ValidateGround) []model.Violation {
-	results := ValidateGraph.Evaluate(gf.Path, ground)
+	results, err := ValidateGraph.Evaluate(gf.Path, ground)
+	if err != nil {
+		return []model.Violation{{
+			File:    gf.Path,
+			Rule:    "EVAL",
+			Level:   "ERROR",
+			Message: err.Error(),
+		}}
+	}
 	var violations []model.Violation
 	for _, r := range results {
 		vs, ok := r.Evidence.([]model.Violation)
