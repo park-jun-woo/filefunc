@@ -5,60 +5,65 @@ package validate
 import "github.com/park-jun-woo/toulmin/pkg/toulmin"
 
 // ValidateGraph declares all validation rules and their defeat relationships.
-var ValidateGraph = toulmin.NewGraph("validate").
+var ValidateGraph = newValidateGraph()
+
+func newValidateGraph() *toulmin.Graph {
+	g := toulmin.NewGraph("validate")
 	// F rules (file structure)
-	Warrant(RuleF1, nil, 1.0).
-	Warrant(RuleF2, nil, 1.0).
-	Warrant(RuleF3, nil, 1.0).
-	Warrant(RuleF4, nil, 1.0).
+	wF1 := g.Warrant(RuleF1, nil, 1.0)
+	wF2 := g.Warrant(RuleF2, nil, 1.0)
+	wF3 := g.Warrant(RuleF3, nil, 1.0)
+	_ = g.Warrant(RuleF4, nil, 1.0)
 	// Q rules (code quality)
-	Warrant(RuleQ1, nil, 1.0).
-	Warrant(RuleQ2Q3, nil, 1.0).
+	_ = g.Warrant(RuleQ1, nil, 1.0)
+	_ = g.Warrant(RuleQ2Q3, nil, 1.0)
 	// A rules (annotation)
-	Warrant(RuleA1, nil, 1.0).
-	Warrant(RuleA2, nil, 1.0).
-	Warrant(RuleA3, nil, 1.0).
-	Warrant(RuleA6, nil, 1.0).
-	Warrant(RuleA7, nil, 1.0).
-	Warrant(RuleA8, nil, 1.0).
-	Warrant(RuleA9, nil, 1.0).
-	Warrant(RuleA10, nil, 1.0).
-	Warrant(RuleA11, nil, 1.0).
-	Warrant(RuleA12, nil, 1.0).
-	Warrant(RuleA13, nil, 1.0).
-	Warrant(RuleA14, nil, 1.0).
-	Warrant(RuleA15, nil, 1.0).
-	Warrant(RuleA16, nil, 1.0).
+	wA1 := g.Warrant(RuleA1, nil, 1.0)
+	wA2 := g.Warrant(RuleA2, nil, 1.0)
+	wA3 := g.Warrant(RuleA3, nil, 1.0)
+	wA6 := g.Warrant(RuleA6, nil, 1.0)
+	wA7 := g.Warrant(RuleA7, nil, 1.0)
+	wA8 := g.Warrant(RuleA8, nil, 1.0)
+	wA9 := g.Warrant(RuleA9, nil, 1.0)
+	wA10 := g.Warrant(RuleA10, nil, 1.0)
+	wA11 := g.Warrant(RuleA11, nil, 1.0)
+	wA12 := g.Warrant(RuleA12, nil, 1.0)
+	wA13 := g.Warrant(RuleA13, nil, 1.0)
+	wA14 := g.Warrant(RuleA14, nil, 1.0)
+	wA15 := g.Warrant(RuleA15, nil, 1.0)
+	wA16 := g.Warrant(RuleA16, nil, 1.0)
 	// Defeaters
-	Defeater(DefeaterTestFile, nil, 1.0).
-	Defeater(DefeaterConstOnly, nil, 1.0).
-	Defeater(DefeaterNoFunc, nil, 1.0).
+	dTestFile := g.Defeater(DefeaterTestFile, nil, 1.0)
+	dConstOnly := g.Defeater(DefeaterConstOnly, nil, 1.0)
+	dNoFunc := g.Defeater(DefeaterNoFunc, nil, 1.0)
 	// Defeat edges: test files defeat F/A rules
-	Defeat(DefeaterTestFile, RuleF1).
-	Defeat(DefeaterTestFile, RuleF2).
-	Defeat(DefeaterTestFile, RuleF3).
-	Defeat(DefeaterTestFile, RuleA1).
-	Defeat(DefeaterTestFile, RuleA2).
-	Defeat(DefeaterTestFile, RuleA3).
-	Defeat(DefeaterTestFile, RuleA6).
-	Defeat(DefeaterTestFile, RuleA7).
-	Defeat(DefeaterTestFile, RuleA8).
-	Defeat(DefeaterTestFile, RuleA9).
-	Defeat(DefeaterTestFile, RuleA10).
-	Defeat(DefeaterTestFile, RuleA11).
-	Defeat(DefeaterTestFile, RuleA12).
-	Defeat(DefeaterTestFile, RuleA13).
-	Defeat(DefeaterTestFile, RuleA14).
-	Defeat(DefeaterTestFile, RuleA15).
-	Defeat(DefeaterTestFile, RuleA16).
+	g.Defeat(dTestFile, wF1)
+	g.Defeat(dTestFile, wF2)
+	g.Defeat(dTestFile, wF3)
+	g.Defeat(dTestFile, wA1)
+	g.Defeat(dTestFile, wA2)
+	g.Defeat(dTestFile, wA3)
+	g.Defeat(dTestFile, wA6)
+	g.Defeat(dTestFile, wA7)
+	g.Defeat(dTestFile, wA8)
+	g.Defeat(dTestFile, wA9)
+	g.Defeat(dTestFile, wA10)
+	g.Defeat(dTestFile, wA11)
+	g.Defeat(dTestFile, wA12)
+	g.Defeat(dTestFile, wA13)
+	g.Defeat(dTestFile, wA14)
+	g.Defeat(dTestFile, wA15)
+	g.Defeat(dTestFile, wA16)
 	// Defeat edges: const-only files defeat F1
-	Defeat(DefeaterConstOnly, RuleF1).
+	g.Defeat(dConstOnly, wF1)
 	// Defeat edges: no-func files defeat control/dimension/annotation rules
-	Defeat(DefeaterNoFunc, RuleA9).
-	Defeat(DefeaterNoFunc, RuleA10).
-	Defeat(DefeaterNoFunc, RuleA11).
-	Defeat(DefeaterNoFunc, RuleA12).
-	Defeat(DefeaterNoFunc, RuleA13).
-	Defeat(DefeaterNoFunc, RuleA14).
-	Defeat(DefeaterNoFunc, RuleA15).
-	Defeat(DefeaterNoFunc, RuleA16)
+	g.Defeat(dNoFunc, wA9)
+	g.Defeat(dNoFunc, wA10)
+	g.Defeat(dNoFunc, wA11)
+	g.Defeat(dNoFunc, wA12)
+	g.Defeat(dNoFunc, wA13)
+	g.Defeat(dNoFunc, wA14)
+	g.Defeat(dNoFunc, wA15)
+	g.Defeat(dNoFunc, wA16)
+	return g
+}
