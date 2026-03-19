@@ -17,6 +17,9 @@ Thumbs.db
 # Go
 vendor/
 
+# Local files
+files/
+
 # Claude Code
 .clari/
 .claude/
