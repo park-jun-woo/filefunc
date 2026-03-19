@@ -5,7 +5,7 @@ package validate
 import "github.com/park-jun-woo/filefunc/internal/model"
 
 // RuleA3 returns (true, []model.Violation) if the file violates A3 (missing what).
-func RuleA3(claim any, ground any) (bool, any) {
+func RuleA3(claim any, ground any, backing any) (bool, any) {
 	gf := ground.(*ValidateGround).File
 	if len(gf.Funcs) == 0 && len(gf.Types) == 0 {
 		return false, nil

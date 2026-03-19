@@ -8,7 +8,7 @@ import (
 )
 
 // RuleA13 returns (true, []model.Violation) if the file violates A13.
-func RuleA13(claim any, ground any) (bool, any) {
+func RuleA13(claim any, ground any, backing any) (bool, any) {
 	gf := ground.(*ValidateGround).File
 	if len(gf.Funcs) == 0 || gf.Annotation == nil {
 		return false, nil

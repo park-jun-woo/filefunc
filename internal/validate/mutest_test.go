@@ -17,9 +17,9 @@ func mustParse(t *testing.T, path string) *model.GoFile {
 	return gf
 }
 
-func ruleViolations(fn func(any, any) (bool, any), gf *model.GoFile, cb *model.Codebook) []model.Violation {
+func ruleViolations(fn func(any, any, any) (bool, any), gf *model.GoFile, cb *model.Codebook) []model.Violation {
 	g := &ValidateGround{File: gf, Codebook: cb, HasChecked: true}
-	ok, ev := fn(gf.Path, g)
+	ok, ev := fn(gf.Path, g, nil)
 	if !ok || ev == nil {
 		return nil
 	}

@@ -5,7 +5,7 @@ package validate
 import "github.com/park-jun-woo/filefunc/internal/model"
 
 // RuleF3 returns (true, []model.Violation) if the file violates F3 (multiple methods).
-func RuleF3(claim any, ground any) (bool, any) {
+func RuleF3(claim any, ground any, backing any) (bool, any) {
 	gf := ground.(*ValidateGround).File
 	if len(gf.Methods) > 1 {
 		return true, []model.Violation{{

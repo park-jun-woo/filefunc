@@ -10,7 +10,7 @@ import (
 )
 
 // RuleA12 returns (true, []model.Violation) if the file violates A12.
-func RuleA12(claim any, ground any) (bool, any) {
+func RuleA12(claim any, ground any, backing any) (bool, any) {
 	gf := ground.(*ValidateGround).File
 	if len(gf.Funcs) == 0 || gf.Annotation == nil {
 		return false, nil

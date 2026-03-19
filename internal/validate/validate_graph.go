@@ -7,32 +7,32 @@ import "github.com/park-jun-woo/toulmin/pkg/toulmin"
 // ValidateGraph declares all validation rules and their defeat relationships.
 var ValidateGraph = toulmin.NewGraph("validate").
 	// F rules (file structure)
-	Warrant(RuleF1, 1.0).
-	Warrant(RuleF2, 1.0).
-	Warrant(RuleF3, 1.0).
-	Warrant(RuleF4, 1.0).
+	Warrant(RuleF1, nil, 1.0).
+	Warrant(RuleF2, nil, 1.0).
+	Warrant(RuleF3, nil, 1.0).
+	Warrant(RuleF4, nil, 1.0).
 	// Q rules (code quality)
-	Warrant(RuleQ1, 1.0).
-	Warrant(RuleQ2Q3, 1.0).
+	Warrant(RuleQ1, nil, 1.0).
+	Warrant(RuleQ2Q3, nil, 1.0).
 	// A rules (annotation)
-	Warrant(RuleA1, 1.0).
-	Warrant(RuleA2, 1.0).
-	Warrant(RuleA3, 1.0).
-	Warrant(RuleA6, 1.0).
-	Warrant(RuleA7, 1.0).
-	Warrant(RuleA8, 1.0).
-	Warrant(RuleA9, 1.0).
-	Warrant(RuleA10, 1.0).
-	Warrant(RuleA11, 1.0).
-	Warrant(RuleA12, 1.0).
-	Warrant(RuleA13, 1.0).
-	Warrant(RuleA14, 1.0).
-	Warrant(RuleA15, 1.0).
-	Warrant(RuleA16, 1.0).
+	Warrant(RuleA1, nil, 1.0).
+	Warrant(RuleA2, nil, 1.0).
+	Warrant(RuleA3, nil, 1.0).
+	Warrant(RuleA6, nil, 1.0).
+	Warrant(RuleA7, nil, 1.0).
+	Warrant(RuleA8, nil, 1.0).
+	Warrant(RuleA9, nil, 1.0).
+	Warrant(RuleA10, nil, 1.0).
+	Warrant(RuleA11, nil, 1.0).
+	Warrant(RuleA12, nil, 1.0).
+	Warrant(RuleA13, nil, 1.0).
+	Warrant(RuleA14, nil, 1.0).
+	Warrant(RuleA15, nil, 1.0).
+	Warrant(RuleA16, nil, 1.0).
 	// Defeaters
-	Defeater(DefeaterTestFile, 1.0).
-	Defeater(DefeaterConstOnly, 1.0).
-	Defeater(DefeaterNoFunc, 1.0).
+	Defeater(DefeaterTestFile, nil, 1.0).
+	Defeater(DefeaterConstOnly, nil, 1.0).
+	Defeater(DefeaterNoFunc, nil, 1.0).
 	// Defeat edges: test files defeat F/A rules
 	Defeat(DefeaterTestFile, RuleF1).
 	Defeat(DefeaterTestFile, RuleF2).

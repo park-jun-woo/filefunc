@@ -9,7 +9,7 @@ import (
 )
 
 // RuleA2 returns (true, []model.Violation) if the file violates A2 (annotation value not in codebook).
-func RuleA2(claim any, ground any) (bool, any) {
+func RuleA2(claim any, ground any, backing any) (bool, any) {
 	g := ground.(*ValidateGround)
 	gf := g.File
 	cb := g.Codebook

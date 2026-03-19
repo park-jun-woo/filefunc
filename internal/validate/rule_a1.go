@@ -5,7 +5,7 @@ package validate
 import "github.com/park-jun-woo/filefunc/internal/model"
 
 // RuleA1 returns (true, []model.Violation) if the file violates A1 (missing annotation).
-func RuleA1(claim any, ground any) (bool, any) {
+func RuleA1(claim any, ground any, backing any) (bool, any) {
 	gf := ground.(*ValidateGround).File
 	hasFuncs := len(gf.Funcs) > 0
 	hasTypes := len(gf.Types) > 0

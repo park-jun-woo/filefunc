@@ -10,7 +10,7 @@ import (
 )
 
 // RuleA7 returns (true, []model.Violation) if the file violates A7 (checked hash mismatch).
-func RuleA7(claim any, ground any) (bool, any) {
+func RuleA7(claim any, ground any, backing any) (bool, any) {
 	g := ground.(*ValidateGround)
 	if !g.HasChecked {
 		return false, nil

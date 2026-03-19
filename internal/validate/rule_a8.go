@@ -9,7 +9,7 @@ import (
 )
 
 // RuleA8 returns (true, []model.Violation) if the file violates A8 (missing required keys).
-func RuleA8(claim any, ground any) (bool, any) {
+func RuleA8(claim any, ground any, backing any) (bool, any) {
 	g := ground.(*ValidateGround)
 	gf := g.File
 	cb := g.Codebook

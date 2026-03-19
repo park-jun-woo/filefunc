@@ -5,7 +5,7 @@ package validate
 import "github.com/park-jun-woo/filefunc/internal/model"
 
 // RuleF2 returns (true, []model.Violation) if the file violates F2 (multiple types).
-func RuleF2(claim any, ground any) (bool, any) {
+func RuleF2(claim any, ground any, backing any) (bool, any) {
 	gf := ground.(*ValidateGround).File
 	if len(gf.Types) > 1 {
 		return true, []model.Violation{{

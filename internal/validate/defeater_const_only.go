@@ -5,6 +5,6 @@ package validate
 
 // DefeaterConstOnly returns true if the file contains only const/var declarations.
 // Used as a defeater against F1.
-func DefeaterConstOnly(claim any, ground any) (bool, any) {
+func DefeaterConstOnly(claim any, ground any, backing any) (bool, any) {
 	return IsConstOnly(ground.(*ValidateGround).File), nil
 }

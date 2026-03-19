@@ -12,7 +12,7 @@ import (
 )
 
 // RuleQ2Q3 returns (true, []model.Violation) if the file violates Q2 or Q3 (func line limits).
-func RuleQ2Q3(claim any, ground any) (bool, any) {
+func RuleQ2Q3(claim any, ground any, backing any) (bool, any) {
 	gf := ground.(*ValidateGround).File
 
 	fset := token.NewFileSet()

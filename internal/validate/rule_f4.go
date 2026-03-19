@@ -5,7 +5,7 @@ package validate
 import "github.com/park-jun-woo/filefunc/internal/model"
 
 // RuleF4 returns (true, []model.Violation) if the file violates F4 (init-only file).
-func RuleF4(claim any, ground any) (bool, any) {
+func RuleF4(claim any, ground any, backing any) (bool, any) {
 	gf := ground.(*ValidateGround).File
 	if !gf.HasInit {
 		return false, nil
