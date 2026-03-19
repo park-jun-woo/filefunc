@@ -1,5 +1,5 @@
-//ff:func feature=validate type=rule control=iteration dimension=1
-//ff:what A2 toulmin rule — 어노테이션 값이 코드북에 존재하지 않으면 violation 반환
+//ff:func feature=validate type=util control=iteration dimension=1
+//ff:what 어노테이션 값이 코드북에 존재하는지 검증
 package validate
 
 import (
@@ -8,22 +8,14 @@ import (
 	"github.com/park-jun-woo/filefunc/internal/model"
 )
 
-// RuleA2 returns (true, []model.Violation) if the file violates A2 (annotation value not in codebook).
-func RuleA2(claim any, ground any, backing any) (bool, any) {
-	g := ground.(*ValidateGround)
-	gf := g.File
-	cb := g.Codebook
-	if cb == nil || gf.Annotation == nil {
-		return false, nil
-	}
-
+func checkValuesInCodebook(gf *model.GoFile, cb *model.Codebook, rule string) (bool, any) {
 	var violations []model.Violation
 	for key, val := range gf.Annotation.Func {
 		allowed := AllowedValues(cb, key)
 		if allowed != nil && !Contains(allowed, val) {
 			violations = append(violations, model.Violation{
 				File:    gf.Path,
-				Rule:    "A2",
+				Rule:    rule,
 				Level:   "ERROR",
 				Message: fmt.Sprintf("codebook has no %s=%s", key, val),
 			})
@@ -34,13 +26,12 @@ func RuleA2(claim any, ground any, backing any) (bool, any) {
 		if allowed != nil && !Contains(allowed, val) {
 			violations = append(violations, model.Violation{
 				File:    gf.Path,
-				Rule:    "A2",
+				Rule:    rule,
 				Level:   "ERROR",
 				Message: fmt.Sprintf("codebook has no %s=%s", key, val),
 			})
 		}
 	}
-
 	if len(violations) > 0 {
 		return true, violations
 	}

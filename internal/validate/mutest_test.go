@@ -17,9 +17,9 @@ func mustParse(t *testing.T, path string) *model.GoFile {
 	return gf
 }
 
-func ruleViolations(fn func(any, any, any) (bool, any), gf *model.GoFile, cb *model.Codebook) []model.Violation {
+func ruleViolations(fn func(any, any, any) (bool, any), gf *model.GoFile, cb *model.Codebook, backing any) []model.Violation {
 	g := &ValidateGround{File: gf, Codebook: cb, HasChecked: true}
-	ok, ev := fn(gf.Path, g, nil)
+	ok, ev := fn(gf.Path, g, backing)
 	if !ok || ev == nil {
 		return nil
 	}
@@ -47,47 +47,82 @@ func expectNoViolation(t *testing.T, violations []model.Violation) {
 	}
 }
 
+// --- backing definitions for tests ---
+
+var (
+	backingF1 = &CountMaxBacking{Field: "Funcs", Max: 1, Rule: "F1",
+		Message: "file contains multiple funcs; expected 1 file 1 func"}
+	backingF2 = &CountMaxBacking{Field: "Types", Max: 1, Rule: "F2",
+		Message: "file contains multiple types; expected 1 file 1 type"}
+	backingF3 = &CountMaxBacking{Field: "Methods", Max: 1, Rule: "F3",
+		Message: "file contains multiple methods; expected 1 file 1 method"}
+	backingF4 = &ExistsWhenBacking{When: "HasInit", Need: "companion", Rule: "F4",
+		Level: "ERROR", Message: "init() must not exist alone; requires accompanying var or func"}
+	backingA1f = &ExistsWhenBacking{When: "HasFuncs", Need: "ff:func", Rule: "A1",
+		Level: "ERROR", Message: "file with func must have //ff:func annotation"}
+	backingA1t = &ExistsWhenBacking{When: "HasTypes", Need: "ff:type", Rule: "A1",
+		Level: "ERROR", Message: "file with type must have //ff:type annotation"}
+	backingA3 = &ExistsWhenBacking{When: "HasFuncOrType", Need: "ff:what", Rule: "A3",
+		Level: "ERROR", Message: "file with func or type must have //ff:what annotation"}
+	backingA9 = &ExistsWhenBacking{When: "HasFuncs", Need: "control", Rule: "A9",
+		Level: "ERROR", Message: "func file must have control= annotation (sequence, selection, or iteration)"}
+	backingA15 = &ExistsWhenBacking{When: "ControlIteration", Need: "dimension", Rule: "A15",
+		Level: "ERROR", Message: "control=iteration requires dimension= annotation"}
+	backingA2 = &InCodebookBacking{Direction: "value→codebook", Rule: "A2"}
+	backingA8 = &InCodebookBacking{Direction: "codebook→annotation", Rule: "A8"}
+	backingA10 = &ControlMatchBacking{Control: "selection", MustHave: "switch", Rule: "A10",
+		Message: "control=selection but no switch found at depth 1"}
+	backingA11 = &ControlMatchBacking{Control: "iteration", MustHave: "loop", Rule: "A11",
+		Message: "control=iteration but no loop found at depth 1"}
+	backingA12 = &ControlMatchBacking{Control: "sequence", MustNotHave: "switch|loop", Rule: "A12",
+		Message: "control=sequence but %s found at depth 1; add control=%s or extract to separate func"}
+	backingA13 = &ControlMatchBacking{Control: "selection", MustNotHave: "loop", Rule: "A13",
+		Message: "control=selection but loop found at depth 1; extract loop to separate func"}
+	backingA14 = &ControlMatchBacking{Control: "iteration", MustNotHave: "switch", Rule: "A14",
+		Message: "control=iteration but switch found at depth 1; extract switch to separate func"}
+)
+
 // F1
 func TestMutest_F1(t *testing.T) {
-	expectViolation(t, ruleViolations(RuleF1, mustParse(t, "testdata/multi_func.go"), nil), "F1")
-	expectNoViolation(t, ruleViolations(RuleF1, mustParse(t, "testdata/clean.go"), nil))
+	expectViolation(t, ruleViolations(CountMax, mustParse(t, "testdata/multi_func.go"), nil, backingF1), "F1")
+	expectNoViolation(t, ruleViolations(CountMax, mustParse(t, "testdata/clean.go"), nil, backingF1))
 }
 
 // F2
 func TestMutest_F2(t *testing.T) {
-	expectViolation(t, ruleViolations(RuleF2, mustParse(t, "testdata/multi_type.go"), nil), "F2")
+	expectViolation(t, ruleViolations(CountMax, mustParse(t, "testdata/multi_type.go"), nil, backingF2), "F2")
 }
 
 // F3
 func TestMutest_F3(t *testing.T) {
-	expectViolation(t, ruleViolations(RuleF3, mustParse(t, "testdata/multi_method.go"), nil), "F3")
+	expectViolation(t, ruleViolations(CountMax, mustParse(t, "testdata/multi_method.go"), nil, backingF3), "F3")
 }
 
 // F4
 func TestMutest_F4(t *testing.T) {
-	expectViolation(t, ruleViolations(RuleF4, mustParse(t, "testdata/init_alone.go"), nil), "F4")
-	expectNoViolation(t, ruleViolations(RuleF4, mustParse(t, "testdata/clean.go"), nil))
+	expectViolation(t, ruleViolations(ExistsWhen, mustParse(t, "testdata/init_alone.go"), nil, backingF4), "F4")
+	expectNoViolation(t, ruleViolations(ExistsWhen, mustParse(t, "testdata/clean.go"), nil, backingF4))
 }
 
 // Q1
 func TestMutest_Q1(t *testing.T) {
-	expectViolation(t, ruleViolations(RuleQ1, mustParse(t, "testdata/deep_nesting.go"), nil), "Q1")
-	expectNoViolation(t, ruleViolations(RuleQ1, mustParse(t, "testdata/clean.go"), nil))
+	expectViolation(t, ruleViolations(CheckDepthLimit, mustParse(t, "testdata/deep_nesting.go"), nil, nil), "Q1")
+	expectNoViolation(t, ruleViolations(CheckDepthLimit, mustParse(t, "testdata/clean.go"), nil, nil))
 }
 
 // Q2
 func TestMutest_Q2(t *testing.T) {
-	expectViolation(t, ruleViolations(RuleQ2Q3, mustParse(t, "testdata/long_func.go"), nil), "Q2")
+	expectViolation(t, ruleViolations(CheckFuncLines, mustParse(t, "testdata/long_func.go"), nil, nil), "Q2")
 }
 
 // Q3
 func TestMutest_Q3(t *testing.T) {
-	expectViolation(t, ruleViolations(RuleQ2Q3, mustParse(t, "testdata/medium_func.go"), nil), "Q3")
+	expectViolation(t, ruleViolations(CheckFuncLines, mustParse(t, "testdata/medium_func.go"), nil, nil), "Q3")
 }
 
 // A1
 func TestMutest_A1(t *testing.T) {
-	expectViolation(t, ruleViolations(RuleA1, mustParse(t, "testdata/no_annotation.go"), nil), "A1")
+	expectViolation(t, ruleViolations(ExistsWhen, mustParse(t, "testdata/no_annotation.go"), nil, backingA1f), "A1")
 }
 
 // A2
@@ -98,51 +133,51 @@ func TestMutest_A2(t *testing.T) {
 			"type":    {"rule": "", "parser": ""},
 		},
 	}
-	expectViolation(t, ruleViolations(RuleA2, mustParse(t, "testdata/bad_codebook_value.go"), cb), "A2")
+	expectViolation(t, ruleViolations(InCodebook, mustParse(t, "testdata/bad_codebook_value.go"), cb, backingA2), "A2")
 }
 
 // A3
 func TestMutest_A3(t *testing.T) {
-	expectViolation(t, ruleViolations(RuleA3, mustParse(t, "testdata/no_what.go"), nil), "A3")
+	expectViolation(t, ruleViolations(ExistsWhen, mustParse(t, "testdata/no_what.go"), nil, backingA3), "A3")
 }
 
 // A6
 func TestMutest_A6(t *testing.T) {
-	expectViolation(t, ruleViolations(RuleA6, mustParse(t, "testdata/annotation_after_func.go"), nil), "A6")
+	expectViolation(t, ruleViolations(AnnotationAtTop, mustParse(t, "testdata/annotation_after_func.go"), nil, nil), "A6")
 }
 
 // A13
 func TestMutest_A13(t *testing.T) {
-	expectViolation(t, ruleViolations(RuleA13, mustParse(t, "testdata/control_selection_with_loop.go"), nil), "A13")
-	expectNoViolation(t, ruleViolations(RuleA13, mustParse(t, "testdata/clean.go"), nil))
+	expectViolation(t, ruleViolations(ControlMatch, mustParse(t, "testdata/control_selection_with_loop.go"), nil, backingA13), "A13")
+	expectNoViolation(t, ruleViolations(ControlMatch, mustParse(t, "testdata/clean.go"), nil, backingA13))
 }
 
 // A14
 func TestMutest_A14(t *testing.T) {
-	expectViolation(t, ruleViolations(RuleA14, mustParse(t, "testdata/control_iteration_with_switch.go"), nil), "A14")
-	expectNoViolation(t, ruleViolations(RuleA14, mustParse(t, "testdata/clean.go"), nil))
+	expectViolation(t, ruleViolations(ControlMatch, mustParse(t, "testdata/control_iteration_with_switch.go"), nil, backingA14), "A14")
+	expectNoViolation(t, ruleViolations(ControlMatch, mustParse(t, "testdata/clean.go"), nil, backingA14))
 }
 
 // A15
 func TestMutest_A15(t *testing.T) {
-	expectViolation(t, ruleViolations(RuleA15, mustParse(t, "testdata/iter_no_dimension.go"), nil), "A15")
-	expectNoViolation(t, ruleViolations(RuleA15, mustParse(t, "testdata/clean.go"), nil))
+	expectViolation(t, ruleViolations(ExistsWhen, mustParse(t, "testdata/iter_no_dimension.go"), nil, backingA15), "A15")
+	expectNoViolation(t, ruleViolations(ExistsWhen, mustParse(t, "testdata/clean.go"), nil, backingA15))
 }
 
 // A16
 func TestMutest_A16(t *testing.T) {
-	expectViolation(t, ruleViolations(RuleA16, mustParse(t, "testdata/bad_dimension_value.go"), nil), "A16")
-	expectNoViolation(t, ruleViolations(RuleA16, mustParse(t, "testdata/clean.go"), nil))
+	expectViolation(t, ruleViolations(ValidDimension, mustParse(t, "testdata/bad_dimension_value.go"), nil, nil), "A16")
+	expectNoViolation(t, ruleViolations(ValidDimension, mustParse(t, "testdata/clean.go"), nil, nil))
 }
 
 // Q1 dimension
 func TestMutest_Q1_Dimension(t *testing.T) {
-	expectNoViolation(t, ruleViolations(RuleQ1, mustParse(t, "testdata/dimension2_depth3.go"), nil))
+	expectNoViolation(t, ruleViolations(CheckDepthLimit, mustParse(t, "testdata/dimension2_depth3.go"), nil, nil))
 }
 
 // Q3 backtick hint
 func TestMutest_Q3_Backtick(t *testing.T) {
-	violations := ruleViolations(RuleQ2Q3, mustParse(t, "testdata/q3_backtick.go"), nil)
+	violations := ruleViolations(CheckFuncLines, mustParse(t, "testdata/q3_backtick.go"), nil, nil)
 	expectViolation(t, violations, "Q3")
 	if len(violations) > 0 && !strings.Contains(violations[0].Message, "var-only file") {
 		t.Errorf("expected backtick hint in message, got %q", violations[0].Message)
@@ -151,40 +186,40 @@ func TestMutest_Q3_Backtick(t *testing.T) {
 
 // A9
 func TestMutest_A9(t *testing.T) {
-	expectViolation(t, ruleViolations(RuleA9, mustParse(t, "testdata/no_control.go"), nil), "A9")
+	expectViolation(t, ruleViolations(ExistsWhen, mustParse(t, "testdata/no_control.go"), nil, backingA9), "A9")
 }
 
 // A10
 func TestMutest_A10(t *testing.T) {
-	expectViolation(t, ruleViolations(RuleA10, mustParse(t, "testdata/selection_no_switch.go"), nil), "A10")
+	expectViolation(t, ruleViolations(ControlMatch, mustParse(t, "testdata/selection_no_switch.go"), nil, backingA10), "A10")
 }
 
 // A11
 func TestMutest_A11(t *testing.T) {
-	expectViolation(t, ruleViolations(RuleA11, mustParse(t, "testdata/iteration_no_loop.go"), nil), "A11")
+	expectViolation(t, ruleViolations(ControlMatch, mustParse(t, "testdata/iteration_no_loop.go"), nil, backingA11), "A11")
 }
 
 // A12
 func TestMutest_A12(t *testing.T) {
-	expectViolation(t, ruleViolations(RuleA12, mustParse(t, "testdata/sequence_with_loop.go"), nil), "A12")
+	expectViolation(t, ruleViolations(ControlMatch, mustParse(t, "testdata/sequence_with_loop.go"), nil, backingA12), "A12")
 }
 
 // A12: control="" should NOT fire A12 (A9 handles it)
 func TestMutest_A12_NoControl(t *testing.T) {
-	expectNoViolation(t, ruleViolations(RuleA12, mustParse(t, "testdata/no_control.go"), nil))
+	expectNoViolation(t, ruleViolations(ControlMatch, mustParse(t, "testdata/no_control.go"), nil, backingA12))
 }
 
 // A1: file with func+type should check both annotations
 func TestMutest_A1_FuncAndType(t *testing.T) {
 	gf := mustParse(t, "testdata/sample_with_func_and_type.go")
-	violations := ruleViolations(RuleA1, gf, nil)
 	// has //ff:func but not //ff:type — should fire A1 for type
+	violations := ruleViolations(ExistsWhen, gf, nil, backingA1t)
 	expectViolation(t, violations, "A1")
 }
 
 // A7
 func TestMutest_A7(t *testing.T) {
-	expectViolation(t, ruleViolations(RuleA7, mustParse(t, "testdata/checked_hash_mismatch.go"), nil), "A7")
+	expectViolation(t, ruleViolations(CheckedHashMatch, mustParse(t, "testdata/checked_hash_mismatch.go"), nil, nil), "A7")
 }
 
 // A8
@@ -195,7 +230,7 @@ func TestMutest_A8(t *testing.T) {
 			"type":    {"rule": "", "parser": ""},
 		},
 	}
-	expectViolation(t, ruleViolations(RuleA8, mustParse(t, "testdata/missing_required_key.go"), cb), "A8")
+	expectViolation(t, ruleViolations(InCodebook, mustParse(t, "testdata/missing_required_key.go"), cb, backingA8), "A8")
 }
 
 // C1

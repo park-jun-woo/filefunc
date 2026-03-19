@@ -9,7 +9,7 @@ import (
 
 // --- Exception tests: rules must NOT fire ---
 
-// F5: _test.go with multiple funcs → F1 should not fire (defeated by DefeaterTestFile)
+// F5: _test.go with multiple funcs → F1 should not fire (defeated by IsTestFile)
 func TestException_F5_TestFile(t *testing.T) {
 	gf, err := parse.ParseGoFile("testdata/test_file_test.go")
 	if err != nil {
@@ -25,10 +25,10 @@ func TestException_F6_ParamType(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	expectNoViolation(t, ruleViolations(RuleF2, gf, nil))
+	expectNoViolation(t, ruleViolations(CountMax, gf, nil, backingF2))
 }
 
-// F7: const-only file → F1 should not fire (defeated by DefeaterConstOnly)
+// F7: const-only file → F1 should not fire (defeated by IsConstOnlyDefeater)
 func TestException_F7_ConstOnly(t *testing.T) {
 	gf, err := parse.ParseGoFile("testdata/const_only.go")
 	if err != nil {
@@ -44,7 +44,7 @@ func TestException_F4_VarWithInit(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	expectNoViolation(t, ruleViolations(RuleF4, gf, nil))
+	expectNoViolation(t, ruleViolations(ExistsWhen, gf, nil, backingF4))
 }
 
 // --- Clean: all rules pass ---
@@ -66,7 +66,7 @@ func TestType_A1_Missing(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	expectViolation(t, ruleViolations(RuleA1, gf, nil), "A1")
+	expectViolation(t, ruleViolations(ExistsWhen, gf, nil, backingA1t), "A1")
 }
 
 // A1: type-only file with //ff:type → should pass
@@ -75,7 +75,7 @@ func TestType_A1_Present(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	expectNoViolation(t, ruleViolations(RuleA1, gf, nil))
+	expectNoViolation(t, ruleViolations(ExistsWhen, gf, nil, backingA1t))
 }
 
 // A2: //ff:type with bad codebook value → should fire
@@ -90,5 +90,5 @@ func TestType_A2_BadCodebook(t *testing.T) {
 			"type":    {"rule": "", "model": ""},
 		},
 	}
-	expectViolation(t, ruleViolations(RuleA2, gf, cb), "A2")
+	expectViolation(t, ruleViolations(InCodebook, gf, cb, backingA2), "A2")
 }

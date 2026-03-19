@@ -10,7 +10,7 @@ import (
 )
 
 // RuleA16 returns (true, []model.Violation) if the file violates A16.
-func RuleA16(claim any, ground any, backing any) (bool, any) {
+func ValidDimension(claim any, ground any, backing any) (bool, any) {
 	gf := ground.(*ValidateGround).File
 	if len(gf.Funcs) == 0 || gf.Annotation == nil {
 		return false, nil

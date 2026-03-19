@@ -11,7 +11,7 @@ import (
 )
 
 // RuleA6 returns (true, []model.Violation) if the file violates A6 (annotation not at top).
-func RuleA6(claim any, ground any, backing any) (bool, any) {
+func AnnotationAtTop(claim any, ground any, backing any) (bool, any) {
 	gf := ground.(*ValidateGround).File
 
 	f, err := os.Open(gf.Path)

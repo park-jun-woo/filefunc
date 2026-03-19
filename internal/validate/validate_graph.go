@@ -1,4 +1,4 @@
-//ff:func feature=validate type=command control=sequence
+//ff:func feature=validate type=command control=iteration dimension=1
 //ff:what toulmin defeats graph — 전체 validate 룰과 예외 관계를 선언
 package validate
 
@@ -9,61 +9,72 @@ var ValidateGraph = newValidateGraph()
 
 func newValidateGraph() *toulmin.Graph {
 	g := toulmin.NewGraph("validate")
-	// F rules (file structure)
-	wF1 := g.Warrant(RuleF1, nil, 1.0)
-	wF2 := g.Warrant(RuleF2, nil, 1.0)
-	wF3 := g.Warrant(RuleF3, nil, 1.0)
-	_ = g.Warrant(RuleF4, nil, 1.0)
-	// Q rules (code quality)
-	_ = g.Warrant(RuleQ1, nil, 1.0)
-	_ = g.Warrant(RuleQ2Q3, nil, 1.0)
-	// A rules (annotation)
-	wA1 := g.Warrant(RuleA1, nil, 1.0)
-	wA2 := g.Warrant(RuleA2, nil, 1.0)
-	wA3 := g.Warrant(RuleA3, nil, 1.0)
-	wA6 := g.Warrant(RuleA6, nil, 1.0)
-	wA7 := g.Warrant(RuleA7, nil, 1.0)
-	wA8 := g.Warrant(RuleA8, nil, 1.0)
-	wA9 := g.Warrant(RuleA9, nil, 1.0)
-	wA10 := g.Warrant(RuleA10, nil, 1.0)
-	wA11 := g.Warrant(RuleA11, nil, 1.0)
-	wA12 := g.Warrant(RuleA12, nil, 1.0)
-	wA13 := g.Warrant(RuleA13, nil, 1.0)
-	wA14 := g.Warrant(RuleA14, nil, 1.0)
-	wA15 := g.Warrant(RuleA15, nil, 1.0)
-	wA16 := g.Warrant(RuleA16, nil, 1.0)
-	// Defeaters
-	dTestFile := g.Defeater(DefeaterTestFile, nil, 1.0)
-	dConstOnly := g.Defeater(DefeaterConstOnly, nil, 1.0)
-	dNoFunc := g.Defeater(DefeaterNoFunc, nil, 1.0)
-	// Defeat edges: test files defeat F/A rules
-	g.Defeat(dTestFile, wF1)
-	g.Defeat(dTestFile, wF2)
-	g.Defeat(dTestFile, wF3)
-	g.Defeat(dTestFile, wA1)
-	g.Defeat(dTestFile, wA2)
-	g.Defeat(dTestFile, wA3)
-	g.Defeat(dTestFile, wA6)
-	g.Defeat(dTestFile, wA7)
-	g.Defeat(dTestFile, wA8)
-	g.Defeat(dTestFile, wA9)
-	g.Defeat(dTestFile, wA10)
-	g.Defeat(dTestFile, wA11)
-	g.Defeat(dTestFile, wA12)
-	g.Defeat(dTestFile, wA13)
-	g.Defeat(dTestFile, wA14)
-	g.Defeat(dTestFile, wA15)
-	g.Defeat(dTestFile, wA16)
-	// Defeat edges: const-only files defeat F1
-	g.Defeat(dConstOnly, wF1)
-	// Defeat edges: no-func files defeat control/dimension/annotation rules
-	g.Defeat(dNoFunc, wA9)
-	g.Defeat(dNoFunc, wA10)
-	g.Defeat(dNoFunc, wA11)
-	g.Defeat(dNoFunc, wA12)
-	g.Defeat(dNoFunc, wA13)
-	g.Defeat(dNoFunc, wA14)
-	g.Defeat(dNoFunc, wA15)
-	g.Defeat(dNoFunc, wA16)
+
+	// ── 파일 구조: 파일당 하나 ──
+	wF1 := g.Warrant(CountMax, &CountMaxBacking{Field: "Funcs", Max: 1, Rule: "F1",
+		Message: "file contains multiple funcs; expected 1 file 1 func"}, 1.0)
+	wF2 := g.Warrant(CountMax, &CountMaxBacking{Field: "Types", Max: 1, Rule: "F2",
+		Message: "file contains multiple types; expected 1 file 1 type"}, 1.0)
+	wF3 := g.Warrant(CountMax, &CountMaxBacking{Field: "Methods", Max: 1, Rule: "F3",
+		Message: "file contains multiple methods; expected 1 file 1 method"}, 1.0)
+
+	// ── 파일 구조: init 단독 불허 ──
+	_ = g.Warrant(ExistsWhen, &ExistsWhenBacking{When: "HasInit", Need: "companion", Rule: "F4",
+		Level: "ERROR", Message: "init() must not exist alone; requires accompanying var or func"}, 1.0)
+
+	// ── 코드 품질 ──
+	_ = g.Warrant(CheckDepthLimit, nil, 1.0)
+	_ = g.Warrant(CheckFuncLines, nil, 1.0)
+
+	// ── 어노테이션: 존재 필수 ──
+	wA1f := g.Warrant(ExistsWhen, &ExistsWhenBacking{When: "HasFuncs", Need: "ff:func", Rule: "A1",
+		Level: "ERROR", Message: "file with func must have //ff:func annotation"}, 1.0)
+	wA1t := g.Warrant(ExistsWhen, &ExistsWhenBacking{When: "HasTypes", Need: "ff:type", Rule: "A1",
+		Level: "ERROR", Message: "file with type must have //ff:type annotation"}, 1.0)
+	wA3 := g.Warrant(ExistsWhen, &ExistsWhenBacking{When: "HasFuncOrType", Need: "ff:what", Rule: "A3",
+		Level: "ERROR", Message: "file with func or type must have //ff:what annotation"}, 1.0)
+	wA9 := g.Warrant(ExistsWhen, &ExistsWhenBacking{When: "HasFuncs", Need: "control", Rule: "A9",
+		Level: "ERROR", Message: "func file must have control= annotation (sequence, selection, or iteration)"}, 1.0)
+	wA15 := g.Warrant(ExistsWhen, &ExistsWhenBacking{When: "ControlIteration", Need: "dimension", Rule: "A15",
+		Level: "ERROR", Message: "control=iteration requires dimension= annotation"}, 1.0)
+
+	// ── 어노테이션: 제어 구조 일치 ──
+	wA10 := g.Warrant(ControlMatch, &ControlMatchBacking{Control: "selection", MustHave: "switch", Rule: "A10",
+		Message: "control=selection but no switch found at depth 1"}, 1.0)
+	wA11 := g.Warrant(ControlMatch, &ControlMatchBacking{Control: "iteration", MustHave: "loop", Rule: "A11",
+		Message: "control=iteration but no loop found at depth 1"}, 1.0)
+	wA12 := g.Warrant(ControlMatch, &ControlMatchBacking{Control: "sequence", MustNotHave: "switch|loop", Rule: "A12",
+		Message: "control=sequence but %s found at depth 1; add control=%s or extract to separate func"}, 1.0)
+	wA13 := g.Warrant(ControlMatch, &ControlMatchBacking{Control: "selection", MustNotHave: "loop", Rule: "A13",
+		Message: "control=selection but loop found at depth 1; extract loop to separate func"}, 1.0)
+	wA14 := g.Warrant(ControlMatch, &ControlMatchBacking{Control: "iteration", MustNotHave: "switch", Rule: "A14",
+		Message: "control=iteration but switch found at depth 1; extract switch to separate func"}, 1.0)
+
+	// ── 어노테이션: 코드북 적합 ──
+	wA2 := g.Warrant(InCodebook, &InCodebookBacking{Direction: "value→codebook", Rule: "A2"}, 1.0)
+	wA8 := g.Warrant(InCodebook, &InCodebookBacking{Direction: "codebook→annotation", Rule: "A8"}, 1.0)
+
+	// ── 고유 검사 ──
+	wA6 := g.Warrant(AnnotationAtTop, nil, 1.0)
+	wA7 := g.Warrant(CheckedHashMatch, nil, 1.0)
+	wA16 := g.Warrant(ValidDimension, nil, 1.0)
+
+	// ══ 예외: test 파일은 구조/어노테이션 룰 면제 ══
+	dTest := g.Defeater(IsTestFile, nil, 1.0)
+	for _, w := range []*toulmin.Rule{wF1, wF2, wF3, wA1f, wA1t, wA2, wA3, wA6, wA7, wA8,
+		wA9, wA10, wA11, wA12, wA13, wA14, wA15, wA16} {
+		g.Defeat(dTest, w)
+	}
+
+	// ══ 예외: const 전용 파일은 F1 면제 ══
+	dConst := g.Defeater(IsConstOnlyDefeater, nil, 1.0)
+	g.Defeat(dConst, wF1)
+
+	// ══ 예외: func 없는 파일은 제어 구조 룰 면제 ══
+	dNoFunc := g.Defeater(HasNoFunc, nil, 1.0)
+	for _, w := range []*toulmin.Rule{wA9, wA10, wA11, wA12, wA13, wA14, wA15, wA16} {
+		g.Defeat(dNoFunc, w)
+	}
+
 	return g
 }

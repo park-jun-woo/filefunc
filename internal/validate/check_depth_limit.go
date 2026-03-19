@@ -9,7 +9,7 @@ import (
 )
 
 // RuleQ1 returns (true, []model.Violation) if the file violates Q1 (nesting depth exceeds limit).
-func RuleQ1(claim any, ground any, backing any) (bool, any) {
+func CheckDepthLimit(claim any, ground any, backing any) (bool, any) {
 	gf := ground.(*ValidateGround).File
 	limit := depthLimit(gf)
 	if gf.MaxDepth > limit {
