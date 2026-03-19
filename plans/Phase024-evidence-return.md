@@ -1,4 +1,4 @@
-# Phase 024: Evidence 반환 — Rule 함수가 판정과 증거를 동시에 반환
+# Phase 024: Evidence 반환 — Rule 함수가 판정과 증거를 동시에 반환 ✅
 
 ## 목표
 

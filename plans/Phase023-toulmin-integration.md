@@ -1,4 +1,4 @@
-# Phase 023: toulmin 엔진 도입 — validate를 논증 기반 룰 엔진으로 전환
+# Phase 023: toulmin 엔진 도입 — validate를 논증 기반 룰 엔진으로 전환 ✅
 
 ## 목표
 
