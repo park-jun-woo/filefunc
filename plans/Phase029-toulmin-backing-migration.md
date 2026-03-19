@@ -1,4 +1,4 @@
-# Phase 029: toulmin backing 마이그레이션 — 3-arg 시그니처 + Graph Builder API 변경
+# Phase 029: toulmin backing 마이그레이션 — 3-arg 시그니처 + Graph Builder API 변경 ✅
 
 ## 목표
 
