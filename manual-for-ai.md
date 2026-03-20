@@ -18,11 +18,10 @@ For Go application-layer projects: backend services, CLI tools, code generators,
 
 | Rule | Description | Severity |
 |---|---|---|
-| F1 | One func per file (filename = func name, snake_case) | ERROR |
+| F1 | One func per file (filename = func name, snake_case) — including `_test.go` | ERROR |
 | F2 | One type per file (filename = type name, snake_case) | ERROR |
 | F3 | One method per file (`{receiver}_{method}.go`) | ERROR |
 | F4 | init() must not exist alone (requires var or func) | ERROR |
-| F5 | _test.go files may have multiple funcs | exception |
 | F6 | Semantically grouped consts allowed in one file | exception |
 
 ### Code quality
