@@ -138,7 +138,7 @@ Verifies `//ff:what` matches func body using local LLM (ollama). Scores 0.0~1.0,
 | F2 | One type per file (filename = type name) | ERROR |
 | F3 | One method per file | ERROR |
 | F4 | init() must not exist alone (requires var or func) | ERROR |
-| F6 | Semantically grouped consts allowed in one file | exception |
+| F5 | Semantically grouped consts allowed in one file | exception |
 
 ### Code quality
 

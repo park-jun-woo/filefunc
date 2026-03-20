@@ -138,7 +138,7 @@ filefunc llmc --threshold 0.9
 | F2 | 파일당 type 1개 (파일명 = 타입명) | ERROR |
 | F3 | 파일당 method 1개 | ERROR |
 | F4 | init()만 단독 불허 (var 또는 func과 함께) | ERROR |
-| F6 | 의미적으로 한 묶음인 const는 같은 파일 허용 | 예외 |
+| F5 | 의미적으로 한 묶음인 const는 같은 파일 허용 | 예외 |
 
 ### 코드 품질
 
