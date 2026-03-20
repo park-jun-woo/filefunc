@@ -13,9 +13,9 @@ func newValidateGraph() *toulmin.Graph {
 	// ── 파일 구조: 파일당 하나 ──
 	wF1 := g.Warrant(CountMax, &CountMaxBacking{Field: "Funcs", Max: 1, Rule: "F1",
 		Message: "file contains multiple funcs; expected 1 file 1 func"}, 1.0)
-	wF2 := g.Warrant(CountMax, &CountMaxBacking{Field: "Types", Max: 1, Rule: "F2",
+	_ = g.Warrant(CountMax, &CountMaxBacking{Field: "Types", Max: 1, Rule: "F2",
 		Message: "file contains multiple types; expected 1 file 1 type"}, 1.0)
-	wF3 := g.Warrant(CountMax, &CountMaxBacking{Field: "Methods", Max: 1, Rule: "F3",
+	_ = g.Warrant(CountMax, &CountMaxBacking{Field: "Methods", Max: 1, Rule: "F3",
 		Message: "file contains multiple methods; expected 1 file 1 method"}, 1.0)
 
 	// ── 파일 구조: init 단독 불허 ──
@@ -27,11 +27,11 @@ func newValidateGraph() *toulmin.Graph {
 	_ = g.Warrant(CheckFuncLines, nil, 1.0)
 
 	// ── 어노테이션: 존재 필수 ──
-	wA1f := g.Warrant(ExistsWhen, &ExistsWhenBacking{When: "HasFuncs", Need: "ff:func", Rule: "A1",
+	_ = g.Warrant(ExistsWhen, &ExistsWhenBacking{When: "HasFuncs", Need: "ff:func", Rule: "A1",
 		Level: "ERROR", Message: "file with func must have //ff:func annotation"}, 1.0)
-	wA1t := g.Warrant(ExistsWhen, &ExistsWhenBacking{When: "HasTypes", Need: "ff:type", Rule: "A1",
+	_ = g.Warrant(ExistsWhen, &ExistsWhenBacking{When: "HasTypes", Need: "ff:type", Rule: "A1",
 		Level: "ERROR", Message: "file with type must have //ff:type annotation"}, 1.0)
-	wA3 := g.Warrant(ExistsWhen, &ExistsWhenBacking{When: "HasFuncOrType", Need: "ff:what", Rule: "A3",
+	_ = g.Warrant(ExistsWhen, &ExistsWhenBacking{When: "HasFuncOrType", Need: "ff:what", Rule: "A3",
 		Level: "ERROR", Message: "file with func or type must have //ff:what annotation"}, 1.0)
 	wA9 := g.Warrant(ExistsWhen, &ExistsWhenBacking{When: "HasFuncs", Need: "control", Rule: "A9",
 		Level: "ERROR", Message: "func file must have control= annotation (sequence, selection, or iteration)"}, 1.0)
@@ -51,20 +51,13 @@ func newValidateGraph() *toulmin.Graph {
 		Message: "control=iteration but switch found at depth 1; extract switch to separate func"}, 1.0)
 
 	// ── 어노테이션: 코드북 적합 ──
-	wA2 := g.Warrant(InCodebook, &InCodebookBacking{Direction: "value→codebook", Rule: "A2"}, 1.0)
-	wA8 := g.Warrant(InCodebook, &InCodebookBacking{Direction: "codebook→annotation", Rule: "A8"}, 1.0)
+	_ = g.Warrant(InCodebook, &InCodebookBacking{Direction: "value→codebook", Rule: "A2"}, 1.0)
+	_ = g.Warrant(InCodebook, &InCodebookBacking{Direction: "codebook→annotation", Rule: "A8"}, 1.0)
 
 	// ── 고유 검사 ──
-	wA6 := g.Warrant(AnnotationAtTop, nil, 1.0)
-	wA7 := g.Warrant(CheckedHashMatch, nil, 1.0)
+	_ = g.Warrant(AnnotationAtTop, nil, 1.0)
+	_ = g.Warrant(CheckedHashMatch, nil, 1.0)
 	wA16 := g.Warrant(ValidDimension, nil, 1.0)
-
-	// ══ 예외: test 파일은 구조/어노테이션 룰 면제 ══
-	dTest := g.Defeater(IsTestFile, nil, 1.0)
-	for _, w := range []*toulmin.Rule{wF1, wF2, wF3, wA1f, wA1t, wA2, wA3, wA6, wA7, wA8,
-		wA9, wA10, wA11, wA12, wA13, wA14, wA15, wA16} {
-		g.Defeat(dTest, w)
-	}
 
 	// ══ 예외: const 전용 파일은 F1 면제 ══
 	dConst := g.Defeater(IsConstOnlyDefeater, nil, 1.0)

@@ -34,7 +34,7 @@ cd filefunc
 go build ./cmd/filefunc/
 ```
 
-Requires Go 1.22+.
+Requires Go 1.18+.
 
 ## Commands
 
@@ -46,7 +46,7 @@ filefunc validate /path/to/project   # explicit project root
 filefunc validate --format json
 ```
 
-Project root must contain `go.mod` and `codebook.yaml`. Read-only. Exit code 1 on violations. Respects `.ffignore`. Powered by [toulmin](https://github.com/park-jun-woo/toulmin) argumentation engine — exceptions are defeats in a graph, not if-statements in code.
+Project root must contain `go.mod` and `codebook.yaml`. Read-only. Exit code 1 on violations. Respects `.ffignore`. Powered by [toulmin](https://github.com/park-jun-woo/toulmin) argumentation engine — rules are generic functions with backing-based judgment criteria, exceptions are defeats in a graph.
 
 ### chain — Trace call relationships
 
@@ -134,11 +134,10 @@ Verifies `//ff:what` matches func body using local LLM (ollama). Scores 0.0~1.0,
 
 | Rule | Description | Severity |
 |---|---|---|
-| F1 | One func per file (filename = func name) | ERROR |
+| F1 | One func per file (filename = func name) — including `_test.go` | ERROR |
 | F2 | One type per file (filename = type name) | ERROR |
 | F3 | One method per file | ERROR |
 | F4 | init() must not exist alone (requires var or func) | ERROR |
-| F5 | _test.go files may have multiple funcs | exception |
 | F6 | Semantically grouped consts allowed in one file | exception |
 
 ### Code quality

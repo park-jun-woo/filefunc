@@ -34,7 +34,7 @@ cd filefunc
 go build ./cmd/filefunc/
 ```
 
-Go 1.22+ 필요.
+Go 1.18+ 필요.
 
 ## 명령
 
@@ -46,7 +46,7 @@ filefunc validate /path/to/project   # 프로젝트 루트 명시
 filefunc validate --format json
 ```
 
-프로젝트 루트에 `go.mod`와 `codebook.yaml` 필수. 읽기 전용. 위반 시 종료 코드 1. `.ffignore` 적용. [toulmin](https://github.com/park-jun-woo/toulmin) 논증 엔진 기반 — 예외는 코드의 if문이 아니라 그래프의 defeat다.
+프로젝트 루트에 `go.mod`와 `codebook.yaml` 필수. 읽기 전용. 위반 시 종료 코드 1. `.ffignore` 적용. [toulmin](https://github.com/park-jun-woo/toulmin) 논증 엔진 기반 — 룰은 backing 기반 범용 함수, 예외는 그래프의 defeat로 선언.
 
 ### chain — 호출 관계 추적
 
@@ -134,11 +134,10 @@ filefunc llmc --threshold 0.9
 
 | 룰 | 설명 | 심각도 |
 |---|---|---|
-| F1 | 파일당 func 1개 (파일명 = 함수명) | ERROR |
+| F1 | 파일당 func 1개 (파일명 = 함수명) — `_test.go` 포함 | ERROR |
 | F2 | 파일당 type 1개 (파일명 = 타입명) | ERROR |
 | F3 | 파일당 method 1개 | ERROR |
 | F4 | init()만 단독 불허 (var 또는 func과 함께) | ERROR |
-| F5 | `_test.go`는 복수 func 허용 | 예외 |
 | F6 | 의미적으로 한 묶음인 const는 같은 파일 허용 | 예외 |
 
 ### 코드 품질

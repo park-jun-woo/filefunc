@@ -1,3 +1,5 @@
+//ff:func feature=parse type=util control=sequence
+//ff:what test: TestParseCodebook
 package parse
 
 import (
