@@ -30,7 +30,8 @@ For Go application-layer projects: backend services, CLI tools, code generators,
 |---|---|---|
 | Q1 | Nesting depth: sequence=2, selection=2, iteration=dimension+1 | ERROR |
 | Q2 | Func max 1000 lines | ERROR |
-| Q3 | Func recommended max: sequence/iteration 100, selection 300 | WARNING |
+| Q3 | Sequence func max 100 lines | ERROR |
+| Q4 | Control body PURE > 10 lines → extract to sequence func | ERROR |
 
 ### Annotation
 
@@ -51,13 +52,13 @@ For Go application-layer projects: backend services, CLI tools, code generators,
 | A15 | `control=iteration` requires `dimension=` | ERROR |
 | A16 | `dimension=` value must be a positive integer | ERROR |
 
-### Code quality (Q3 control-specific)
+### Q4 PURE body calculation
 
-| control | Q3 limit |
-|---|---|
-| sequence | 100 lines |
-| iteration | 100 lines |
-| selection | 300 lines |
+PURE = control body lines − inner control statement lines (2-depth exemption).
+Inner control: if, for, range, switch, type-switch spans at depth 2 are subtracted.
+For switch/type-switch, Q4 applies per case clause, not the whole switch body.
+
+Example: a range body of 30 lines containing an if block of 20 lines → PURE = 10 → OK.
 
 ### Codebook format
 

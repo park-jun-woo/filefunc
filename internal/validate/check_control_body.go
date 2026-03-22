@@ -1,5 +1,5 @@
 //ff:func feature=validate type=rule control=iteration dimension=1
-//ff:what Q2/Q3 toulmin rule — func 라인 수 위반 시 violation 반환
+//ff:what Q4 toulmin rule — 제어문 body PURE 줄수 10줄 초과 시 violation 반환
 package validate
 
 import (
@@ -10,10 +10,10 @@ import (
 	"github.com/park-jun-woo/filefunc/internal/model"
 )
 
-// CheckFuncLines returns (true, []model.Violation) if the file violates Q2 or Q3.
-// Q2: func > 1000 lines → ERROR.
-// Q3: control=sequence func > 100 lines → ERROR.
-func CheckFuncLines(claim any, ground any, backing any) (bool, any) {
+// CheckControlBody returns (true, []model.Violation) if a depth-1 control statement's
+// PURE body exceeds 10 lines. PURE = total body lines minus inner control statement lines.
+// For switch/type-switch, each case clause is checked individually.
+func CheckControlBody(claim any, ground any, backing any) (bool, any) {
 	gf := ground.(*ValidateGround).File
 
 	fset := token.NewFileSet()
@@ -22,7 +22,6 @@ func CheckFuncLines(claim any, ground any, backing any) (bool, any) {
 		return false, nil
 	}
 
-	q3Limit, q3Applies := Q3Limit(gf)
 	var violations []model.Violation
 
 	for _, decl := range f.Decls {
@@ -30,7 +29,9 @@ func CheckFuncLines(claim any, ground any, backing any) (bool, any) {
 		if !ok || fd.Body == nil {
 			continue
 		}
-		violations = checkOneFuncLines(fset, gf.Path, fd, q3Limit, q3Applies, violations)
+		for _, stmt := range fd.Body.List {
+			violations = checkQ4Stmt(fset, gf.Path, fd.Name.Name, stmt, violations)
+		}
 	}
 
 	if len(violations) > 0 {

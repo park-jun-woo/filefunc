@@ -146,7 +146,8 @@ filefunc llmc --threshold 0.9
 |---|---|---|
 | Q1 | 중첩 깊이: sequence=2, selection=2, iteration=dimension+1 | ERROR |
 | Q2 | func 최대 1000줄 | ERROR |
-| Q3 | func 권고 최대: sequence/iteration 100줄, selection 300줄 | WARNING |
+| Q3 | sequence func 최대 100줄 | ERROR |
+| Q4 | 제어문 body PURE 10줄 초과 시 sequence func으로 추출 | ERROR |
 
 ### 어노테이션
 

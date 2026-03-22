@@ -146,7 +146,8 @@ Verifies `//ff:what` matches func body using local LLM (ollama). Scores 0.0~1.0,
 |---|---|---|
 | Q1 | Nesting depth: sequence=2, selection=2, iteration=dimension+1 | ERROR |
 | Q2 | Func max 1000 lines | ERROR |
-| Q3 | Func recommended max: sequence/iteration 100, selection 300 | WARNING |
+| Q3 | Sequence func max 100 lines | ERROR |
+| Q4 | Control body PURE > 10 lines → extract to sequence func | ERROR |
 
 ### Annotation
 

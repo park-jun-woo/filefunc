@@ -1,3 +1,5 @@
+//ff:func feature=validate type=util control=sequence
+//ff:what Q3 위반 테스트: sequence 100줄 초과
 package testdata
 
 func MediumFunc() {

@@ -25,6 +25,7 @@ func newValidateGraph() *toulmin.Graph {
 	// ── 코드 품질 ──
 	_ = g.Warrant(CheckDepthLimit, nil, 1.0)
 	_ = g.Warrant(CheckFuncLines, nil, 1.0)
+	_ = g.Warrant(CheckControlBody, nil, 1.0)
 
 	// ── 어노테이션: 존재 필수 ──
 	_ = g.Warrant(ExistsWhen, &ExistsWhenBacking{When: "HasFuncs", Need: "ff:func", Rule: "A1",

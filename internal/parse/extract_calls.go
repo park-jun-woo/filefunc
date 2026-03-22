@@ -24,17 +24,7 @@ func ExtractCalls(path string, modulePath string, projFuncs map[string]string, c
 		if !ok || fd.Body == nil || fd.Name.Name == "init" {
 			continue
 		}
-		ast.Inspect(fd.Body, func(n ast.Node) bool {
-			call, ok := n.(*ast.CallExpr)
-			if !ok {
-				return true
-			}
-			name := CallName(call, imports, projFuncs, callerPkg)
-			if name != "" {
-				seen[name] = true
-			}
-			return true
-		})
+		collectCallsFromFunc(fd, imports, projFuncs, callerPkg, seen)
 	}
 
 	return SortedKeys(seen), nil

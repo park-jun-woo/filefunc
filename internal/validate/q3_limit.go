@@ -1,14 +1,14 @@
 //ff:func feature=validate type=util control=sequence
-//ff:what control 값에 따라 Q3 줄 수 제한을 반환
+//ff:what control=sequence인 경우에만 Q3 적용 여부와 줄 수 제한을 반환
 package validate
 
 import "github.com/park-jun-woo/filefunc/internal/model"
 
-// Q3Limit returns the Q3 line limit based on the control annotation.
-// selection: 300, sequence/iteration/default: 100.
-func Q3Limit(gf *model.GoFile) int {
-	if gf.Annotation != nil && gf.Annotation.Func["control"] == "selection" {
-		return 300
+// Q3Limit returns (100, true) if the file is control=sequence, (0, false) otherwise.
+// Q3 only applies to sequence funcs. iteration/selection are governed by Q4 (control body limit).
+func Q3Limit(gf *model.GoFile) (int, bool) {
+	if gf.Annotation != nil && gf.Annotation.Func["control"] == "sequence" {
+		return 100, true
 	}
-	return 100
+	return 0, false
 }
