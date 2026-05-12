@@ -196,6 +196,21 @@ internal/legacy/
 
 Optional. If absent, nothing is excluded.
 
+## Case study
+
+### typer — Python CLI framework (1155 tests, 0 failures)
+
+[Refactored fork](https://github.com/park-jun-woo/typer) of [fastapi/typer](https://github.com/fastapi/typer), restructured to pass `filefunc validate --lang python` with zero violations.
+
+| Metric | Original | Refactored |
+|---|---|---|
+| Source files | 16 | 197 |
+| filefunc violations | 69 | 0 |
+| pytest passed | 1155 | 1155 |
+| pytest failed | 0 | 0 |
+
+All public APIs, import paths, and runtime behavior are identical to the original. Verified by full pytest suite and exhaustive comparison.
+
 ## Academic basis
 
 - **"Lost in the Middle" (Stanford, 2024)** — Relevant info in the middle of context drops performance 30%+.

@@ -196,6 +196,21 @@ internal/legacy/
 
 선택 사항. 없으면 제외 없음.
 
+## 적용 사례
+
+### typer — Python CLI 프레임워크 (테스트 1155개, 실패 0)
+
+[fastapi/typer](https://github.com/fastapi/typer)를 `filefunc validate --lang python` 위반 0으로 리팩토링한 [포크](https://github.com/park-jun-woo/typer).
+
+| 지표 | 원본 | 리팩토링 |
+|---|---|---|
+| 소스 파일 | 16 | 197 |
+| filefunc 위반 | 69 | 0 |
+| pytest 통과 | 1155 | 1155 |
+| pytest 실패 | 0 | 0 |
+
+모든 public API, import 경로, 런타임 동작이 원본과 동일. pytest 전체 통과 및 전수 비교로 검증.
+
 ## 학술 근거
 
 - **"Lost in the Middle" (Stanford, 2024)** — 컨텍스트 중간의 관련 정보는 성능을 30%+ 저하시킨다.
