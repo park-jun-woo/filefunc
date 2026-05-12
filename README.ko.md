@@ -130,43 +130,7 @@ filefunc llmc --threshold 0.9
 
 ## 룰
 
-### 파일 구조
-
-| 룰 | 설명 | 심각도 |
-|---|---|---|
-| F1 | 파일당 func 1개 (파일명 = 함수명) — `_test.go` 포함 | ERROR |
-| F2 | 파일당 type 1개 (파일명 = 타입명) | ERROR |
-| F3 | 파일당 method 1개 | ERROR |
-| F4 | init()만 단독 불허 (var 또는 func과 함께) | ERROR |
-| F5 | 의미적으로 한 묶음인 const는 같은 파일 허용 | 예외 |
-
-### 코드 품질
-
-| 룰 | 설명 | 심각도 |
-|---|---|---|
-| Q1 | 중첩 깊이: sequence=2, selection=2, iteration=dimension+1 | ERROR |
-| Q2 | func 최대 1000줄 | ERROR |
-| Q3 | sequence func 최대 100줄 | ERROR |
-| Q4 | 제어문 body PURE 10줄 초과 시 sequence func으로 추출 | ERROR |
-
-### 어노테이션
-
-| 룰 | 설명 | 심각도 |
-|---|---|---|
-| A1 | func 파일은 `//ff:func`, type 파일은 `//ff:type` 필수 | ERROR |
-| A2 | 어노테이션 값은 코드북에 존재해야 함 | ERROR |
-| A3 | func/type 파일은 `//ff:what` 필수 | ERROR |
-| A6 | 어노테이션은 파일 최상단에 위치 | ERROR |
-| A7 | `//ff:checked` 해시 불일치 (LLM 검증 후 본문 변경) | ERROR |
-| A8 | 코드북 required 키가 어노테이션에 모두 존재해야 함 | ERROR |
-| A9 | func 파일은 `control=` 필수 (sequence/selection/iteration) | ERROR |
-| A10 | `control=selection`인데 switch 없음 (depth 1) | ERROR |
-| A11 | `control=iteration`인데 loop 없음 (depth 1) | ERROR |
-| A12 | `control=sequence`인데 switch/loop 존재 (depth 1) | ERROR |
-| A13 | `control=selection`인데 loop 존재 (depth 1) | ERROR |
-| A14 | `control=iteration`인데 switch 존재 (depth 1) | ERROR |
-| A15 | `control=iteration`이면 `dimension=` 필수 | ERROR |
-| A16 | `dimension=` 값은 양의 정수여야 함 | ERROR |
+전체 룰은 [`rulebook.md`](rulebook.md) 참조 (SSOT). 카테고리: P (프로젝트), F (파일 구조), Q (코드 품질), A (어노테이션), C (코드북), N (네이밍).
 
 ## 어노테이션
 
@@ -216,16 +180,7 @@ optional:
 
 코드북에 없는 값을 쓰면 `A2 ERROR`. 프로젝트마다 고유한 코드북. `codebook.yaml` 필수.
 
-### 코드북 포맷 룰
-
-| 룰 | 설명 | 심각도 |
-|---|---|---|
-| C1 | `required` 섹션에 최소 1개 키와 1개 값 필수 | ERROR |
-| C2 | 같은 섹션 내 중복 키 불허 | ERROR |
-| C3 | 모든 키는 소문자 + 하이픈만 (`[a-z][a-z0-9-]*`) | ERROR |
-| C4 | required 값은 비어있지 않은 description 권장 | WARNING |
-
-코드북이 먼저 검증된다. 코드북이 실패하면 코드 검증은 실행되지 않는다.
+코드북 포맷 룰 (C1-C4)은 [`rulebook.md`](rulebook.md) 참조. 코드북이 먼저 검증된다. 코드북이 실패하면 코드 검증은 실행되지 않는다.
 
 ## .ffignore
 

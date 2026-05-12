@@ -53,6 +53,11 @@ var validateCmd = &cobra.Command{
 		}
 
 		ignorePatterns := walk.ParseFFIgnore(filepath.Join(root, ".ffignore"))
+
+		if err := CheckNoMixedLang(root, lang, ignorePatterns); err != nil {
+			return err
+		}
+
 		files, err := LoadFilesForLang(root, lang, ignorePatterns)
 		if err != nil {
 			return err

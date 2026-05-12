@@ -14,67 +14,7 @@ For Go application-layer projects: backend services, CLI tools, code generators,
 
 ## Rules
 
-### File structure
-
-| Rule | Description | Severity |
-|---|---|---|
-| F1 | One func per file (filename = func name, snake_case) — including `_test.go` | ERROR |
-| F2 | One type per file (filename = type name, snake_case) | ERROR |
-| F3 | One method per file (`{receiver}_{method}.go`) | ERROR |
-| F4 | init() must not exist alone (requires var or func) | ERROR |
-| F5 | Semantically grouped consts allowed in one file | exception |
-
-### Code quality
-
-| Rule | Description | Severity |
-|---|---|---|
-| Q1 | Nesting depth: sequence=2, selection=2, iteration=dimension+1 | ERROR |
-| Q2 | Func max 1000 lines | ERROR |
-| Q3 | Sequence func max 100 lines | ERROR |
-| Q4 | Control body PURE > 10 lines → extract to sequence func | ERROR |
-
-### Annotation
-
-| Rule | Description | Severity |
-|---|---|---|
-| A1 | Func files require `//ff:func`, type files require `//ff:type` | ERROR |
-| A2 | Annotation values must exist in codebook | ERROR |
-| A3 | Func/type files require `//ff:what` | ERROR |
-| A6 | Annotations must be at the top of the file (above package) | ERROR |
-| A7 | `//ff:checked` hash mismatch → body changed after LLM verification | ERROR |
-| A8 | Required codebook keys must be present in annotation | ERROR |
-| A9 | Func files must have `control=` (sequence/selection/iteration) | ERROR |
-| A10 | `control=selection` but no switch at depth 1 | ERROR |
-| A11 | `control=iteration` but no loop at depth 1 | ERROR |
-| A12 | `control=sequence` but switch/loop exists at depth 1 | ERROR |
-| A13 | `control=selection` but loop exists at depth 1 | ERROR |
-| A14 | `control=iteration` but switch exists at depth 1 | ERROR |
-| A15 | `control=iteration` requires `dimension=` | ERROR |
-| A16 | `dimension=` value must be a positive integer | ERROR |
-
-### Q4 PURE body calculation
-
-PURE = control body lines − inner control statement lines (2-depth exemption).
-Inner control: if, for, range, switch, type-switch spans at depth 2 are subtracted.
-For switch/type-switch, Q4 applies per case clause, not the whole switch body.
-
-Example: a range body of 30 lines containing an if block of 20 lines → PURE = 10 → OK.
-
-### Codebook format
-
-| Rule | Description | Severity |
-|---|---|---|
-| C1 | `required` section must have at least one key with at least one value | ERROR |
-| C2 | No duplicate keys within the same section | ERROR |
-| C3 | All keys lowercase + hyphens only (`[a-z][a-z0-9-]*`) | ERROR |
-| C4 | Required values should have non-empty descriptions | WARNING |
-
-Codebook is validated first. If codebook fails, code validation does not run.
-
-### Exceptions (not violations)
-
-- const-only and var-only files do not require annotations
-- If no `//ff:checked` exists in the project, A7 is skipped entirely
+All rules defined in `rulebook.md` (SSOT). Categories: P (project), F (file structure), Q (code quality), A (annotation), C (codebook), N (naming).
 
 ---
 

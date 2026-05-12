@@ -3,13 +3,16 @@
 package walk
 
 // DetectLang detects the project language from marker files in the root directory.
-// Returns "go", "python", or "" (empty string if undetermined).
+// Returns "go", "python", "typescript", or "" (empty string if undetermined).
 func DetectLang(root string) string {
 	if fileExists(root, "go.mod") {
 		return "go"
 	}
 	if fileExists(root, "setup.py") || fileExists(root, "pyproject.toml") || fileExists(root, "setup.cfg") {
 		return "python"
+	}
+	if fileExists(root, "tsconfig.json") {
+		return "typescript"
 	}
 	return ""
 }

@@ -15,7 +15,7 @@ func ResolveLang(flagValue string, root string) (string, error) {
 		lang = walk.DetectLang(root)
 	}
 	if lang == "" {
-		return "", fmt.Errorf("cannot detect language; use --lang go or --lang python")
+		return "", fmt.Errorf("cannot detect language; use --lang go, --lang python, or --lang typescript")
 	}
 	return lang, nil
 }
