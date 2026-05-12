@@ -1,5 +1,5 @@
 //ff:func feature=validate type=rule control=iteration dimension=1
-//ff:what ruff check 실행 후 린트 위반에 N4 violation 생성; 미설치 시 skip
+//ff:what ruff check 실행 후 린트 위반에 N4 violation 생성; 미설치 시 ERROR
 package validate
 
 import (
@@ -11,10 +11,14 @@ import (
 )
 
 // CheckRuff runs "ruff check --quiet" on the given paths and returns N4 violations
-// for each lint finding. If ruff is not installed, returns nil (skip).
+// for each lint finding. If ruff is not installed, returns N4 ERROR.
 func CheckRuff(paths []string) []model.Violation {
 	if _, err := exec.LookPath("ruff"); err != nil {
-		return nil
+		return []model.Violation{{
+			Rule:    "N4",
+			Level:   "ERROR",
+			Message: "ruff not installed; run: pip install ruff",
+		}}
 	}
 
 	if len(paths) == 0 {

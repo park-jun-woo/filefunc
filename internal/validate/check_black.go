@@ -1,5 +1,5 @@
 //ff:func feature=validate type=rule control=iteration dimension=1
-//ff:what black --check 실행 후 포매팅 위반 파일에 N4 violation 생성; 미설치 시 skip
+//ff:what black --check 실행 후 포매팅 위반 파일에 N4 violation 생성; 미설치 시 ERROR
 package validate
 
 import (
@@ -12,10 +12,14 @@ import (
 )
 
 // CheckBlack runs "black --check --quiet" on the given paths and returns N4 violations
-// for files that would be reformatted. If black is not installed, returns nil (skip).
+// for files that would be reformatted. If black is not installed, returns N4 ERROR.
 func CheckBlack(paths []string) []model.Violation {
 	if _, err := exec.LookPath("black"); err != nil {
-		return nil
+		return []model.Violation{{
+			Rule:    "N4",
+			Level:   "ERROR",
+			Message: "black not installed; run: pip install black",
+		}}
 	}
 
 	if len(paths) == 0 {
