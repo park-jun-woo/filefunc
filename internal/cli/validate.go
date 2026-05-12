@@ -72,6 +72,12 @@ var validateCmd = &cobra.Command{
 			violations = append(violations, validate.CheckRuff(pyPaths)...)
 		}
 
+		if lang == "typescript" {
+			tsPaths := collectSourcePaths(files)
+			violations = append(violations, validate.CheckPrettier(tsPaths)...)
+			violations = append(violations, validate.CheckESLint(tsPaths)...)
+		}
+
 		if format == "json" {
 			report.FormatJSON(os.Stdout, violations)
 		} else {
