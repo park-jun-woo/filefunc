@@ -211,6 +211,19 @@ Optional. If absent, nothing is excluded.
 
 All public APIs, import paths, and runtime behavior are identical to the original. No performance regression (import +2% within noise, all other benchmarks identical). Verified by full pytest suite and exhaustive comparison.
 
+### hono — TypeScript web framework (4419 tests, 0 new failures)
+
+[Refactored fork](https://github.com/park-jun-woo/hono) of [honojs/hono](https://github.com/honojs/hono), restructured to pass `filefunc validate --lang typescript` with zero violations.
+
+| Metric | Original | Refactored |
+|---|---|---|
+| Source files | 186 | 626 |
+| filefunc violations | 397 | 0 |
+| vitest passed | 4419 | 4419 |
+| vitest failed | 4 | 4 (pre-existing) |
+
+All import paths and runtime behavior identical to original. Verified by full vitest suite.
+
 ## Academic basis
 
 - **"Lost in the Middle" (Stanford, 2024)** — Relevant info in the middle of context drops performance 30%+.

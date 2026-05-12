@@ -211,6 +211,19 @@ internal/legacy/
 
 모든 public API, import 경로, 런타임 동작이 원본과 동일. 성능 저하 없음 (import +2% 오차 범위, 나머지 벤치마크 동일). pytest 전체 통과 및 전수 비교로 검증.
 
+### hono — TypeScript 웹 프레임워크 (테스트 4419개, 신규 실패 0)
+
+[honojs/hono](https://github.com/honojs/hono)를 `filefunc validate --lang typescript` 위반 0으로 리팩토링한 [포크](https://github.com/park-jun-woo/hono).
+
+| 지표 | 원본 | 리팩토링 |
+|---|---|---|
+| 소스 파일 | 186 | 626 |
+| filefunc 위반 | 397 | 0 |
+| vitest 통과 | 4419 | 4419 |
+| vitest 실패 | 4 | 4 (기존 결함) |
+
+모든 import 경로, 런타임 동작이 원본과 동일. vitest 전체 통과로 검증.
+
 ## 학술 근거
 
 - **"Lost in the Middle" (Stanford, 2024)** — 컨텍스트 중간의 관련 정보는 성능을 30%+ 저하시킨다.
