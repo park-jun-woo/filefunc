@@ -10,6 +10,11 @@ import (
 )
 
 func buildPythonFile(r PyAstResult) *model.PythonFile {
+	moduleImports := make([]string, 0, len(r.ModuleImports))
+	for _, mi := range r.ModuleImports {
+		moduleImports = append(moduleImports, mi.Module)
+	}
+
 	pf := &model.PythonFile{
 		Path:             r.Path,
 		Funcs:            r.Functions,
@@ -25,6 +30,7 @@ func buildPythonFile(r PyAstResult) *model.PythonFile {
 		HasMatchAtDepth1: r.HasMatchAtD1,
 		FuncLines:        r.FuncLines,
 		Calls:            r.Calls,
+		ModuleImports:    moduleImports,
 		BodyHash:         r.BodyHash,
 	}
 

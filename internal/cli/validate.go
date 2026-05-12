@@ -70,6 +70,8 @@ var validateCmd = &cobra.Command{
 			pyPaths := collectSourcePaths(files)
 			violations = append(violations, validate.CheckBlack(pyPaths)...)
 			violations = append(violations, validate.CheckRuff(pyPaths)...)
+			pyFiles := collectPythonFiles(files)
+			violations = append(violations, validate.CheckCircularImport(pyFiles, root)...)
 		}
 
 		if lang == "typescript" {

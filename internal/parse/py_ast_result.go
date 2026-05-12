@@ -19,6 +19,7 @@ type PyAstResult struct {
 	Q4Results       []PyQ4JSON     `json:"q4_results"`
 	Calls           []string       `json:"calls"`
 	Imports         []PyImportJSON `json:"imports"`
+	ModuleImports   []PyImportJSON `json:"module_imports"`
 	BodyHash        string         `json:"body_hash"`
 	Error           string         `json:"error,omitempty"`
 }

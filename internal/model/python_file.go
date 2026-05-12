@@ -21,5 +21,6 @@ type PythonFile struct {
 	FuncLines        map[string]int
 	Q4Violations     []Q4Result
 	Calls            []string
+	ModuleImports    []string
 	BodyHash         string
 }

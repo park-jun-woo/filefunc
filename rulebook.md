@@ -14,6 +14,25 @@ Project-level structural rules. Checked before file-level validation.
 
 ---
 
+## I: Import rules
+
+Import structure rules. Python and TypeScript only (Go has no intra-package imports).
+
+| # | Rule | Severity | Verification |
+|---|---|---|---|
+| I1 | No circular imports in project | ERROR | Build import graph from AST, detect cycles (DFS). Error message includes cycle path and fix advice: which import to move inside function body |
+
+### I1 error format
+
+```
+[ERROR] I1: circular import — A → B → C → A
+  fix: move "from .A import func" inside function body in C.py
+```
+
+The fix advice targets the last edge in the cycle — moving that one import to a lazy (function-body) import breaks the cycle.
+
+---
+
 ## F: File structure rules
 
 | # | Rule | Severity | Go | Python | TypeScript |

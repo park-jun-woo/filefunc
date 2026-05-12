@@ -200,6 +200,21 @@ def _extract_imports(tree):
     return imports
 
 
+def _extract_module_imports(tree):
+    """Extract module-level imports only (exclude function-body imports)."""
+    imports = []
+    for stmt in tree.body:
+        if isinstance(stmt, ast.Import):
+            for alias in stmt.names:
+                imports.append({"module": alias.name, "names": []})
+        elif isinstance(stmt, ast.ImportFrom):
+            prefix = "." * (stmt.level or 0)
+            module = prefix + (stmt.module or "")
+            names = [alias.name for alias in stmt.names]
+            imports.append({"module": module, "names": names})
+    return imports
+
+
 def _body_hash(source, func_node):
     """Compute SHA-256 hash of first func/method signature+body (first 8 hex chars)."""
     lines = source.splitlines(True)
@@ -314,6 +329,9 @@ def parse_file(path):
     # imports
     imports = _extract_imports(tree)
 
+    # module-level imports
+    module_imports = _extract_module_imports(tree)
+
     # deduplicate calls
     seen = set()
     unique_calls = []
@@ -338,6 +356,7 @@ def parse_file(path):
         "q4_results": q4_results,
         "calls": unique_calls,
         "imports": imports,
+        "module_imports": module_imports,
         "body_hash": bhash,
     }
 
