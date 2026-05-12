@@ -11,6 +11,7 @@ import (
 	"github.com/park-jun-woo/filefunc/internal/report"
 	"github.com/park-jun-woo/filefunc/internal/validate"
 	"github.com/park-jun-woo/filefunc/internal/walk"
+
 	"github.com/spf13/cobra"
 )
 
@@ -64,6 +65,12 @@ var validateCmd = &cobra.Command{
 		}
 
 		violations := validate.RunAll(files, cb)
+
+		if lang == "python" {
+			pyPaths := collectSourcePaths(files)
+			violations = append(violations, validate.CheckBlack(pyPaths)...)
+			violations = append(violations, validate.CheckRuff(pyPaths)...)
+		}
 
 		if format == "json" {
 			report.FormatJSON(os.Stdout, violations)
