@@ -7,28 +7,27 @@ import (
 	"os"
 
 	"github.com/park-jun-woo/filefunc/internal/model"
-	"github.com/park-jun-woo/filefunc/internal/parse"
 )
 
 // BuildCallGraph builds a bidirectional call graph from parsed Go files.
-func BuildCallGraph(files []*model.GoFile, modulePath string, projFuncs map[string]string) *CallGraph {
+func BuildCallGraph(files []model.SourceFile, modulePath string, projFuncs map[string]string) *CallGraph {
 	g := &CallGraph{
 		Children: make(map[string][]string),
 		Parents:  make(map[string][]string),
 	}
 
-	for _, gf := range files {
-		if gf.IsTest {
+	for _, sf := range files {
+		if sf.IsTestFile() {
 			continue
 		}
-		name := funcName(gf)
+		name := funcName(sf)
 		if name == "" {
 			continue
 		}
-		caller := qualifiedName(gf.Package, name)
-		calls, err := parse.ExtractCalls(gf.Path, modulePath, projFuncs, gf.Package)
+		caller := qualifiedName(sf.GetPackage(), name)
+		calls, err := extractCallsForFile(sf, modulePath, projFuncs)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "[WARN] %s: extract calls failed: %v\n", gf.Path, err)
+			fmt.Fprintf(os.Stderr, "[WARN] %s: extract calls failed: %v\n", sf.GetPath(), err)
 			continue
 		}
 		g.Children[caller] = calls

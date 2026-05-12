@@ -11,18 +11,18 @@ import (
 )
 
 // ScoreBody runs body-based relevance scoring per file and filters by rate.
-func ScoreBody(files []*model.GoFile, prompt string, rate float64, generate func(string) (string, error)) ([]*model.GoFile, map[int]float64, int, error) {
-	var kept []*model.GoFile
+func ScoreBody(files []model.SourceFile, prompt string, rate float64, generate func(string) (string, error)) ([]model.SourceFile, map[int]float64, int, error) {
+	var kept []model.SourceFile
 	keptScores := make(map[int]float64)
 	removed := 0
-	for _, gf := range files {
-		src, err := os.ReadFile(gf.Path)
+	for _, sf := range files {
+		src, err := os.ReadFile(sf.GetPath())
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "warning: skipping %s: %v\n", gf.Path, err)
+			fmt.Fprintf(os.Stderr, "warning: skipping %s: %v\n", sf.GetPath(), err)
 			removed++
 			continue
 		}
-		body := parse.ExtractFuncSource(gf.Path, src)
+		body := parse.ExtractFuncSource(sf.GetPath(), src)
 		if body == "" {
 			removed++
 			continue
@@ -39,7 +39,7 @@ func ScoreBody(files []*model.GoFile, prompt string, rate float64, generate func
 		}
 		if s >= rate {
 			keptScores[len(kept)] = s
-			kept = append(kept, gf)
+			kept = append(kept, sf)
 		} else {
 			removed++
 		}

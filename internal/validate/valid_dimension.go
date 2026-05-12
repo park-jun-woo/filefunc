@@ -11,18 +11,19 @@ import (
 
 // RuleA16 returns (true, []model.Violation) if the file violates A16.
 func ValidDimension(claim any, ground any, backing any) (bool, any) {
-	gf := ground.(*ValidateGround).File
-	if len(gf.Funcs) == 0 || gf.Annotation == nil {
+	sf := ground.(*ValidateGround).File
+	ann := sf.GetAnnotation()
+	if len(sf.GetFuncs()) == 0 || ann == nil {
 		return false, nil
 	}
-	dim := gf.Annotation.Func["dimension"]
+	dim := ann.Func["dimension"]
 	if dim == "" {
 		return false, nil
 	}
 	n, err := strconv.Atoi(dim)
 	if err != nil || n < 1 {
 		return true, []model.Violation{{
-			File:    gf.Path,
+			File:    sf.GetPath(),
 			Rule:    "A16",
 			Level:   "ERROR",
 			Message: fmt.Sprintf("dimension value must be a positive integer, got %q", dim),

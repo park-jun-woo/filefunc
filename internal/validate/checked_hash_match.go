@@ -15,24 +15,25 @@ func CheckedHashMatch(claim any, ground any, backing any) (bool, any) {
 	if !g.HasChecked {
 		return false, nil
 	}
-	gf := g.File
-	if gf.Annotation == nil || len(gf.Annotation.Checked) == 0 {
+	sf := g.File
+	ann := sf.GetAnnotation()
+	if ann == nil || len(ann.Checked) == 0 {
 		return false, nil
 	}
 
-	savedHash := gf.Annotation.Checked["hash"]
+	savedHash := ann.Checked["hash"]
 	if savedHash == "" {
 		return false, nil
 	}
 
-	currentHash, err := parse.CalcBodyHash(gf.Path)
+	currentHash, err := parse.CalcBodyHash(sf.GetPath())
 	if err != nil {
 		return false, nil
 	}
 
 	if savedHash != currentHash {
 		return true, []model.Violation{{
-			File:    gf.Path,
+			File:    sf.GetPath(),
 			Rule:    "A7",
 			Level:   "ERROR",
 			Message: fmt.Sprintf("checked hash mismatch: saved=%s current=%s (run filefunc llmc to re-verify)", savedHash, currentHash),

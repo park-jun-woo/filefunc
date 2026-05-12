@@ -7,16 +7,16 @@ import "github.com/park-jun-woo/filefunc/internal/model"
 // ExistsWhen returns (true, []model.Violation) if a precondition is met but the required target is missing.
 func ExistsWhen(claim any, ground any, backing any) (bool, any) {
 	b := backing.(*ExistsWhenBacking)
-	gf := ground.(*ValidateGround).File
+	sf := ground.(*ValidateGround).File
 
-	if !checkWhen(gf, b.When) {
+	if !checkWhen(sf, b.When) {
 		return false, nil
 	}
-	if checkNeed(gf, b.Need) {
+	if checkNeed(sf, b.Need) {
 		return false, nil
 	}
 	return true, []model.Violation{{
-		File:    gf.Path,
+		File:    sf.GetPath(),
 		Rule:    b.Rule,
 		Level:   b.Level,
 		Message: b.Message,

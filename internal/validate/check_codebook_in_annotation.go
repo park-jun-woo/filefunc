@@ -8,10 +8,11 @@ import (
 	"github.com/park-jun-woo/filefunc/internal/model"
 )
 
-func checkCodebookInAnnotation(gf *model.GoFile, cb *model.Codebook, rule string) (bool, any) {
-	meta := gf.Annotation.Func
+func checkCodebookInAnnotation(sf model.SourceFile, cb *model.Codebook, rule string) (bool, any) {
+	ann := sf.GetAnnotation()
+	meta := ann.Func
 	if len(meta) == 0 {
-		meta = gf.Annotation.Type
+		meta = ann.Type
 	}
 	if len(meta) == 0 {
 		return false, nil
@@ -20,7 +21,7 @@ func checkCodebookInAnnotation(gf *model.GoFile, cb *model.Codebook, rule string
 	for key := range cb.Required {
 		if _, ok := meta[key]; !ok {
 			violations = append(violations, model.Violation{
-				File:    gf.Path,
+				File:    sf.GetPath(),
 				Rule:    rule,
 				Level:   "ERROR",
 				Message: fmt.Sprintf("required codebook key %q missing in annotation", key),

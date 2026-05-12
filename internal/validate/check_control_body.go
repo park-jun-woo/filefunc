@@ -14,10 +14,10 @@ import (
 // PURE body exceeds 10 lines. PURE = total body lines minus inner control statement lines.
 // For switch/type-switch, each case clause is checked individually.
 func CheckControlBody(claim any, ground any, backing any) (bool, any) {
-	gf := ground.(*ValidateGround).File
+	sf := ground.(*ValidateGround).File
 
 	fset := token.NewFileSet()
-	f, err := parser.ParseFile(fset, gf.Path, nil, 0)
+	f, err := parser.ParseFile(fset, sf.GetPath(), nil, 0)
 	if err != nil {
 		return false, nil
 	}
@@ -30,7 +30,7 @@ func CheckControlBody(claim any, ground any, backing any) (bool, any) {
 			continue
 		}
 		for _, stmt := range fd.Body.List {
-			violations = checkQ4Stmt(fset, gf.Path, fd.Name.Name, stmt, violations)
+			violations = checkQ4Stmt(fset, sf.GetPath(), fd.Name.Name, stmt, violations)
 		}
 	}
 

@@ -10,17 +10,18 @@ import (
 )
 
 // FormatResult writes the final context pipeline results.
-func FormatResult(w io.Writer, files []*model.GoFile, scores map[int]float64) {
+func FormatResult(w io.Writer, files []model.SourceFile, scores map[int]float64) {
 	fmt.Fprintln(w, "\nResults:")
-	for i, gf := range files {
-		name := funcName(gf)
+	for i, sf := range files {
+		name := funcName(sf)
 		var score float64
 		if scores != nil {
 			score = scores[i]
 		}
 		what := ""
-		if gf.Annotation != nil {
-			what = gf.Annotation.What
+		ann := sf.GetAnnotation()
+		if ann != nil {
+			what = ann.What
 		}
 		fmt.Fprintf(w, "  %s [%.2f] (what=\"%s\")\n", name, score, what)
 	}

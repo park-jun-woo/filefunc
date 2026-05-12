@@ -9,46 +9,42 @@ import (
 	"github.com/park-jun-woo/filefunc/internal/annotate"
 	"github.com/park-jun-woo/filefunc/internal/llm"
 	"github.com/park-jun-woo/filefunc/internal/model"
-	"github.com/park-jun-woo/filefunc/internal/parse"
 )
 
 // ProcessLlmcFile verifies a single file with LLM. Returns "pass", "fail", or "skip".
-func ProcessLlmcFile(gf *model.GoFile, provider llm.Provider, modelName string, threshold float64) string {
-	currentHash, err := parse.CalcBodyHash(gf.Path)
+func ProcessLlmcFile(sf model.SourceFile, provider llm.Provider, modelName string, threshold float64) string {
+	currentHash, err := CalcBodyHashForLang(sf)
 	if err != nil {
 		return "skip"
 	}
 
-	if len(gf.Annotation.Checked) > 0 && gf.Annotation.Checked["hash"] == currentHash {
+	ann := sf.GetAnnotation()
+	if len(ann.Checked) > 0 && ann.Checked["hash"] == currentHash {
 		return "skip"
 	}
 
-	src, err := os.ReadFile(gf.Path)
-	if err != nil {
-		return "skip"
-	}
-
-	body := parse.ExtractFuncSource(gf.Path, src)
+	body := ExtractBodyForLlmc(sf)
 	if body == "" {
 		return "skip"
 	}
 
-	score, err := llm.VerifyWhat(provider, gf.Annotation.What, body)
+	score, err := llm.VerifyWhat(provider, ann.What, body)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "[ERROR] %s: LLM error: %v\n", gf.Path, err)
+		fmt.Fprintf(os.Stderr, "[ERROR] %s: LLM error: %v\n", sf.GetPath(), err)
 		return "fail"
 	}
 
+	prefix := AnnotationPrefixForLang(sf)
 	if score < threshold {
-		fmt.Fprintf(os.Stderr, "[FAIL] %s: score=%.2f (threshold=%.2f) — update //ff:what\n", gf.Path, score, threshold)
+		fmt.Fprintf(os.Stderr, "[FAIL] %s: score=%.2f (threshold=%.2f) — update %swhat\n", sf.GetPath(), score, threshold, prefix)
 		return "fail"
 	}
 
-	_, err = annotate.WriteAnnotationLine(gf.Path, "checked", fmt.Sprintf("llm=%s hash=%s", modelName, currentHash))
+	_, err = annotate.WriteAnnotationLine(sf.GetPath(), "checked", fmt.Sprintf("llm=%s hash=%s", modelName, currentHash))
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "[ERROR] %s: failed to write checked annotation: %v\n", gf.Path, err)
+		fmt.Fprintf(os.Stderr, "[ERROR] %s: failed to write checked annotation: %v\n", sf.GetPath(), err)
 		return "fail"
 	}
-	fmt.Printf("[PASS] %s: score=%.2f\n", gf.Path, score)
+	fmt.Printf("[PASS] %s: score=%.2f\n", sf.GetPath(), score)
 	return "pass"
 }

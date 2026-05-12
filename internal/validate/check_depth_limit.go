@@ -10,14 +10,14 @@ import (
 
 // RuleQ1 returns (true, []model.Violation) if the file violates Q1 (nesting depth exceeds limit).
 func CheckDepthLimit(claim any, ground any, backing any) (bool, any) {
-	gf := ground.(*ValidateGround).File
-	limit := depthLimit(gf)
-	if gf.MaxDepth > limit {
+	sf := ground.(*ValidateGround).File
+	limit := depthLimit(sf)
+	if sf.GetMaxDepth() > limit {
 		return true, []model.Violation{{
-			File:    gf.Path,
+			File:    sf.GetPath(),
 			Rule:    "Q1",
 			Level:   "ERROR",
-			Message: fmt.Sprintf("nesting depth %d exceeds maximum of %d", gf.MaxDepth, limit),
+			Message: fmt.Sprintf("nesting depth %d exceeds maximum of %d", sf.GetMaxDepth(), limit),
 		}}
 	}
 	return false, nil

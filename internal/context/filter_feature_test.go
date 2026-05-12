@@ -9,10 +9,10 @@ import (
 )
 
 func TestFilterFeature(t *testing.T) {
-	files := []*model.GoFile{
-		{Annotation: &model.Annotation{Func: map[string]string{"feature": "validate"}}},
-		{Annotation: &model.Annotation{Func: map[string]string{"feature": "chain"}}},
-		{Annotation: nil},
+	files := []model.SourceFile{
+		&model.GoFile{Annotation: &model.Annotation{Func: map[string]string{"feature": "validate"}}},
+		&model.GoFile{Annotation: &model.Annotation{Func: map[string]string{"feature": "chain"}}},
+		&model.GoFile{Annotation: nil},
 	}
 	got := FilterFeature(files, []string{"validate"})
 	if len(got) != 1 {

@@ -11,8 +11,8 @@ import (
 )
 
 // RunPipeline executes the 4-stage context pipeline.
-func RunPipeline(w io.Writer, files []*model.GoFile, cfg PipelineConfig) error {
-	var filtered []*model.GoFile
+func RunPipeline(w io.Writer, files []model.SourceFile, cfg PipelineConfig) error {
+	var filtered []model.SourceFile
 
 	if cfg.Search != "" {
 		// --search: LLM 스킵, 직접 필터

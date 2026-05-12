@@ -6,12 +6,12 @@ import "github.com/park-jun-woo/filefunc/internal/model"
 
 // RunAll executes all validation rules via the toulmin defeats graph.
 // Verdict > 0 means the warrant holds (violation). Verdict <= 0 means defeated (exception).
-func RunAll(files []*model.GoFile, cb *model.Codebook) []model.Violation {
+func RunAll(files []model.SourceFile, cb *model.Codebook) []model.Violation {
 	var violations []model.Violation
 	hasChecked := HasAnyChecked(files)
-	for _, gf := range files {
-		ground := &ValidateGround{File: gf, Codebook: cb, HasChecked: hasChecked}
-		violations = append(violations, evaluateFile(gf, cb, ground)...)
+	for _, sf := range files {
+		ground := &ValidateGround{File: sf, Codebook: cb, HasChecked: hasChecked}
+		violations = append(violations, evaluateFile(sf, cb, ground)...)
 	}
 	return violations
 }

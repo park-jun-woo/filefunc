@@ -6,11 +6,12 @@ import "github.com/park-jun-woo/filefunc/internal/model"
 
 // evaluateFile runs the defeats graph on a single file and collects violations
 // from the evidence returned by each rule function.
-func evaluateFile(gf *model.GoFile, cb *model.Codebook, ground *ValidateGround) []model.Violation {
-	results, err := ValidateGraph.Evaluate(gf.Path, ground)
+func evaluateFile(sf model.SourceFile, cb *model.Codebook, ground *ValidateGround) []model.Violation {
+	graph := selectGraph(sf)
+	results, err := graph.Evaluate(sf.GetPath(), ground)
 	if err != nil {
 		return []model.Violation{{
-			File:    gf.Path,
+			File:    sf.GetPath(),
 			Rule:    "EVAL",
 			Level:   "ERROR",
 			Message: err.Error(),

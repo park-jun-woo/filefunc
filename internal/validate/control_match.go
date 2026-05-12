@@ -11,19 +11,20 @@ import (
 // does not match the actual AST control structure at depth 1.
 func ControlMatch(claim any, ground any, backing any) (bool, any) {
 	b := backing.(*ControlMatchBacking)
-	gf := ground.(*ValidateGround).File
-	if len(gf.Funcs) == 0 || gf.Annotation == nil {
+	sf := ground.(*ValidateGround).File
+	ann := sf.GetAnnotation()
+	if len(sf.GetFuncs()) == 0 || ann == nil {
 		return false, nil
 	}
-	if gf.Annotation.Func["control"] != b.Control {
+	if ann.Func["control"] != b.Control {
 		return false, nil
 	}
 
 	if b.MustHave != "" {
-		actual := parse.DetectControl(gf.Path)
+		actual := parse.DetectControl(sf.GetPath())
 		if actual != b.Control {
 			return true, []model.Violation{{
-				File:    gf.Path,
+				File:    sf.GetPath(),
 				Rule:    b.Rule,
 				Level:   "ERROR",
 				Message: b.Message,
@@ -33,7 +34,7 @@ func ControlMatch(claim any, ground any, backing any) (bool, any) {
 	}
 
 	if b.MustNotHave != "" {
-		return checkForbiddenControl(gf, b)
+		return checkForbiddenControl(sf, b)
 	}
 
 	return false, nil

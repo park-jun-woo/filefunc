@@ -4,12 +4,9 @@ package cli
 
 import (
 	"fmt"
-	"os"
 	"path/filepath"
 
 	"github.com/park-jun-woo/filefunc/internal/llm"
-	"github.com/park-jun-woo/filefunc/internal/model"
-	"github.com/park-jun-woo/filefunc/internal/parse"
 	"github.com/park-jun-woo/filefunc/internal/walk"
 	"github.com/spf13/cobra"
 )
@@ -24,7 +21,13 @@ var llmcCmd = &cobra.Command{
 			root = args[0]
 		}
 
-		if err := CheckProjectRoot(root); err != nil {
+		langFlag, _ := cmd.Flags().GetString("lang")
+		lang, err := ResolveLang(langFlag, root)
+		if err != nil {
+			return err
+		}
+
+		if err := CheckProjectRootForLang(root, lang); err != nil {
 			return err
 		}
 
@@ -43,27 +46,17 @@ var llmcCmd = &cobra.Command{
 		}
 
 		ignorePatterns := walk.ParseFFIgnore(filepath.Join(root, ".ffignore"))
-		paths, err := walk.WalkGoFiles(root, ignorePatterns)
+		files, err := LoadFilesForLang(root, lang, ignorePatterns)
 		if err != nil {
-			return fmt.Errorf("walking files: %w", err)
-		}
-
-		var files []*model.GoFile
-		for _, p := range paths {
-			gf, err := parse.ParseGoFile(p)
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "warning: skipping %s: %v\n", p, err)
-				continue
-			}
-			files = append(files, gf)
+			return err
 		}
 
 		passed, failed, skipped := 0, 0, 0
-		for _, gf := range files {
-			if gf.IsTest || len(gf.Funcs) == 0 || gf.Annotation == nil {
+		for _, sf := range files {
+			if sf.IsTestFile() || len(sf.GetFuncs()) == 0 || sf.GetAnnotation() == nil {
 				continue
 			}
-			switch ProcessLlmcFile(gf, provider, modelName, threshold) {
+			switch ProcessLlmcFile(sf, provider, modelName, threshold) {
 			case "skip":
 				skipped++
 			case "pass":
@@ -86,5 +79,6 @@ func init() {
 	llmcCmd.Flags().String("model", EnvOrDefault("FILEFUNC_LLM_MODEL", "gpt-oss:20b"), "LLM model name")
 	llmcCmd.Flags().String("endpoint", EnvOrDefault("FILEFUNC_LLM_ENDPOINT", "http://localhost:11434"), "LLM API endpoint")
 	llmcCmd.Flags().Float64("threshold", 0.8, "minimum score for passing (0.0~1.0)")
+	llmcCmd.Flags().String("lang", "", "language (go or python; auto-detect if omitted)")
 	rootCmd.AddCommand(llmcCmd)
 }

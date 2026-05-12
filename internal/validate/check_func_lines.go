@@ -14,15 +14,15 @@ import (
 // Q2: func > 1000 lines → ERROR.
 // Q3: control=sequence func > 100 lines → ERROR.
 func CheckFuncLines(claim any, ground any, backing any) (bool, any) {
-	gf := ground.(*ValidateGround).File
+	sf := ground.(*ValidateGround).File
 
 	fset := token.NewFileSet()
-	f, err := parser.ParseFile(fset, gf.Path, nil, 0)
+	f, err := parser.ParseFile(fset, sf.GetPath(), nil, 0)
 	if err != nil {
 		return false, nil
 	}
 
-	q3Limit, q3Applies := Q3Limit(gf)
+	q3Limit, q3Applies := Q3Limit(sf)
 	var violations []model.Violation
 
 	for _, decl := range f.Decls {
@@ -30,7 +30,7 @@ func CheckFuncLines(claim any, ground any, backing any) (bool, any) {
 		if !ok || fd.Body == nil {
 			continue
 		}
-		violations = checkOneFuncLines(fset, gf.Path, fd, q3Limit, q3Applies, violations)
+		violations = checkOneFuncLines(fset, sf.GetPath(), fd, q3Limit, q3Applies, violations)
 	}
 
 	if len(violations) > 0 {

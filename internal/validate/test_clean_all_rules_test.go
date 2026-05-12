@@ -16,6 +16,6 @@ func TestClean_AllRules(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	violations := RunAll([]*model.GoFile{gf}, nil)
+	violations := RunAll([]model.SourceFile{gf}, nil)
 	expectNoViolation(t, violations)
 }

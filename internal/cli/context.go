@@ -12,7 +12,6 @@ import (
 	"path/filepath"
 
 	ffcontext "github.com/park-jun-woo/filefunc/internal/context"
-	"github.com/park-jun-woo/filefunc/internal/model"
 	"github.com/park-jun-woo/filefunc/internal/parse"
 	"github.com/park-jun-woo/filefunc/internal/walk"
 	"github.com/spf13/cobra"
@@ -25,6 +24,7 @@ var contextCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		prompt := args[0]
 		root, _ := cmd.Flags().GetString("root")
+		langFlag, _ := cmd.Flags().GetString("lang")
 		depth, _ := cmd.Flags().GetInt("depth")
 		whatRate, _ := cmd.Flags().GetFloat64("what-rate")
 		bodyRate, _ := cmd.Flags().GetFloat64("body-rate")
@@ -32,7 +32,12 @@ var contextCmd = &cobra.Command{
 		endpoint, _ := cmd.Flags().GetString("endpoint")
 		search, _ := cmd.Flags().GetString("search")
 
-		if err := CheckProjectRoot(root); err != nil {
+		lang, err := ResolveLang(langFlag, root)
+		if err != nil {
+			return err
+		}
+
+		if err := CheckProjectRootForLang(root, lang); err != nil {
 			return err
 		}
 
@@ -42,18 +47,9 @@ var contextCmd = &cobra.Command{
 		}
 
 		ignorePatterns := walk.ParseFFIgnore(filepath.Join(root, ".ffignore"))
-		paths, err := walk.WalkGoFiles(root, ignorePatterns)
+		files, err := LoadFilesForLang(root, lang, ignorePatterns)
 		if err != nil {
 			return err
-		}
-
-		var files []*model.GoFile
-		for _, p := range paths {
-			gf, err := parse.ParseGoFile(p)
-			if err != nil {
-				continue
-			}
-			files = append(files, gf)
 		}
 
 		generate := func(p string) (string, error) {
@@ -107,5 +103,6 @@ func init() {
 	contextCmd.Flags().String("model", "gpt-oss:20b", "ollama model name")
 	contextCmd.Flags().String("endpoint", "http://localhost:11434", "ollama endpoint")
 	contextCmd.Flags().String("search", "", "direct annotation filter (e.g. \"feature=validate type=rule\")")
+	contextCmd.Flags().String("lang", "", "language (go or python; auto-detect if omitted)")
 	rootCmd.AddCommand(contextCmd)
 }

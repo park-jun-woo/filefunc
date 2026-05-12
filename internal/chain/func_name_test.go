@@ -11,7 +11,7 @@ import (
 func TestFuncName(t *testing.T) {
 	tests := []struct {
 		name string
-		gf   *model.GoFile
+		sf   model.SourceFile
 		want string
 	}{
 		{"func", &model.GoFile{Funcs: []string{"Foo"}}, "Foo"},
@@ -20,7 +20,7 @@ func TestFuncName(t *testing.T) {
 		{"empty", &model.GoFile{}, ""},
 	}
 	for _, tt := range tests {
-		got := funcName(tt.gf)
+		got := funcName(tt.sf)
 		if got != tt.want {
 			t.Errorf("funcName(%s) = %q, want %q", tt.name, got, tt.want)
 		}

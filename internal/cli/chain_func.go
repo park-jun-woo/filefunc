@@ -18,6 +18,7 @@ var chainFuncCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		target := args[0]
 		root, _ := cmd.Flags().GetString("root")
+		langFlag, _ := cmd.Flags().GetString("lang")
 		chon, _ := cmd.Flags().GetInt("chon")
 		childDepth, _ := cmd.Flags().GetInt("child-depth")
 		parentDepth, _ := cmd.Flags().GetInt("parent-depth")
@@ -32,11 +33,16 @@ var chainFuncCmd = &cobra.Command{
 			return fmt.Errorf("--prompt is required when --rate is specified")
 		}
 
-		if err := CheckProjectRoot(root); err != nil {
+		lang, err := ResolveLang(langFlag, root)
+		if err != nil {
 			return err
 		}
 
-		g, files, err := BuildGraph(root)
+		if err := CheckProjectRootForLang(root, lang); err != nil {
+			return err
+		}
+
+		g, files, err := BuildGraphForLang(root, lang)
 		if err != nil {
 			return err
 		}
@@ -60,7 +66,7 @@ var chainFuncCmd = &cobra.Command{
 		}
 
 		metaFlags := chain.ParseMetaFlags(metaRaw)
-		var fileMap map[string]*model.GoFile
+		var fileMap map[string]model.SourceFile
 		if len(metaFlags) > 0 || prompt != "" {
 			fileMap = chain.BuildFuncFileMap(files)
 		}
@@ -93,5 +99,6 @@ func init() {
 	chainFuncCmd.Flags().String("model", "Qwen/Qwen3-Reranker-0.6B", "reranker model name")
 	chainFuncCmd.Flags().String("score-endpoint", "http://localhost:8000", "vLLM endpoint for reranker")
 	chainFuncCmd.Flags().String("package", "", "limit to funcs in this Go package")
+	chainFuncCmd.Flags().String("lang", "", "language (go or python; auto-detect if omitted)")
 	chainCmd.AddCommand(chainFuncCmd)
 }

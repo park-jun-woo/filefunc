@@ -9,15 +9,16 @@ import (
 )
 
 // ScoreWhat runs what-based relevance scoring per file and filters by rate.
-func ScoreWhat(files []*model.GoFile, prompt string, rate float64, generate func(string) (string, error)) ([]*model.GoFile, map[int]float64, int, error) {
-	var kept []*model.GoFile
+func ScoreWhat(files []model.SourceFile, prompt string, rate float64, generate func(string) (string, error)) ([]model.SourceFile, map[int]float64, int, error) {
+	var kept []model.SourceFile
 	keptScores := make(map[int]float64)
 	removed := 0
-	for _, gf := range files {
-		name := funcName(gf)
+	for _, sf := range files {
+		name := funcName(sf)
 		what := ""
-		if gf.Annotation != nil {
-			what = gf.Annotation.What
+		ann := sf.GetAnnotation()
+		if ann != nil {
+			what = ann.What
 		}
 		p := fmt.Sprintf("사용자 작업과 함수의 관련도를 0.0~1.0으로 평가. 직접 수정 대상 0.8+, 영향 0.4~0.7, 무관 0.2 이하.\n\n작업: \"%s\"\n함수: %s: \"%s\"\n\n점수만 출력. 예: 0.80", prompt, name, what)
 		resp, err := generate(p)
@@ -31,7 +32,7 @@ func ScoreWhat(files []*model.GoFile, prompt string, rate float64, generate func
 		}
 		if s >= rate {
 			keptScores[len(kept)] = s
-			kept = append(kept, gf)
+			kept = append(kept, sf)
 		} else {
 			removed++
 		}

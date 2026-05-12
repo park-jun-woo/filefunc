@@ -7,10 +7,10 @@ import "github.com/park-jun-woo/filefunc/internal/model"
 // CountMax returns (true, []model.Violation) if the count of the specified field exceeds Max.
 func CountMax(claim any, ground any, backing any) (bool, any) {
 	b := backing.(*CountMaxBacking)
-	gf := ground.(*ValidateGround).File
-	if countField(gf, b.Field) > b.Max {
+	sf := ground.(*ValidateGround).File
+	if countField(sf, b.Field) > b.Max {
 		return true, []model.Violation{{
-			File:    gf.Path,
+			File:    sf.GetPath(),
 			Rule:    b.Rule,
 			Level:   "ERROR",
 			Message: b.Message,

@@ -10,7 +10,7 @@ import (
 
 // ScoreRelevance scores each chon=2+ result against the prompt using vLLM reranker.
 // Returns a map of result index → score.
-func ScoreRelevance(results []ChonResult, prompt string, endpoint string, modelName string, fileMap map[string]*model.GoFile) (map[int]float64, error) {
+func ScoreRelevance(results []ChonResult, prompt string, endpoint string, modelName string, fileMap map[string]model.SourceFile) (map[int]float64, error) {
 	scores := make(map[int]float64)
 	for i, r := range results {
 		if r.Chon <= 1 {

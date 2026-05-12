@@ -10,18 +10,18 @@ import (
 	"github.com/park-jun-woo/filefunc/internal/parse"
 )
 
-func checkForbiddenControl(gf *model.GoFile, b *ControlMatchBacking) (bool, any) {
+func checkForbiddenControl(sf model.SourceFile, b *ControlMatchBacking) (bool, any) {
 	for _, f := range strings.Split(b.MustNotHave, "|") {
-		if !hasForbidden(gf.Path, f) {
+		if !hasForbidden(sf.GetPath(), f) {
 			continue
 		}
 		msg := b.Message
 		if strings.Contains(msg, "%s") {
-			actual := parse.DetectControl(gf.Path)
+			actual := parse.DetectControl(sf.GetPath())
 			msg = fmt.Sprintf(b.Message, actual, actual)
 		}
 		return true, []model.Violation{{
-			File:    gf.Path,
+			File:    sf.GetPath(),
 			Rule:    b.Rule,
 			Level:   "ERROR",
 			Message: msg,

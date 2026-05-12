@@ -6,17 +6,17 @@ package validate
 func InCodebook(claim any, ground any, backing any) (bool, any) {
 	b := backing.(*InCodebookBacking)
 	g := ground.(*ValidateGround)
-	gf := g.File
+	sf := g.File
 	cb := g.Codebook
-	if cb == nil || gf.Annotation == nil {
+	if cb == nil || sf.GetAnnotation() == nil {
 		return false, nil
 	}
 
 	switch b.Direction {
 	case "value→codebook":
-		return checkValuesInCodebook(gf, cb, b.Rule)
+		return checkValuesInCodebook(sf, cb, b.Rule)
 	case "codebook→annotation":
-		return checkCodebookInAnnotation(gf, cb, b.Rule)
+		return checkCodebookInAnnotation(sf, cb, b.Rule)
 	}
 	return false, nil
 }

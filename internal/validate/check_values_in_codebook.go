@@ -8,24 +8,25 @@ import (
 	"github.com/park-jun-woo/filefunc/internal/model"
 )
 
-func checkValuesInCodebook(gf *model.GoFile, cb *model.Codebook, rule string) (bool, any) {
+func checkValuesInCodebook(sf model.SourceFile, cb *model.Codebook, rule string) (bool, any) {
+	ann := sf.GetAnnotation()
 	var violations []model.Violation
-	for key, val := range gf.Annotation.Func {
+	for key, val := range ann.Func {
 		allowed := AllowedValues(cb, key)
 		if allowed != nil && !Contains(allowed, val) {
 			violations = append(violations, model.Violation{
-				File:    gf.Path,
+				File:    sf.GetPath(),
 				Rule:    rule,
 				Level:   "ERROR",
 				Message: fmt.Sprintf("codebook has no %s=%s", key, val),
 			})
 		}
 	}
-	for key, val := range gf.Annotation.Type {
+	for key, val := range ann.Type {
 		allowed := AllowedValues(cb, key)
 		if allowed != nil && !Contains(allowed, val) {
 			violations = append(violations, model.Violation{
-				File:    gf.Path,
+				File:    sf.GetPath(),
 				Rule:    rule,
 				Level:   "ERROR",
 				Message: fmt.Sprintf("codebook has no %s=%s", key, val),

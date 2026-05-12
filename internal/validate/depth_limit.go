@@ -8,15 +8,16 @@ import (
 	"github.com/park-jun-woo/filefunc/internal/model"
 )
 
-// depthLimit returns the maximum allowed nesting depth for a GoFile.
+// depthLimit returns the maximum allowed nesting depth for a SourceFile.
 // sequence=2, selection=2, iteration=dimension+1.
-func depthLimit(gf *model.GoFile) int {
-	if gf.Annotation == nil {
+func depthLimit(sf model.SourceFile) int {
+	ann := sf.GetAnnotation()
+	if ann == nil {
 		return 2
 	}
-	control := gf.Annotation.Func["control"]
+	control := ann.Func["control"]
 	if control == "iteration" {
-		dim := gf.Annotation.Func["dimension"]
+		dim := ann.Func["dimension"]
 		n, err := strconv.Atoi(dim)
 		if err != nil || n < 1 {
 			return 2

@@ -9,11 +9,11 @@ import (
 )
 
 func TestBuildCallGraph(t *testing.T) {
-	files := []*model.GoFile{
-		{Package: "testdata", Path: "testdata/caller.go", Funcs: []string{"Caller"}},
-		{Package: "testdata", Path: "testdata/helper_a.go", Funcs: []string{"HelperA"}},
-		{Package: "testdata", Path: "testdata/helper_b.go", Funcs: []string{"HelperB"}},
-		{Package: "testdata", Path: "testdata/leaf.go", Funcs: []string{"Leaf"}},
+	files := []model.SourceFile{
+		&model.GoFile{Package: "testdata", Path: "testdata/caller.go", Funcs: []string{"Caller"}},
+		&model.GoFile{Package: "testdata", Path: "testdata/helper_a.go", Funcs: []string{"HelperA"}},
+		&model.GoFile{Package: "testdata", Path: "testdata/helper_b.go", Funcs: []string{"HelperB"}},
+		&model.GoFile{Package: "testdata", Path: "testdata/leaf.go", Funcs: []string{"Leaf"}},
 	}
 	projFuncs := map[string]string{
 		"Caller":  "testdata",

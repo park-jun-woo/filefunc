@@ -7,7 +7,6 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/park-jun-woo/filefunc/internal/model"
 	"github.com/park-jun-woo/filefunc/internal/parse"
 	"github.com/park-jun-woo/filefunc/internal/report"
 	"github.com/park-jun-woo/filefunc/internal/validate"
@@ -25,7 +24,13 @@ var validateCmd = &cobra.Command{
 			root = args[0]
 		}
 
-		if err := CheckProjectRoot(root); err != nil {
+		langFlag, _ := cmd.Flags().GetString("lang")
+		lang, err := ResolveLang(langFlag, root)
+		if err != nil {
+			return err
+		}
+
+		if err := CheckProjectRootForLang(root, lang); err != nil {
 			return err
 		}
 
@@ -48,19 +53,9 @@ var validateCmd = &cobra.Command{
 		}
 
 		ignorePatterns := walk.ParseFFIgnore(filepath.Join(root, ".ffignore"))
-		paths, err := walk.WalkGoFiles(root, ignorePatterns)
+		files, err := LoadFilesForLang(root, lang, ignorePatterns)
 		if err != nil {
-			return fmt.Errorf("walking files: %w", err)
-		}
-
-		var files []*model.GoFile
-		for _, p := range paths {
-			gf, err := parse.ParseGoFile(p)
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "warning: skipping %s: %v\n", p, err)
-				continue
-			}
-			files = append(files, gf)
+			return err
 		}
 
 		violations := validate.RunAll(files, cb)
@@ -81,5 +76,7 @@ var validateCmd = &cobra.Command{
 func init() {
 	validateCmd.Flags().String("codebook", "", "path to codebook.yaml (default: <project-root>/codebook.yaml)")
 	validateCmd.Flags().String("format", "text", "output format (text or json)")
+	validateCmd.Flags().String("lang", "", "language (go or python; auto-detect if omitted)")
 	rootCmd.AddCommand(validateCmd)
 }
+

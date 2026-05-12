@@ -13,7 +13,7 @@ import (
 )
 
 // BuildGraph builds a call graph from the project at root.
-func BuildGraph(root string) (*chain.CallGraph, []*model.GoFile, error) {
+func BuildGraph(root string) (*chain.CallGraph, []model.SourceFile, error) {
 	modulePath, err := parse.ReadModulePath(filepath.Join(root, "go.mod"))
 	if err != nil {
 		return nil, nil, fmt.Errorf("reading go.mod: %w", err)
@@ -25,7 +25,7 @@ func BuildGraph(root string) (*chain.CallGraph, []*model.GoFile, error) {
 		return nil, nil, fmt.Errorf("walking files: %w", err)
 	}
 
-	var files []*model.GoFile
+	var files []model.SourceFile
 	for _, p := range paths {
 		gf, err := parse.ParseGoFile(p)
 		if err != nil {

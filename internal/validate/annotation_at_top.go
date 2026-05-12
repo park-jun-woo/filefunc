@@ -12,9 +12,9 @@ import (
 
 // RuleA6 returns (true, []model.Violation) if the file violates A6 (annotation not at top).
 func AnnotationAtTop(claim any, ground any, backing any) (bool, any) {
-	gf := ground.(*ValidateGround).File
+	sf := ground.(*ValidateGround).File
 
-	f, err := os.Open(gf.Path)
+	f, err := os.Open(sf.GetPath())
 	if err != nil {
 		return false, nil
 	}
@@ -27,7 +27,7 @@ func AnnotationAtTop(claim any, ground any, backing any) (bool, any) {
 
 		if strings.HasPrefix(line, "//ff:") && seenCode {
 			return true, []model.Violation{{
-				File:    gf.Path,
+				File:    sf.GetPath(),
 				Rule:    "A6",
 				Level:   "ERROR",
 				Message: "//ff: annotation must be at the top of the file",

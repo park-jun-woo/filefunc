@@ -9,13 +9,13 @@ import (
 )
 
 func TestHasFeature(t *testing.T) {
-	gf := &model.GoFile{Annotation: &model.Annotation{
+	var sf model.SourceFile = &model.GoFile{Annotation: &model.Annotation{
 		Func: map[string]string{"feature": "validate"},
 	}}
-	if !hasFeature(gf, "validate") {
+	if !hasFeature(sf, "validate") {
 		t.Error("expected true for feature=validate")
 	}
-	if hasFeature(gf, "chain") {
+	if hasFeature(sf, "chain") {
 		t.Error("expected false for feature=chain")
 	}
 	if hasFeature(&model.GoFile{}, "validate") {

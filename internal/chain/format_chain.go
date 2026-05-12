@@ -14,7 +14,7 @@ import (
 // fileMap: func/method/type name → GoFile mapping. nil = no meta.
 // scores: result index → relevance score. nil = no scoring.
 // removed: number of results removed by rate filter. 0 = no filtering.
-func FormatChain(w io.Writer, start string, results []ChonResult, metaFlags map[string]bool, fileMap map[string]*model.GoFile, scores map[int]float64, removed int) {
+func FormatChain(w io.Writer, start string, results []ChonResult, metaFlags map[string]bool, fileMap map[string]model.SourceFile, scores map[int]float64, removed int) {
 	startDisplay := NameFromQualified(start)
 	fmt.Fprintf(w, "%s%s\n", startDisplay, formatMeta(start, metaFlags, fileMap))
 	startPkg := PkgFromQualified(start)

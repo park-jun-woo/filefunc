@@ -6,14 +6,14 @@ import "github.com/park-jun-woo/filefunc/internal/model"
 
 // FilterByFeature returns func names whose //ff:func or //ff:type annotation control=iteration dimension=1
 // has the given feature value.
-func FilterByFeature(files []*model.GoFile, feature string) []string {
+func FilterByFeature(files []model.SourceFile, feature string) []string {
 	var result []string
-	for _, gf := range files {
-		if !hasFeature(gf, feature) {
+	for _, sf := range files {
+		if !hasFeature(sf, feature) {
 			continue
 		}
-		for _, name := range gf.Funcs {
-			result = append(result, qualifiedName(gf.Package, name))
+		for _, name := range sf.GetFuncs() {
+			result = append(result, qualifiedName(sf.GetPackage(), name))
 		}
 	}
 	return result
