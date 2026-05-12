@@ -87,6 +87,6 @@ func init() {
 	chainFeatureCmd.Flags().Float64("rate", 0, "relevance score threshold (0.0~1.0)")
 	chainFeatureCmd.Flags().String("model", "Qwen/Qwen3-Reranker-0.6B", "reranker model name")
 	chainFeatureCmd.Flags().String("score-endpoint", "http://localhost:8000", "vLLM endpoint for reranker")
-	chainFeatureCmd.Flags().String("lang", "", "language (go or python; auto-detect if omitted)")
+	chainFeatureCmd.Flags().String("lang", "", "language (go, python, or typescript; auto-detect if omitted)")
 	chainCmd.AddCommand(chainFeatureCmd)
 }

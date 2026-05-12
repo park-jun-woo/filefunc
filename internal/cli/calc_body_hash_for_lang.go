@@ -1,5 +1,5 @@
 //ff:func feature=cli type=util control=selection
-//ff:what 언어에 따라 func body 해시를 계산 — Go는 AST 기반, Python은 PythonFile.BodyHash 사용
+//ff:what 언어에 따라 func body 해시를 계산 — Go는 AST, Python/TypeScript는 File.BodyHash 사용
 package cli
 
 import (
@@ -16,6 +16,12 @@ func CalcBodyHashForLang(sf model.SourceFile) (string, error) {
 			return "", nil
 		}
 		return pf.BodyHash, nil
+	case "typescript":
+		tf, ok := sf.(*model.TypeScriptFile)
+		if !ok {
+			return "", nil
+		}
+		return tf.BodyHash, nil
 	default:
 		return parse.CalcBodyHash(sf.GetPath())
 	}

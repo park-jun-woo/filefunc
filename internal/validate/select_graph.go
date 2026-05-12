@@ -12,6 +12,8 @@ func selectGraph(sf model.SourceFile) *toulmin.Graph {
 	switch sf.GetLang() {
 	case "python":
 		return PythonValidateGraph
+	case "typescript":
+		return TypeScriptValidateGraph
 	default:
 		return ValidateGraph
 	}

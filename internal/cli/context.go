@@ -103,6 +103,6 @@ func init() {
 	contextCmd.Flags().String("model", "gpt-oss:20b", "ollama model name")
 	contextCmd.Flags().String("endpoint", "http://localhost:11434", "ollama endpoint")
 	contextCmd.Flags().String("search", "", "direct annotation filter (e.g. \"feature=validate type=rule\")")
-	contextCmd.Flags().String("lang", "", "language (go or python; auto-detect if omitted)")
+	contextCmd.Flags().String("lang", "", "language (go, python, or typescript; auto-detect if omitted)")
 	rootCmd.AddCommand(contextCmd)
 }

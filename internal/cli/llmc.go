@@ -79,6 +79,6 @@ func init() {
 	llmcCmd.Flags().String("model", EnvOrDefault("FILEFUNC_LLM_MODEL", "gpt-oss:20b"), "LLM model name")
 	llmcCmd.Flags().String("endpoint", EnvOrDefault("FILEFUNC_LLM_ENDPOINT", "http://localhost:11434"), "LLM API endpoint")
 	llmcCmd.Flags().Float64("threshold", 0.8, "minimum score for passing (0.0~1.0)")
-	llmcCmd.Flags().String("lang", "", "language (go or python; auto-detect if omitted)")
+	llmcCmd.Flags().String("lang", "", "language (go, python, or typescript; auto-detect if omitted)")
 	rootCmd.AddCommand(llmcCmd)
 }

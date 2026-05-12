@@ -17,6 +17,11 @@ Thumbs.db
 # Go
 vendor/
 
+# Node
+node_modules/
+package.json
+package-lock.json
+
 # Local files
 files/
 .whyso/

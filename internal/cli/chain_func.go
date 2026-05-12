@@ -99,6 +99,6 @@ func init() {
 	chainFuncCmd.Flags().String("model", "Qwen/Qwen3-Reranker-0.6B", "reranker model name")
 	chainFuncCmd.Flags().String("score-endpoint", "http://localhost:8000", "vLLM endpoint for reranker")
 	chainFuncCmd.Flags().String("package", "", "limit to funcs in this Go package")
-	chainFuncCmd.Flags().String("lang", "", "language (go or python; auto-detect if omitted)")
+	chainFuncCmd.Flags().String("lang", "", "language (go, python, or typescript; auto-detect if omitted)")
 	chainCmd.AddCommand(chainFuncCmd)
 }

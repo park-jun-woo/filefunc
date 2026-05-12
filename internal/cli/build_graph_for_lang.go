@@ -1,5 +1,5 @@
 //ff:func feature=cli type=util control=selection
-//ff:what 언어에 따라 Go 또는 Python 호출 그래프 구성을 디스패치
+//ff:what 언어에 따라 Go, Python, TypeScript 호출 그래프 구성을 디스패치
 package cli
 
 import (
@@ -16,6 +16,8 @@ func BuildGraphForLang(root string, lang string) (*chain.CallGraph, []model.Sour
 		return BuildGraph(root)
 	case "python":
 		return BuildGraphPython(root)
+	case "typescript":
+		return BuildGraphTypeScript(root)
 	default:
 		return nil, nil, fmt.Errorf("unsupported language: %s", lang)
 	}

@@ -81,7 +81,7 @@ var validateCmd = &cobra.Command{
 func init() {
 	validateCmd.Flags().String("codebook", "", "path to codebook.yaml (default: <project-root>/codebook.yaml)")
 	validateCmd.Flags().String("format", "text", "output format (text or json)")
-	validateCmd.Flags().String("lang", "", "language (go or python; auto-detect if omitted)")
+	validateCmd.Flags().String("lang", "", "language (go, python, or typescript; auto-detect if omitted)")
 	rootCmd.AddCommand(validateCmd)
 }
 
