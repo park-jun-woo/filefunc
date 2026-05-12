@@ -209,7 +209,7 @@ internal/legacy/
 | pytest 통과 | 1155 | 1155 |
 | pytest 실패 | 0 | 0 |
 
-모든 public API, import 경로, 런타임 동작이 원본과 동일. pytest 전체 통과 및 전수 비교로 검증.
+모든 public API, import 경로, 런타임 동작이 원본과 동일. 성능 저하 없음 (import +2% 오차 범위, 나머지 벤치마크 동일). pytest 전체 통과 및 전수 비교로 검증.
 
 ## 학술 근거
 

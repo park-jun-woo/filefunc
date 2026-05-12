@@ -209,7 +209,7 @@ Optional. If absent, nothing is excluded.
 | pytest passed | 1155 | 1155 |
 | pytest failed | 0 | 0 |
 
-All public APIs, import paths, and runtime behavior are identical to the original. Verified by full pytest suite and exhaustive comparison.
+All public APIs, import paths, and runtime behavior are identical to the original. No performance regression (import +2% within noise, all other benchmarks identical). Verified by full pytest suite and exhaustive comparison.
 
 ## Academic basis
 
