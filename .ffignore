@@ -1,4 +1,5 @@
 scripts/
 node_modules/
+examples/
 py_ast.py
 ts_ast.js

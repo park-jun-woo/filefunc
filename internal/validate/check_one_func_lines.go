@@ -11,7 +11,7 @@ import (
 )
 
 func checkOneFuncLines(fset *token.FileSet, path string, fd *ast.FuncDecl, q3Limit int, q3Applies bool, violations []model.Violation) []model.Violation {
-	startLine := fset.Position(fd.Pos()).Line
+	startLine := fset.Position(fd.Body.Pos()).Line // { position (body only, signature excluded)
 	endLine := fset.Position(fd.End()).Line
 	lines := endLine - startLine + 1
 

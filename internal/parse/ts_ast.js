@@ -179,7 +179,7 @@ function parseFile(filePath) {
     if (ts.isFunctionDeclaration(stmt) && stmt.name) {
       const name = stmt.name.text;
       result.functions.push(name);
-      const ln = countLines(stmt, sourceFile);
+      const ln = stmt.body ? countLines(stmt.body, sourceFile) : countLines(stmt, sourceFile);
       result.func_lines[name] = ln;
 
       if (!firstFuncBody && stmt.body) {
@@ -213,7 +213,7 @@ function parseFile(filePath) {
         if (ts.isConstructorDeclaration(member)) {
           result.has_constructor = true;
           const ctorName = className + ".constructor";
-          const ln = countLines(member, sourceFile);
+          const ln = member.body ? countLines(member.body, sourceFile) : countLines(member, sourceFile);
           result.func_lines[ctorName] = ln;
 
           if (member.body) {
@@ -226,7 +226,7 @@ function parseFile(filePath) {
         if (ts.isMethodDeclaration(member) && member.name) {
           const methodName = className + "." + member.name.getText(sourceFile);
           result.methods.push(methodName);
-          const ln = countLines(member, sourceFile);
+          const ln = member.body ? countLines(member.body, sourceFile) : countLines(member, sourceFile);
           result.func_lines[methodName] = ln;
 
           if (!firstFuncBody && member.body) {

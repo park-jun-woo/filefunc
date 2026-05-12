@@ -24,6 +24,8 @@ package-lock.json
 
 # Local files
 files/
+examples/
+
 .whyso/
 plans/
 

@@ -15,8 +15,9 @@ func newPythonValidateGraph() *toulmin.Graph {
 		Message: "file contains multiple funcs; expected 1 file 1 func"}, 1.0)
 	g.Warrant(CountMax, &CountMaxBacking{Field: "Types", Max: 1, Rule: "F2",
 		Message: "file contains multiple classes; expected 1 file 1 class"}, 1.0)
-	g.Warrant(CountMax, &CountMaxBacking{Field: "Methods", Max: 1, Rule: "F3",
-		Message: "file contains multiple methods; expected 1 file 1 method (use Mixin pattern)"}, 1.0)
+	// F3 면제: Python은 1 file 1 class(F2)로 충분. 추후 재검토.
+	// g.Warrant(CountMax, &CountMaxBacking{Field: "Methods", Max: 1, Rule: "F3",
+	// 	Message: "file contains multiple methods; expected 1 file 1 method (use Mixin pattern)"}, 1.0)
 
 	// ── 코드 품질 ──
 	g.Warrant(CheckDepthLimit, nil, 1.0)

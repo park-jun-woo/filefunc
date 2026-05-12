@@ -26,7 +26,7 @@ func CheckBlack(paths []string) []model.Violation {
 		return nil
 	}
 
-	args := append([]string{"--check", "--quiet"}, paths...)
+	args := append([]string{"--check"}, paths...)
 	cmd := exec.Command("black", args...)
 	var stderr bytes.Buffer
 	cmd.Stderr = &stderr

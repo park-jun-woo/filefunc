@@ -1,5 +1,5 @@
-//ff:func feature=validate type=util control=sequence
-//ff:what test: TestTypeScriptF3
+//ff:func feature=validate type=util control=iteration dimension=1
+//ff:what test: TestTypeScriptF3Exempt — TypeScript F3 면제 확인
 package validate
 
 import (
@@ -8,8 +8,12 @@ import (
 	"github.com/park-jun-woo/filefunc/internal/model"
 )
 
-func TestTypeScriptF3(t *testing.T) {
+func TestTypeScriptF3Exempt(t *testing.T) {
 	tf := mustParseTypeScript(t, "testdata/ts_multi_method.ts")
 	violations := RunAll([]model.SourceFile{tf}, nil)
-	expectViolation(t, violations, "F3")
+	for _, v := range violations {
+		if v.Rule == "F3" {
+			t.Errorf("F3 should be exempt for TypeScript, got violation: %s", v.Message)
+		}
+	}
 }

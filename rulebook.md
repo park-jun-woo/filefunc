@@ -16,13 +16,13 @@ Project-level structural rules. Checked before file-level validation.
 
 ## F: File structure rules
 
-| # | Rule | Severity | Go | Python |
-|---|---|---|---|---|
-| F1 | One func per file (filename = func name). Includes test files | ERROR | includes `_test.go` | includes `test_*.py` |
-| F2 | One type per file (filename = type name) | ERROR | type | class |
-| F3 | One method per file | ERROR | `receiver_method.go` | Mixin class (1 class 1 method). `__init__` exempt |
-| F4 | `init()` must not exist alone (requires var or func) | ERROR | Go only | N/A |
-| F5 | Semantically grouped constants allowed in one file | exception | const | module-level UPPER_CASE variables |
+| # | Rule | Severity | Go | Python | TypeScript |
+|---|---|---|---|---|---|
+| F1 | One func per file (filename = func name). Includes test files | ERROR | includes `_test.go` | includes `test_*.py` | includes `*.test.ts` |
+| F2 | One type per file (filename = type name) | ERROR | type | class | class/interface/type |
+| F3 | One method per file | ERROR | `receiver_method.go` | **exempt** (F2 sufficient) | **exempt** (F2 sufficient) |
+| F4 | `init()` must not exist alone (requires var or func) | ERROR | Go only | N/A | N/A |
+| F5 | Semantically grouped constants allowed in one file | exception | const | module-level UPPER_CASE variables | export const |
 
 ### F3 Python Mixin pattern
 
@@ -43,8 +43,8 @@ class Server(ServerStartMixin, ServerStopMixin):
 | # | Rule | Severity | Verification |
 |---|---|---|---|
 | Q1 | Nesting depth: sequence=2, selection=2, iteration=dimension+1 | ERROR | MaxDepth vs limit |
-| Q2 | Func max 1000 lines | ERROR | line count |
-| Q3 | Sequence func max 100 lines | ERROR | line count + control=sequence |
+| Q2 | Func body max 1000 lines (signature excluded) | ERROR | line count |
+| Q3 | Sequence func body max 100 lines (signature excluded) | ERROR | line count + control=sequence |
 | Q4 | Control body PURE > 10 lines → extract to sequence func | ERROR | body lines - inner control lines |
 
 ### Q1 depth target statements

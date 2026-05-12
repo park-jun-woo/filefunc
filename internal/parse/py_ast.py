@@ -239,8 +239,11 @@ def parse_file(path):
     for node in ast.iter_child_nodes(tree):
         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             functions.append(node.name)
-            lines = _count_lines(node)
-            func_lines[node.name] = lines
+            if node.body:
+                body_start = node.body[0].lineno
+                func_lines[node.name] = node.end_lineno - body_start + 1
+            else:
+                func_lines[node.name] = 0
             if first_func_node is None:
                 first_func_node = node
             if _has_control_at_depth1(node, "loop"):
@@ -259,8 +262,11 @@ def parse_file(path):
                     else:
                         method_name = node.name + "." + item.name
                         methods.append(method_name)
-                        lines = _count_lines(item)
-                        func_lines[method_name] = lines
+                        if item.body:
+                            body_start = item.body[0].lineno
+                            func_lines[method_name] = item.end_lineno - body_start + 1
+                        else:
+                            func_lines[method_name] = 0
                         if first_func_node is None:
                             first_func_node = item
                         if _has_control_at_depth1(item, "loop"):
