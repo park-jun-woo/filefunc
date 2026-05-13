@@ -18,6 +18,11 @@ func matchPattern(path string, name string, isDir bool, pattern string) bool {
 		}
 		return strings.HasSuffix(path, dirPattern) || strings.Contains("/"+path+"/", "/"+dirPattern+"/")
 	}
+	if strings.Contains(pattern, "/") {
+		clean := strings.TrimPrefix(path, "./")
+		matched, _ := filepath.Match(pattern, clean)
+		return matched
+	}
 	matched, _ := filepath.Match(pattern, name)
 	return matched
 }
