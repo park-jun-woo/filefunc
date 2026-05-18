@@ -1,6 +1,7 @@
 # filefunc
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![skills.sh](https://skills.sh/b/park-jun-woo/filefunc)](https://skills.sh/park-jun-woo/filefunc)
 
 **One file, one concept.** The filename is the concept name.
 
