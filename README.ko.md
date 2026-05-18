@@ -1,8 +1,80 @@
 # filefunc
 
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 **One file, one concept.** 파일명이 곧 개념명.
 
-LLM 네이티브 Go 응용 개발을 위한 코드 구조 컨벤션 및 CLI 도구. 백엔드 서비스, CLI 도구, 코드 생성기, SSOT 검증기가 대상이다. 알고리즘 라이브러리, 저수준 시스템 프로그래밍은 대상이 아니다.
+**AI 에이전트가 `check_nesting_depth.go`를 열면 함수 하나만 나온다. `utils.go`에서 무관한 헬퍼 19개를 스크롤할 일이 없다.**
+
+Go, Python, TypeScript를 위한 LLM 네이티브 코드 구조 컨벤션 및 CLI 도구. 백엔드 서비스, CLI 도구, 코드 생성기, SSOT 검증기가 대상이다. 알고리즘 라이브러리, 저수준 시스템 프로그래밍은 대상이 아니다.
+
+---
+
+## 적용 사례
+
+### typer — Python CLI 프레임워크 (테스트 1155개, 실패 0)
+
+[fastapi/typer](https://github.com/fastapi/typer)를 `filefunc validate --lang python` 위반 0으로 리팩토링한 [포크](https://github.com/park-jun-woo/typer).
+
+| 지표 | 원본 | 리팩토링 |
+|---|---|---|
+| 소스 파일 | 16 | 197 |
+| filefunc 위반 | 69 | 0 |
+| pytest 통과 | 1155 | 1155 |
+| pytest 실패 | 0 | 0 |
+
+모든 public API, import 경로, 런타임 동작이 원본과 동일. 성능 저하 없음 (import +2% 오차 범위, 나머지 벤치마크 동일). pytest 전체 통과 및 전수 비교로 검증.
+
+### hono — TypeScript 웹 프레임워크 (테스트 4419개, 신규 실패 0)
+
+[honojs/hono](https://github.com/honojs/hono)를 `filefunc validate --lang typescript` 위반 0으로 리팩토링한 [포크](https://github.com/park-jun-woo/hono).
+
+| 지표 | 원본 | 리팩토링 |
+|---|---|---|
+| 소스 파일 | 186 | 626 |
+| filefunc 위반 | 397 | 0 |
+| vitest 통과 | 4419 | 4419 |
+| vitest 실패 | 4 | 4 (기존 결함) |
+
+모든 import 경로, 런타임 동작이 원본과 동일. vitest 전체 통과로 검증.
+
+---
+
+## 빠른 시작
+
+```bash
+npx skills add park-jun-woo/filefunc
+```
+
+```bash
+go install github.com/park-jun-woo/filefunc/cmd/filefunc@latest
+```
+
+소스에서 빌드:
+
+```bash
+git clone https://github.com/park-jun-woo/filefunc.git
+cd filefunc
+go build ./cmd/filefunc/
+```
+
+Go 1.18+ 필요.
+
+---
+
+## AI와 함께 사용하기
+
+위 적용 사례는 AI 에이전트가 리팩토링하고 filefunc이 검증하는 방식으로 측정했다. Claude Code, Codex, Copilot, Cursor — 어떤 에이전트든 된다.
+
+에이전트를 시작하고 프롬프트 하나를 준다:
+
+```
+SKILL.md를 읽고 이 프로젝트를 filefunc validate를 통과하도록 리팩토링해.
+```
+
+AI가 파일을 분리한다. `filefunc validate`가 구조 위반을 즉시 잡는다. 에이전트는 레일 안에서 자유롭고, 레일을 벗어나면 검증이 바로 실패한다.
+
+---
 
 ## 왜
 
@@ -20,21 +92,7 @@ read check_one_file_one_func.go → 함수 1개. 정확히 필요한 것.
 
 filefunc의 1등 시민은 AI 에이전트이지 사람이 아니다. 파일 수 폭발은 기능이지 버그가 아니다 — 파일이 많을수록 파일이 작아지고, read당 노이즈가 줄어든다. 사람의 편의는 뷰 레이어(VSCode 확장 등)에서 해결한다.
 
-## 설치
-
-```bash
-go install github.com/park-jun-woo/filefunc/cmd/filefunc@latest
-```
-
-소스에서 빌드:
-
-```bash
-git clone https://github.com/park-jun-woo/filefunc.git
-cd filefunc
-go build ./cmd/filefunc/
-```
-
-Go 1.18+ 필요.
+---
 
 ## 명령
 
@@ -44,11 +102,31 @@ Go 1.18+ 필요.
 filefunc validate                    # 현재 디렉토리를 프로젝트 루트로
 filefunc validate /path/to/project   # 프로젝트 루트 명시
 filefunc validate --format json
+filefunc validate --lang python      # 언어 지정
 ```
 
-프로젝트 루트에 `go.mod`와 `codebook.yaml` 필수. 읽기 전용. 위반 시 종료 코드 1. `.ffignore` 적용. [toulmin](https://github.com/park-jun-woo/toulmin) 논증 엔진 기반 — 룰은 backing 기반 범용 함수, 예외는 그래프의 defeat로 선언.
+```
+[PASS] 127 files checked, 0 violations
+```
+
+프로젝트 루트에 `go.mod`(Go), `pyproject.toml`(Python), `package.json`(TypeScript) 중 하나와 `codebook.yaml` 필수. 읽기 전용. 위반 시 종료 코드 1. `.ffignore` 적용. 언어는 자동 감지되며, `--lang go|python|typescript`로 지정 가능. [toulmin](https://github.com/park-jun-woo/toulmin) 논증 엔진 기반 — 룰은 backing 기반 범용 함수, 예외는 그래프의 defeat로 선언.
 
 ### chain — 호출 관계 추적
+
+```bash
+filefunc chain func RunAll --chon 2 --meta what
+```
+
+```
+── Func Chain: RunAll (chon=2) ──
+
+  [self]    RunAll                  //ff:what 전체 검증 실행
+  [child]   RunProjectRules         //ff:what P 룰 실행
+  [child]   RunCodebookRules        //ff:what C 룰 실행
+  [child]   RunFileRules            //ff:what F/Q/A 룰 실행
+  [co]      FormatResult            //ff:what 검증 결과 포매팅
+  [co]      PrintReport             //ff:what 검증 결과 출력
+```
 
 ```bash
 filefunc chain func RunAll              # 1촌 (기본, 현재 디렉토리)
@@ -57,9 +135,6 @@ filefunc chain func RunAll --chon 3     # 3촌 (최대)
 filefunc chain func RunAll --child-depth 3   # 호출만
 filefunc chain func RunAll --parent-depth 3  # 호출자만
 filefunc chain feature validate         # feature 내 전체 함수
-filefunc chain func RunAll --root /path/to/project  # 프로젝트 루트 명시
-filefunc chain func RunAll --chon 2 --meta what     # //ff:what 포함
-filefunc chain func RunAll --chon 2 --meta all      # 전체 어노테이션 포함
 filefunc chain func RunAll --chon 2 --meta what \
   --prompt "nesting depth 수정" --rate 0.8           # 리랭커 필터링
 filefunc chain func ParseFile --package funcspec     # 특정 패키지 한정
@@ -128,9 +203,22 @@ filefunc llmc --threshold 0.9
 | `--endpoint` | API 엔드포인트 | `http://localhost:11434` |
 | `--threshold` | 최소 통과 점수 | `0.8` |
 
+---
+
 ## 룰
 
-전체 룰은 [`rulebook.md`](rulebook.md) 참조 (SSOT). 카테고리: P (프로젝트), F (파일 구조), Q (코드 품질), A (어노테이션), C (코드북), N (네이밍).
+전체 룰은 [`rulebook.md`](rulebook.md) 참조 (SSOT). 카테고리: P (프로젝트), I (임포트), F (파일 구조), Q (코드 품질), A (어노테이션), C (코드북), N (네이밍).
+
+검증 순서:
+
+```
+1. P 룰 (프로젝트 레벨) — 단일 언어 검사
+2. C 룰 (코드북) — codebook.yaml 무결성
+3. I 룰 (임포트) — 순환 임포트 탐지 (Python, TypeScript)
+4. F/Q/A 룰 (파일 레벨) — toulmin defeats graph
+```
+
+P 또는 C 위반 시 후속 검증이 차단된다.
 
 ## 어노테이션
 
@@ -153,6 +241,8 @@ func CheckOneFileOneFunc(gf *model.GoFile) []model.Violation {
 | `//ff:what` | 한 줄 설명 — 뭘 하는가 | 예 |
 | `//ff:why` | 설계 결정 — 왜 이렇게 만들었는가 | 아니오 |
 | `//ff:checked` | LLM 검증 서명 | 자동 (`filefunc llmc`) |
+
+Python은 `# ff:func`, `# ff:what` 등을 사용. TypeScript는 `// ff:func`, `// ff:what` 등을 사용.
 
 ## 코드북
 
@@ -184,7 +274,7 @@ optional:
 
 ## .ffignore
 
-모든 filefunc 명령에서 경로를 제외. 프로젝트 루트(`go.mod` 옆)에 `.ffignore` 배치. `.gitignore`와 동일 문법.
+모든 filefunc 명령에서 경로를 제외. 프로젝트 루트(`go.mod` 옆)에 `.ffignore` 배치. `.gitignore`와 동일 문법. 경로 기반 패턴 지원.
 
 ```
 # .ffignore 예시
@@ -196,33 +286,7 @@ internal/legacy/
 
 선택 사항. 없으면 제외 없음.
 
-## 적용 사례
-
-### typer — Python CLI 프레임워크 (테스트 1155개, 실패 0)
-
-[fastapi/typer](https://github.com/fastapi/typer)를 `filefunc validate --lang python` 위반 0으로 리팩토링한 [포크](https://github.com/park-jun-woo/typer).
-
-| 지표 | 원본 | 리팩토링 |
-|---|---|---|
-| 소스 파일 | 16 | 197 |
-| filefunc 위반 | 69 | 0 |
-| pytest 통과 | 1155 | 1155 |
-| pytest 실패 | 0 | 0 |
-
-모든 public API, import 경로, 런타임 동작이 원본과 동일. 성능 저하 없음 (import +2% 오차 범위, 나머지 벤치마크 동일). pytest 전체 통과 및 전수 비교로 검증.
-
-### hono — TypeScript 웹 프레임워크 (테스트 4419개, 신규 실패 0)
-
-[honojs/hono](https://github.com/honojs/hono)를 `filefunc validate --lang typescript` 위반 0으로 리팩토링한 [포크](https://github.com/park-jun-woo/hono).
-
-| 지표 | 원본 | 리팩토링 |
-|---|---|---|
-| 소스 파일 | 186 | 626 |
-| filefunc 위반 | 397 | 0 |
-| vitest 통과 | 4419 | 4419 |
-| vitest 실패 | 4 | 4 (기존 결함) |
-
-모든 import 경로, 런타임 동작이 원본과 동일. vitest 전체 통과로 검증.
+---
 
 ## 학술 근거
 
@@ -234,4 +298,4 @@ internal/legacy/
 
 ## 라이선스
 
-MIT License — [LICENSE](LICENSE) 참조.
+MIT — [LICENSE](LICENSE) 참조.

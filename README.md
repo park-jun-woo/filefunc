@@ -1,8 +1,80 @@
 # filefunc
 
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 **One file, one concept.** The filename is the concept name.
 
-A code structure convention and CLI toolchain for LLM-native Go application development — backend services, CLI tools, code generators, and SSOT validators. Not intended for algorithm libraries, low-level systems programming, or performance-critical hot paths.
+**An AI agent reads `check_nesting_depth.go` and gets exactly one function. No scrolling past 19 irrelevant helpers in `utils.go`.**
+
+A code structure convention and CLI toolchain for LLM-native development in Go, Python, and TypeScript — backend services, CLI tools, code generators, and SSOT validators. Not intended for algorithm libraries or low-level systems programming.
+
+---
+
+## Case Studies
+
+### typer — Python CLI framework (1155 tests, 0 failures)
+
+[Refactored fork](https://github.com/park-jun-woo/typer) of [fastapi/typer](https://github.com/fastapi/typer), restructured to pass `filefunc validate --lang python` with zero violations.
+
+| Metric | Original | Refactored |
+|---|---|---|
+| Source files | 16 | 197 |
+| filefunc violations | 69 | 0 |
+| pytest passed | 1155 | 1155 |
+| pytest failed | 0 | 0 |
+
+All public APIs, import paths, and runtime behavior are identical to the original. No performance regression (import +2% within noise, all other benchmarks identical). Verified by full pytest suite and exhaustive comparison.
+
+### hono — TypeScript web framework (4419 tests, 0 new failures)
+
+[Refactored fork](https://github.com/park-jun-woo/hono) of [honojs/hono](https://github.com/honojs/hono), restructured to pass `filefunc validate --lang typescript` with zero violations.
+
+| Metric | Original | Refactored |
+|---|---|---|
+| Source files | 186 | 626 |
+| filefunc violations | 397 | 0 |
+| vitest passed | 4419 | 4419 |
+| vitest failed | 4 | 4 (pre-existing) |
+
+All import paths and runtime behavior identical to original. Verified by full vitest suite.
+
+---
+
+## Quick Start
+
+```bash
+npx skills add park-jun-woo/filefunc
+```
+
+```bash
+go install github.com/park-jun-woo/filefunc/cmd/filefunc@latest
+```
+
+Or build from source:
+
+```bash
+git clone https://github.com/park-jun-woo/filefunc.git
+cd filefunc
+go build ./cmd/filefunc/
+```
+
+Requires Go 1.18+.
+
+---
+
+## Using it with AI
+
+The case studies above were measured with AI agents doing the refactoring while filefunc validated them. Claude Code, Codex, Copilot, Cursor — any agent works.
+
+Start the agent, give it one prompt:
+
+```
+Read SKILL.md and refactor this project to pass filefunc validate.
+```
+
+The AI splits files. `filefunc validate` catches structural violations the moment they appear. The agent stays free within the rails; step off the rails and validation fails fast.
+
+---
 
 ## Why
 
@@ -20,21 +92,7 @@ read check_one_file_one_func.go → 1 func. Exactly what you needed.
 
 The primary citizen of filefunc is the AI agent, not the human. File count explosion is a feature, not a bug — more files means smaller files, less noise per read. Human convenience is solved at the view layer (VSCode extensions, etc.).
 
-## Install
-
-```bash
-go install github.com/park-jun-woo/filefunc/cmd/filefunc@latest
-```
-
-Or build from source:
-
-```bash
-git clone https://github.com/park-jun-woo/filefunc.git
-cd filefunc
-go build ./cmd/filefunc/
-```
-
-Requires Go 1.18+.
+---
 
 ## Commands
 
@@ -44,11 +102,31 @@ Requires Go 1.18+.
 filefunc validate                    # current directory as project root
 filefunc validate /path/to/project   # explicit project root
 filefunc validate --format json
+filefunc validate --lang python      # language override
 ```
 
-Project root must contain `go.mod` and `codebook.yaml`. Read-only. Exit code 1 on violations. Respects `.ffignore`. Powered by [toulmin](https://github.com/park-jun-woo/toulmin) argumentation engine — rules are generic functions with backing-based judgment criteria, exceptions are defeats in a graph.
+```
+[PASS] 127 files checked, 0 violations
+```
+
+Project root must contain `go.mod` (Go), `pyproject.toml` (Python), or `package.json` (TypeScript) and `codebook.yaml`. Read-only. Exit code 1 on violations. Respects `.ffignore`. Language is auto-detected; override with `--lang go|python|typescript`. Powered by [toulmin](https://github.com/park-jun-woo/toulmin) argumentation engine — rules are generic functions with backing-based judgment criteria, exceptions are defeats in a graph.
 
 ### chain — Trace call relationships
+
+```bash
+filefunc chain func RunAll --chon 2 --meta what
+```
+
+```
+── Func Chain: RunAll (chon=2) ──
+
+  [self]    RunAll                  //ff:what 전체 검증 실행
+  [child]   RunProjectRules         //ff:what P 룰 실행
+  [child]   RunCodebookRules        //ff:what C 룰 실행
+  [child]   RunFileRules            //ff:what F/Q/A 룰 실행
+  [co]      FormatResult            //ff:what 검증 결과 포매팅
+  [co]      PrintReport             //ff:what 검증 결과 출력
+```
 
 ```bash
 filefunc chain func RunAll              # 1촌 (default, current dir)
@@ -57,9 +135,6 @@ filefunc chain func RunAll --chon 3     # 3촌 (max)
 filefunc chain func RunAll --child-depth 3   # calls only
 filefunc chain func RunAll --parent-depth 3  # callers only
 filefunc chain feature validate         # all funcs in feature
-filefunc chain func RunAll --root /path/to/project  # explicit project root
-filefunc chain func RunAll --chon 2 --meta what     # with //ff:what annotations
-filefunc chain func RunAll --chon 2 --meta all      # with all annotations
 filefunc chain func RunAll --chon 2 --meta what \
   --prompt "nesting depth 수정" --rate 0.8           # reranker filtering
 filefunc chain func ParseFile --package funcspec     # limit to specific package
@@ -128,9 +203,22 @@ Verifies `//ff:what` matches func body using local LLM (ollama). Scores 0.0~1.0,
 | `--endpoint` | API endpoint | `http://localhost:11434` |
 | `--threshold` | Minimum passing score | `0.8` |
 
+---
+
 ## Rules
 
-All rules defined in [`rulebook.md`](rulebook.md) (SSOT). Categories: P (project), F (file structure), Q (code quality), A (annotation), C (codebook), N (naming).
+All rules defined in [`rulebook.md`](rulebook.md) (SSOT). Categories: P (project), I (import), F (file structure), Q (code quality), A (annotation), C (codebook), N (naming).
+
+Validation order:
+
+```
+1. P rules (project level) — single language check
+2. C rules (codebook) — codebook.yaml integrity
+3. I rules (import) — circular import detection (Python, TypeScript)
+4. F/Q/A rules (file level) — via toulmin defeats graph
+```
+
+P or C violations block subsequent validation.
 
 ## Annotations
 
@@ -142,9 +230,9 @@ All rules defined in [`rulebook.md`](rulebook.md) (SSOT). Categories: P (project
 func CheckOneFileOneFunc(gf *model.GoFile) []model.Violation {
 ```
 
-`control=` is required for all func files (A9). Values: `sequence`, `selection` (switch), `iteration` (loop). Based on Böhm-Jacopini theorem (1966). 1 func 1 control.
+`control=` is required for all func files (A9). Values: `sequence`, `selection` (switch), `iteration` (loop). Based on Bohm-Jacopini theorem (1966). 1 func 1 control.
 
-`dimension=` is required for `control=iteration` files (A15). Specifies the dimensionality of the data being iterated. Q1 depth limit = dimension + 1. dimension=1 for flat lists (depth ≤ 2), dimension ≥ 2 requires named type (struct/interface) nesting.
+`dimension=` is required for `control=iteration` files (A15). Specifies the dimensionality of the data being iterated. Q1 depth limit = dimension + 1. dimension=1 for flat lists (depth <= 2), dimension >= 2 requires named type (struct/interface) nesting.
 
 | Annotation | Purpose | Required |
 |---|---|---|
@@ -154,6 +242,8 @@ func CheckOneFileOneFunc(gf *model.GoFile) []model.Violation {
 | `//ff:why` | Design decision — why it's this way | No |
 | `//ff:checked` | LLM verification signature | Auto (`filefunc llmc`) |
 
+Python uses `# ff:func`, `# ff:what`, etc. TypeScript uses `// ff:func`, `// ff:what`, etc.
+
 ## Codebook
 
 The codebook defines allowed values for annotations. It's the project's vocabulary — the map that makes `grep` precise.
@@ -162,15 +252,15 @@ The codebook defines allowed values for annotations. It's the project's vocabula
 # codebook.yaml
 required:
   feature:
-    validate: "코드 구조 룰 검증 (F1,Q1,A1 등 정적 분석 룰)"
-    parse: "소스 코드, 어노테이션, codebook 파싱"
+    validate: "Code structure rule validation"
+    parse: "Source code, annotation, codebook parsing"
   type:
-    command: "cobra 명령 엔트리포인트"
-    rule: "개별 검증 룰 구현"
+    command: "cobra command entrypoint"
+    rule: "Individual validation rule"
 
 optional:
   pattern:
-    error-collection: "에러 수집 후 일괄 보고"
+    error-collection: "Collect errors, report in batch"
   level:
     error: ""
     warning: ""
@@ -184,7 +274,7 @@ Codebook format rules (C1-C4) in [`rulebook.md`](rulebook.md). Codebook is valid
 
 ## .ffignore
 
-Exclude paths from all filefunc commands. Place `.ffignore` in the project root (next to `go.mod`). Same syntax as `.gitignore`.
+Exclude paths from all filefunc commands. Place `.ffignore` in the project root (next to `go.mod`). Same syntax as `.gitignore`. Supports path-based patterns.
 
 ```
 # Example .ffignore
@@ -196,35 +286,9 @@ internal/legacy/
 
 Optional. If absent, nothing is excluded.
 
-## Case study
+---
 
-### typer — Python CLI framework (1155 tests, 0 failures)
-
-[Refactored fork](https://github.com/park-jun-woo/typer) of [fastapi/typer](https://github.com/fastapi/typer), restructured to pass `filefunc validate --lang python` with zero violations.
-
-| Metric | Original | Refactored |
-|---|---|---|
-| Source files | 16 | 197 |
-| filefunc violations | 69 | 0 |
-| pytest passed | 1155 | 1155 |
-| pytest failed | 0 | 0 |
-
-All public APIs, import paths, and runtime behavior are identical to the original. No performance regression (import +2% within noise, all other benchmarks identical). Verified by full pytest suite and exhaustive comparison.
-
-### hono — TypeScript web framework (4419 tests, 0 new failures)
-
-[Refactored fork](https://github.com/park-jun-woo/hono) of [honojs/hono](https://github.com/honojs/hono), restructured to pass `filefunc validate --lang typescript` with zero violations.
-
-| Metric | Original | Refactored |
-|---|---|---|
-| Source files | 186 | 626 |
-| filefunc violations | 397 | 0 |
-| vitest passed | 4419 | 4419 |
-| vitest failed | 4 | 4 (pre-existing) |
-
-All import paths and runtime behavior identical to original. Verified by full vitest suite.
-
-## Academic basis
+## Academic Basis
 
 - **"Lost in the Middle" (Stanford, 2024)** — Relevant info in the middle of context drops performance 30%+.
 - **"Context Length Alone Hurts LLM Performance" (Amazon, 2025)** — Even blank tokens degrade performance (13.9~85%). Short focused context wins.
@@ -234,4 +298,4 @@ Research proved "shorter context is better." filefunc is the missing tool that s
 
 ## License
 
-MIT License — see [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE).
